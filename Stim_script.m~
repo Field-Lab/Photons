@@ -268,7 +268,7 @@ parameters.field_width = 32;  parameters.field_height = 32;
 % parameters.stixel_width = 1;   parameters.stixel_height = 1;
 % parameters.field_width = 600;  parameters.field_height = 600;
 
-% parameters.map_file_name = '/Users/alexth/test4/Photons/Maps/2011-12-13-2_f04_vorcones/map-0000.txt';
+% parameters.map_file_name = '/Users/alexth/test4/Photons/RSM_Map_Vault/2011-12-13-2_f04_vorcones/map-0000.txt';
 
 parameters.frames = 1000;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
 
@@ -303,7 +303,7 @@ parameters.start_frame = 1; % >0
 parameters.interval = 1;
 parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
 parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
-parameters.movie_name = '/Users/alexth/test4/Photons/Movies/test_5_A.rawMovie';
+parameters.movie_name = '/Users/alexth/test4/Photons/RSM_Movie_Vault/test_5_A.rawMovie';
 
 stimulus = make_stimulus(parameters, def_params);
 save_parameters(stimulus, 'data000');
