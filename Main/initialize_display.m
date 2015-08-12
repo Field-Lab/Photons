@@ -24,6 +24,7 @@ mglFlush;
 
 % pre-run white noise and movie to initialize libraries - not sure how much
 % it's needed
+    
 stimulus = make_stimulus(def_params, 'class', 'RN', 'rgb', [0 0 0], 'independent', 1,...
     'seed', 11111, 'x_start', 1, 'x_end', 320, 'y_start', 1, 'y_end', 320,...
     'stixel_width', 10, 'stixel_height', 10, 'field_width', 32, 'field_height', 32,...
@@ -32,6 +33,9 @@ display_stimulus(stimulus);
 stimulus = make_stimulus(def_params, 'class', 'RM', 'frames', 10, 'silent', ...
     'movie_name', '/Users/alexth/test4/RSM/RSM_Movie_Vault/test_5_A.rawMovie');
 display_stimulus(stimulus);
+mglStencilSelect(0);
+
+
 fprintf('Silent prerun complete.\n');
 
 % initialize the DIO (we will simply use the default port values specified
@@ -41,4 +45,4 @@ mglDigIO('init');
 Pulse_DigOut_Channel; % 6501 Output line starts high (~ +4.4 V), clear the line with a pulse
 % NB: THIS DOES NOT OUTPUT A PULSE. It merely causes the line voltage to
 % drop low.
-fprintf('RSM initialization complete.\n');
+fprintf('Initialization complete.\n');

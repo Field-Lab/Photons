@@ -25,10 +25,10 @@ end
 
 %%%%%%%%%%% WAIT FOR TRIGGER OR KEY PRESS %%%%%%%%%%%
 if params.wait_trigger
-    fprintf('WAITING FOR TRIGGER\n');
+%     fprintf('WAITING FOR TRIGGER\n');
     trigger_time = Scan_4_Trigger(trigger_sample_rate); % if trigger time is needed?
 elseif params.wait_key % wait for key press event
-    fprintf('WAITING FOR KEY\n');
+%     fprintf('WAITING FOR KEY\n');
     pause;
 end
 
