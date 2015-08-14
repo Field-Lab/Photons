@@ -35,6 +35,8 @@ classdef	Raw_Movie < handle
         reverse
         flip
         
+        jitter
+        
         % interval
         refresh              
  
@@ -141,6 +143,8 @@ classdef	Raw_Movie < handle
 
             % interval
             stimulus.refresh = parameters.interval;
+            
+            stimulus.jitter.flag = 0;
               
         end		% constructor
     

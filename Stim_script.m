@@ -245,18 +245,18 @@ clear parameters stimulus
 
 parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = [1 1 1]*0.16;
-parameters.interval = 1;
+parameters.rgb = [1 1 1]*0.48;
+parameters.interval = 20;
 parameters.seed = 11111;
 parameters.independent = 1;
-parameters.binary = 0;
+parameters.binary = 1;
 parameters.probability = 1;
 parameters.delay_frames = 0;
 % 
-parameters.x_start = 1;  parameters.x_end = 320;
-parameters.y_start = 1;   parameters.y_end = 320;
-parameters.stixel_width = 10;   parameters.stixel_height = 10;
-parameters.field_width = 32;  parameters.field_height = 32;
+parameters.x_start = 101;  parameters.x_end = 500;
+parameters.y_start = 101;   parameters.y_end = 500;
+parameters.stixel_width = 40;   parameters.stixel_height = 40;
+parameters.field_width = 10;  parameters.field_height = 10;
 
 % parameters.x_start = 1;  parameters.x_end = 640;
 % parameters.y_start = 81;   parameters.y_end = 400;
@@ -270,13 +270,15 @@ parameters.field_width = 32;  parameters.field_height = 32;
 
 % parameters.map_file_name = '/Users/alexth/test4/Photons/Maps/2011-12-13-2_f04_vorcones/map-0000.txt';
 
-parameters.frames = 1000;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
+parameters.frames = 300;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
+
+parameters.jitter = 1;
 
 stimulus = make_stimulus(parameters, def_params);
 % save_parameters(stimulus, 'data000');
 time_stamps = cell(1,10);
 for i=1:10
-    time_stamps{i} = display_stimulus(stimulus, 'erase',0);
+    time_stamps{i} = display_stimulus(stimulus, 'erase',1);
 end
 % 
 figure

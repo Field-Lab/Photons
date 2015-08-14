@@ -23,9 +23,10 @@ classdef	Random_Noise < handle
         % size
         field_width
         field_height
+        stixel_width
+        stixel_height
         m_width
-        m_height
-        
+        m_height        
         x_start
         y_start
         span_width
@@ -38,7 +39,9 @@ classdef	Random_Noise < handle
         
         refresh
         rng_init
-        probability        
+        probability  
+        jitter
+        
         
     end			% properties block
     
@@ -65,6 +68,7 @@ classdef	Random_Noise < handle
             addParameter(p,'frames', intmax('int64')); % def max
             addParameter(p,'interval', 1); % def 1
             addParameter(p,'probability', 1.0); % def probability 1
+            addParameter(p,'jitter', 0); % def no jitter
             addParameter(p,'binary', 1); % def BW            
             
             addParameter(p,'rgb', []);  % forced
@@ -144,6 +148,8 @@ classdef	Random_Noise < handle
             stimulus.field_height = parameters.field_height;
             stimulus.x_start = parameters.x_start;
             stimulus.y_start = parameters.y_start;
+            stimulus.stixel_width = parameters.stixel_width;
+            stimulus.stixel_height = parameters.stixel_height;
             stimulus.span_width = stimulus.field_width * parameters.stixel_width;
             stimulus.span_height = stimulus.field_height * parameters.stixel_height;            
                         
@@ -155,6 +161,15 @@ classdef	Random_Noise < handle
             end
             
             stimulus.probability = parameters.probability;
+            stimulus.jitter.flag = parameters.jitter;
+            stimulus.jitter.state = [];
+%             
+            if stimulus.jitter.flag
+                stimulus.span_width = stimulus.span_width + 2*parameters.stixel_width;
+                stimulus.span_height = stimulus.span_height + 2*parameters.stixel_height; 
+                stimulus.x_start = parameters.x_start-parameters.stixel_width;
+                stimulus.y_start = parameters.y_start-parameters.stixel_height;
+            end
             
             % duration, interval, seed
             stimulus.frames = parameters.frames;

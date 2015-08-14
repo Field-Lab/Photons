@@ -14,6 +14,8 @@
 
 function time_stamps = Run_OnTheFly(stimulus, trigger_interval)
 
+jitterX = 0;jitterY=0;
+
 frametex = mglCreateTexture( zeros(1,1));
 
 countdown = 1;
@@ -29,15 +31,35 @@ for i=1:stimulus.frames
         
         mglDeleteTexture(frametex);
         countdown = stimulus.refresh;  % reset to the number of frames specified by "interval"
-        eval(stimulus.make_frame_script);
-
+        eval(stimulus.make_frame_script);        
+        if stimulus.jitter.flag
+            tmp = ones(size(img_frame,1), size(img_frame,2)+2,size(img_frame,3)+2);
+            
+            tmp(1,[1:2 end-1:end],:) =stimulus.back_rgb(1);
+            tmp(1,:,[1:2 end-1:end]) =stimulus.back_rgb(1);
+            tmp(2,[1:2 end-1:end],:) =stimulus.back_rgb(2);
+            tmp(2,:,[1:2 end-1:end]) =stimulus.back_rgb(2);
+            tmp(3,[1:2 end-1:end],:) =stimulus.back_rgb(3);
+            tmp(3,:,[1:2 end-1:end]) =stimulus.back_rgb(3);
+            tmp = uint8(tmp*256);
+            tmp(:,3:end-2,3:end-2) = img_frame(:,2:end-1,2:end-1);
+            img_frame = tmp;
+            
+            jitterX = mod(double(random_uint16(stimulus.jitter.state)), stimulus.stixel_width) - stimulus.stixel_width/2;
+            jitterY = mod(double(random_uint16(stimulus.jitter.state)), stimulus.stixel_height) - stimulus.stixel_height/2;
+        end
         frametex = mglCreateTexture( img_frame, [], 0, {'GL_TEXTURE_MAG_FILTER','GL_NEAREST'} );
+        
+%         for i=1:10000
+%             a(i) = mod((random_uint16(stimulus.jitter.state)), stimulus.stixel_width) - stimulus.stixel_width/2;
+%         end
+%         hist(a)
         
     else
         countdown = countdown - 1;    % it wasn't time to get a new frame, so instead we just decrement the count down
     end
 
-    mglBltTexture(frametex, [stimulus.x_start, stimulus.y_start, stimulus.span_width, stimulus.span_height], -1, -1);
+    mglBltTexture(frametex, [stimulus.x_start+jitterX, stimulus.y_start+jitterY, stimulus.span_width, stimulus.span_height], -1, -1);
     mglFlush
     
     % collect timestamp info
