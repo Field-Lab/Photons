@@ -19,8 +19,10 @@ SInt16 RandJavaNbit(RandJavaState state, int n_bit) {
         return (SInt16) (*state >> 47LL);}
     else if (n_bit == 3){
         return (SInt16) (*state >> 45LL);}
-    else{
+    else if (n_bit == 8){
         return (SInt16) (*state >> 40LL); }
+    else{
+        return (SInt16) (*state); }
 }
 
 SInt32 RandJavaLong(RandJavaState state) {

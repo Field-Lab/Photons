@@ -237,7 +237,7 @@ end
 
 %% Random Noise
 
-%cd('/Users/alexth/test4/Photons/Utils/random/')
+%cd('/Users/alexth/test4/Photons/Utils/mex_functions/')
 %mex Draw_Random_Frame_opt.c
 
 fprintf('\n\n<strong> Random Noise </strong>\n');
@@ -245,23 +245,28 @@ clear parameters stimulus
 
 parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = [1 1 1]*0.48;
-parameters.interval = 20;
+parameters.rgb = [1 1 1]*0.16;
+parameters.interval = 1;
 parameters.seed = 11111;
 parameters.independent = 1;
-parameters.binary = 1;
+parameters.binary = 0;
 parameters.probability = 1;
 parameters.delay_frames = 0;
 % 
-parameters.x_start = 101;  parameters.x_end = 500;
-parameters.y_start = 101;   parameters.y_end = 500;
-parameters.stixel_width = 40;   parameters.stixel_height = 40;
-parameters.field_width = 10;  parameters.field_height = 10;
+% parameters.x_start = 101;  parameters.x_end = 500;
+% parameters.y_start = 101;   parameters.y_end = 500;
+% parameters.stixel_width = 40;   parameters.stixel_height = 40;
+% parameters.field_width = 10;  parameters.field_height = 10;
 
 % parameters.x_start = 1;  parameters.x_end = 640;
 % parameters.y_start = 81;   parameters.y_end = 400;
 % parameters.stixel_width = 80;   parameters.stixel_height = 80;
 % parameters.field_width = 8;  parameters.field_height = 4;
+
+parameters.x_start = 1;  parameters.x_end = 320;
+parameters.y_start = 1;   parameters.y_end = 320;
+parameters.stixel_width = 10;   parameters.stixel_height = 10;
+parameters.field_width = 32;  parameters.field_height = 32;
 
 % parameters.x_start = 1;  parameters.x_end = 600;
 % parameters.y_start = 1;   parameters.y_end = 600;
@@ -272,7 +277,7 @@ parameters.field_width = 10;  parameters.field_height = 10;
 
 parameters.frames = 300;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
 
-parameters.jitter = 1;
+parameters.jitter = 0;
 
 stimulus = make_stimulus(parameters, def_params);
 % save_parameters(stimulus, 'data000');
