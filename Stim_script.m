@@ -4,6 +4,8 @@
 %% Initialization
 
 cd('/Users/alexth/test4')
+
+path2save = '/Users/alexth/test4/Photons/saved_stim/2015-08-25-1';
 screen_number = 2;
 def_params = initialize_display('OLED', screen_number);
 
@@ -80,7 +82,7 @@ parameters.y_start = 50;   parameters.y_end = 400;
 rgb = [1 0 1; 1 1 1; 0 1 0; -1 -1 -1]*0.5;
 for i=1:size(rgb,1)
     stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
-    save_parameters(stimulus, 'data000');
+    save_parameters(stimulus, path2save, 'data000');
     display_stimulus(stimulus);
 end
 
@@ -98,7 +100,7 @@ s_params = read_stim_lisp_output_hack('/Users/alexth/test4/Photons/Maps/s36_test
 for i=2:size(s_params,2)
     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
-    save_parameters(stimulus{i-1}, 'data000');
+    save_parameters(stimulus{i-1}, path2save, 'data000');
 end
 
 time_stamps = cell(1,length(stimulus));
@@ -108,7 +110,7 @@ for i=1:length(stimulus)
 end
 
 for i=1:length(stimulus)
-    save_time_stamps(time_stamps(i), 'data000');
+    save_time_stamps(time_stamps(i), path2save, 'data000');
 end
 
 %% Moving bar
@@ -135,14 +137,14 @@ parameters.delay_frames = 30;
 % for i=2:size(s_params,2)
 %     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
 %     stimulus{i-1} = make_stimulus(trial_params, def_params);
-%     save_parameters(stimulus{i-1}, 'data000');
+%     save_parameters(stimulus, path2save{i-1}, 'data000');
 % end
 
 
 orientation = [0 30 45];% 60 90 120 135 150 180 210 225 240 270 300 315 330];
 for i = 1:length(orientation)
     stimulus{i} = make_stimulus(parameters,'orientation', orientation(i), def_params);    
-    save_parameters(stimulus{i}, 'data000');
+    save_parameters(stimulus{i}, path2save, 'data000');
 end
 
 time_stamps = cell(1,length(stimulus));
@@ -152,7 +154,7 @@ for i=1:length(stimulus)
 end
 
 for i=1:length(stimulus)
-    save_time_stamps(time_stamps(i), 'data000'); % as one file!
+    save_time_stamps(time_stamps(i), path2save, 'data000'); % as one file!
 end
 
 
@@ -178,14 +180,14 @@ s_params = read_stim_lisp_output_hack('/Users/alexth/test4/Photons/Maps/gratings
 for i=2:size(s_params,2)
     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
-    save_parameters(stimulus{i-1}, 'data000');
+    save_parameters(stimulus{i-1}, path2save, 'data000');
 end
 
 % 
 % orientation = [0 30 45 60 90 120 135 150 180 210 225 240 270 300 315 330];
 % for i = 1:length(orientation)
 %     stimulus{i} = make_stimulus(parameters,'orientation', orientation(i), def_params);    
-%     save_parameters(stimulus{i}, 'data000');
+%     save_parameters(stimulus, path2save{i}, 'data000');
 % end
 
 time_stamps = cell(1,length(stimulus));
@@ -195,7 +197,7 @@ for i=1:length(stimulus)
 end
 
 for i=1:length(stimulus)
-    save_time_stamps(time_stamps(i), 'data000'); % as one file!
+    save_time_stamps(time_stamps(i), path2save, 'data000'); % as one file!
 end
 
 %% Counterphase Grating
@@ -220,7 +222,7 @@ parameters.spatial_period = 120; % pixels
 orientation = [0 30 45 60 90 120 135 150 180 210 225 240 270 300 315 330];
 for i = 1:length(orientation)
     stimulus{i} = make_stimulus(parameters,'orientation', orientation(i), def_params);    
-    save_parameters(stimulus{i}, 'data000');
+    save_parameters(stimulus{i}, path2save, 'data000');
 end
 
 time_stamps = cell(1,length(stimulus));
@@ -230,7 +232,7 @@ for i=1:length(stimulus)
 end
 
 for i=1:length(stimulus)
-    save_time_stamps(time_stamps(i), 'data000'); % as one file!
+    save_time_stamps(time_stamps(i), path2save, 'data000'); % as one file!
 end
 
 
@@ -280,7 +282,7 @@ parameters.frames = 300;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(se
 parameters.jitter = 0;
 
 stimulus = make_stimulus(parameters, def_params);
-% save_parameters(stimulus, 'data000');
+% save_parameters(stimulus, path2save, 'data000');
 time_stamps = cell(1,10);
 for i=1:10
     time_stamps{i} = display_stimulus(stimulus, 'erase',1);
@@ -313,7 +315,7 @@ parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
 parameters.movie_name = '/Users/alexth/test4/Photons/Movies/test_5_A.rawMovie';
 
 stimulus = make_stimulus(parameters, def_params);
-save_parameters(stimulus, 'data000');
+save_parameters(stimulus, path2save, 'data000');
 time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1);
 
 
@@ -346,7 +348,7 @@ display_stimulus(stimulus, 'erase',0);
 
 
 %%
-Stop_RSM
+Stop_Photons
 
 make_normal_table(8)
 

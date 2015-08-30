@@ -1,6 +1,6 @@
-function save_parameters(stimulus, data_name)
+function save_parameters(stimulus, path2save, data_name)
 
-dir_save = ['/Users/alexth/test4/RSM/saved_stim/', date, '/',data_name,'/parameters/'];
+dir_save = fullfile(path2save, data_name,'parameters');
 if ~isdir(dir_save)
     mkdir(dir_save);
 end
