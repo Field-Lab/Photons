@@ -22,7 +22,7 @@ SInt16 RandJavaNbit(RandJavaState state, int n_bit) {
     else if (n_bit == 8){
         return (SInt16) (*state >> 40LL); }
     else{
-        return (SInt16) (*state); }
+        return (SInt16) (*state >> 32LL); }
 }
 
 SInt32 RandJavaLong(RandJavaState state) {
@@ -43,14 +43,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     SInt64 *state;
     
     mxArray *lut_in_mxarray;
-    
+    unsigned char *lut
+            
     mxArray *map_in_mxarray;
     unsigned short *map;
     
     mxArray *backrgb_in_mxarray;
     unsigned char *backrgb;
     
-    unsigned char *lut, *image_pattern, *prefilled_seq;
+    unsigned char *image_pattern, *prefilled_seq;
     int w, h, width, height, image_index, map_index, lut_index, noise_type, n_bits, cnt, map_value,  m_width, m_height;
     float probability;
     
