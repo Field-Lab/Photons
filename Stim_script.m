@@ -1,5 +1,5 @@
 % cd('/Users/alexth/test4/Photons/Utils/mex_functions/')
-% mex Draw_Random_Frame_float.c
+% mex Draw_Random_Frame_opt.c
 
 %% Initialization
 

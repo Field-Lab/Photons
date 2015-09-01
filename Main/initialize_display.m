@@ -3,7 +3,7 @@ function def_params = initialize_display(dev_type, screen_number)
 % set monitor parameters
 switch dev_type
     case 'CRT'
-        width = 640; height = 480; refresh_rate = 60.3578; % in experiments, put real value here!
+        width = 640; height = 480; refresh_rate = 120; % in experiments, put real value here!
     case 'OLED'
         width = 800; height = 600; refresh_rate = 60.3578;
 end
