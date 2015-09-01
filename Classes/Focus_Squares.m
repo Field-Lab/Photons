@@ -73,7 +73,7 @@ classdef	Focus_Squares < handle
             mglFlush
             
             fprintf('\n');
-            disp('Hit any key to clear screen\n');
+            disp('Hit any key to clear screen');
             pause
             time_stamps = [];
             

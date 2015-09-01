@@ -18,9 +18,9 @@ set_gamma_from_fit_params(scale, power, offset);
 %% Gamma calibration
 
 steps = 17;
-run_gamma_flashes('linear', steps, [1 0 0]);
+run_gamma_flashes('linear', steps, [0 0 1]); % this will reset gamma to default (linear)!
 
-% linear measurements
+% linear measurements (INSERT HERE)
 r = [0.01e-3 0.01e-3 0.06e-3 0.35e-3 1.10e-3 2.40e-3 4.34e-3 6.95e-3 10.30e-3 13.90e-3 18.27e-3 2.33e-2 2.95e-2 3.72e-2 4.63e-2 5.68e-2 6.84e-2];
 g = [0e-3 0e-3 0.01e-2 0.03e-2 0.11e-2 0.27e-2 0.52e-2 0.87e-2 1.33e-2 1.82e-2 2.42e-2 3.13e-2 4.01e-2 5.08e-2 6.36e-2 7.77e-2 9.33e-2];
 b = [0.01e-3 0.01e-3 0.09e-3 0.51e-3 1.58e-3 3.42e-3 6.12e-3 9.71e-3 14.21e-3 19.05e-3 2.5e-2 3.23e-2 4.10e-2 5.15e-2 6.41e-2 7.83e-2 9.40e-2];
@@ -31,7 +31,7 @@ w = [0.01e-3 0.02e-3 0.18e-3 1.11e-3 3.66e-3 8.15e-3 14.77e-3 2.37e-2 3.5e-2 4.7
 % control
 run_gamma_flashes([scale, power, offset], steps, [1 0 0]);
 
-% corrected measurements
+% corrected measurements (INSERT HERE, then proceed below)
 r = [];
 g = [];
 b = [];
@@ -129,17 +129,6 @@ parameters.y_start = 100;   parameters.y_end = 350;
 parameters.frames = 200;
 parameters.delay_frames = 30;
 
-% stimulus = make_stimulus(parameters, def_params); 
-% display_stimulus(stimulus)
-
-% s_params = read_stim_lisp_output_hack('/Users/alexth/test4/Photons/Maps/bars/s14'); % read S file
-% 
-% for i=2:size(s_params,2)
-%     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
-%     stimulus{i-1} = make_stimulus(trial_params, def_params);
-%     save_parameters(stimulus, path2save{i-1}, 'data000');
-% end
-
 
 orientation = [0 30 45];% 60 90 120 135 150 180 210 225 240 270 300 315 330];
 for i = 1:length(orientation)
@@ -167,16 +156,15 @@ clear parameters stimulus
 parameters.class = 'MG';
 parameters.spatial_modulation = 'sine'; % sine or square
 % parameters.rgb = [1 1 0]*0.3;
-parameters.back_rgb = [1 1 1]*0.4;
+parameters.back_rgb = [1 1 1]*0.2;
 % parameters.frames = 120; % presentation of each grating, frames
 % parameters.x_start = 100;  parameters.x_end = 700;
 % parameters.y_start = 100;   parameters.y_end = 500;
-parameters.spatial_phase = 0; % pixels - offset from sin(0)
+% parameters.spatial_phase = 0; % pixels - offset from sin(0)
 % parameters.temporal_period = 120;  % frames (how long it takes to drift one period)
 % parameters.spatial_period = 60; % pixels
 
 s_params = read_stim_lisp_output_hack('/Users/alexth/test4/Photons/Maps/gratings/s03'); % read S file
-
 for i=2:size(s_params,2)
     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
@@ -187,7 +175,7 @@ end
 % orientation = [0 30 45 60 90 120 135 150 180 210 225 240 270 300 315 330];
 % for i = 1:length(orientation)
 %     stimulus{i} = make_stimulus(parameters,'orientation', orientation(i), def_params);    
-%     save_parameters(stimulus, path2save{i}, 'data000');
+%     save_parameters(stimulus{i}, path2save, 'data000');
 % end
 
 time_stamps = cell(1,length(stimulus));
@@ -219,7 +207,7 @@ parameters.temporal_period = 60;  % frames (how long it takes to return to initi
 parameters.spatial_period = 120; % pixels
 
 % S file: copy logic from cone pulses
-orientation = [0 30 45 60 90 120 135 150 180 210 225 240 270 300 315 330];
+orientation = [0 30 45];% 60 90 120 135 150 180 210 225 240 270 300 315 330];
 for i = 1:length(orientation)
     stimulus{i} = make_stimulus(parameters,'orientation', orientation(i), def_params);    
     save_parameters(stimulus{i}, path2save, 'data000');
@@ -287,7 +275,7 @@ time_stamps = cell(1,10);
 for i=1:10
     time_stamps{i} = display_stimulus(stimulus, 'erase',1);
 end
-% 
+% this is to test timing
 figure
 for i=1:10
     subplot(3,4,i)
