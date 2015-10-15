@@ -18,7 +18,7 @@ set_gamma_from_fit_params(scale, power, offset);
 %% Gamma calibration
 
 steps = 17;
-run_gamma_flashes('linear', steps, [0 0 1]); % this will reset gamma to default (linear)!
+run_gamma_flashes('linear', steps, [0 0 1]); % FIRST PARAMETER will reset gamma to linear!
 
 % linear measurements (INSERT HERE)
 r = [0.01e-3 0.01e-3 0.06e-3 0.35e-3 1.10e-3 2.40e-3 4.34e-3 6.95e-3 10.30e-3 13.90e-3 18.27e-3 2.33e-2 2.95e-2 3.72e-2 4.63e-2 5.68e-2 6.84e-2];
@@ -110,7 +110,7 @@ for i=1:length(stimulus)
 end
 
 for i=1:length(stimulus)
-    save_time_stamps(time_stamps(i), path2save, 'data000');
+    save_time_stamps(time_stamps{i}, path2save, 'data000');
 end
 
 %% Moving bar
@@ -235,11 +235,11 @@ clear parameters stimulus
 
 parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = [1 1 1]*0.16;
+parameters.rgb = [1 1 1]*0.48;
 parameters.interval = 1;
 parameters.seed = 11111;
-parameters.independent = 1;
-parameters.binary = 0;
+parameters.independent = 0;
+parameters.binary = 1;
 parameters.probability = 1;
 parameters.delay_frames = 0;
 % 
@@ -265,25 +265,25 @@ parameters.field_width = 32;  parameters.field_height = 32;
 
 % parameters.map_file_name = '/Users/alexth/test4/Photons/Maps/2011-12-13-2_f04_vorcones/map-0000.txt';
 
-parameters.frames = 300;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
+parameters.frames = 10;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
 
 parameters.jitter = 0;
 
 stimulus = make_stimulus(parameters, def_params);
 % save_parameters(stimulus, path2save, 'data000');
 time_stamps = cell(1,10);
-for i=1:10
-    time_stamps{i} = display_stimulus(stimulus, 'erase',1);
-end
+% for i=1:10
+    time_stamps{i} = display_stimulus(stimulus, 'erase',0);
+% end
 % this is to test timing
-figure
-for i=1:10
-    subplot(3,4,i)
-    a = diff(time_stamps{i})*1000;
-    plot(a)
-    xlabel('flush')
-    ylabel('time per flush, ms')
-end
+% figure
+% for i=1:10
+%     subplot(3,4,i)
+%     a = diff(time_stamps{i})*1000;
+%     plot(a)
+%     xlabel('flush')
+%     ylabel('time per flush, ms')
+% end
 
 %% Raw Movie
 
@@ -304,7 +304,7 @@ parameters.movie_name = '/Users/alexth/test4/Photons/Movies/test_5_A.rawMovie';
 
 stimulus = make_stimulus(parameters, def_params);
 save_parameters(stimulus, path2save, 'data000');
-time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1);
+time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1, 'erase', 0);
 
 
 %% photographic mapping

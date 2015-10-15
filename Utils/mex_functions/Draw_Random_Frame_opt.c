@@ -43,7 +43,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     SInt64 *state;
     
     mxArray *lut_in_mxarray;
-    unsigned char *lut
+    unsigned char *lut;
             
     mxArray *map_in_mxarray;
     unsigned short *map;

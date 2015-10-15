@@ -176,6 +176,7 @@ classdef	Random_Noise < handle
             stimulus.delay_frames = parameters.delay_frames;
             stimulus.refresh = parameters.interval;
             stimulus.rng_init.state = parameters.seed;
+            stimulus.rng_init.seed = parameters.seed;
                         
         end		% constructor
        
