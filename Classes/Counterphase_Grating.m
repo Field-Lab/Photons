@@ -78,27 +78,31 @@ classdef	Counterphase_Grating < handle
             
             %%%%%% calculate the wave %%%%%%
             
-            angle = mod(parameters.orientation, 180);
-            sf = 2*pi/parameters.spatial_period;  %cycles/pixel
-            a=cosd(angle)*sf;
-            b=sind(angle)*sf;
-            phase = parameters.spatial_phase;
-
-            x = [parameters.x_start,parameters.x_end];
-            y = [parameters.y_start,parameters.y_end];
-            [xMesh,yMesh] = meshgrid(x(1):x(2),y(1):y(2));
             
+            angle = mod(parameters.orientation+90, 360);
+            sf = 2*pi/parameters.spatial_period;  %cycles/pixel
+            
+            phase = parameters.spatial_phase;
+            a=sind(angle)*sf; % change per pixel
+            b=cosd(angle)*sf;
+            
+            y = [0, (parameters.x_end-parameters.x_start)];
+            x = [0, (parameters.y_end-parameters.y_start)];
+
+
+            [xMesh,yMesh] = meshgrid(x(1):x(2),y(1):y(2));
             switch parameters.spatial_modulation
                 case 'square'
-                    myGrating = sign(sin(a*xMesh + b*yMesh - phase));
+                    myGrating = sign(sin(a*xMesh + b*yMesh + sf*phase));
                 case 'sine'
-                    myGrating = sin(a*xMesh + b*yMesh - phase);
+                     myGrating = sin(a*xMesh + b*yMesh + sf*phase);
             end
-        
+           
+       
             switch parameters.temporal_modulation
                 case 'sine'
                     x = 0:360/parameters.temporal_period:360;
-                    parameters.contrast = cosd(x(1:end-1));
+                    parameters.contrast = sind(x(1:end-1));
                 case'square'
                     parameters.contrast = [zeros(1,parameters.temporal_period/2)+1 zeros(1,parameters.temporal_period/2)-1];
             end
@@ -139,6 +143,7 @@ classdef	Counterphase_Grating < handle
             RSM_Pause(stimulus.delay_frames-1);
             Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts
             time_stamps(1) = mglGetSecs(t0);
+            mglClearScreen;
             mglFlush % last delay frame
             
             for i=1:stimulus.frames

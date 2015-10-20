@@ -219,7 +219,7 @@ parameters.y_start = 1;   parameters.y_end = 480;
 parameters.spatial_phase = 0; % pixels - offset
 parameters.temporal_period = 480;  % frames (how long it takes to return to initial phase)
 parameters.spatial_period = 160; % pixels
-parameters.orientation = 180; % pixels
+parameters.orientation = 225; % pixels
 
 stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus, 'erase', 0);
