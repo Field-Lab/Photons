@@ -161,20 +161,19 @@ parameters.class = 'MG';
 parameters.spatial_modulation = 'sine'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.frames = 1; % presentation of each grating, frames
+parameters.frames = 5*120; % presentation of each grating, frames
 % parameters.x_start = 100;  parameters.x_end = 540;
 % parameters.y_start = 100;   parameters.y_end = 380;
 % parameters.x_start = 51;  parameters.x_end = 690;
 % parameters.y_start = 51;   parameters.y_end = 530;
 parameters.x_start = 1;  parameters.x_end = 640;
 parameters.y_start = 1;   parameters.y_end = 480;
-parameters.spatial_phase = 0; % pixels - offset from sin(0)
-parameters.temporal_period = 180;  % frames (how long it takes to drift one period)
-parameters.spatial_period = 160; % pixels
+parameters.temporal_period = 10;  % frames (how long it takes to drift one period)
+parameters.spatial_period = 100; % pixels
 parameters.orientation = 180; % pixels
 
 stimulus = make_stimulus(parameters, def_params);
-display_stimulus(stimulus, 'erase', 0);
+time_stamps = display_stimulus(stimulus, 'erase', 0);
 
 
 
@@ -222,7 +221,7 @@ parameters.spatial_period = 160; % pixels
 parameters.orientation = 180; % pixels
 
 stimulus = make_stimulus(parameters, def_params);
-display_stimulus(stimulus, 'erase', 0);
+display_stimulus(stimulus, 'erase', 1);
 % 
 % % S file: copy logic from cone pulses
 % orientation = [0 30 45];% 60 90 120 135 150 180 210 225 240 270 300 315 330];
@@ -291,7 +290,7 @@ stimulus = make_stimulus(parameters, def_params);
 % save_parameters(stimulus, path2save, 'data000');
 time_stamps = cell(1,10);
 % for i=1:10
-    time_stamps{i} = display_stimulus(stimulus, 'erase',0);
+    time_stamps{i} = display_stimulus(stimulus, 'erase',1);
 % end
 % this is to test timing
 % figure

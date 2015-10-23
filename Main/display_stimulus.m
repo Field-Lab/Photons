@@ -23,6 +23,12 @@ if params.wait_key
     fprintf('\n\n"Wait Key" is set to true, "Wait Trigger" forced to false\n\n')
 end
 
+% for white noise reset rng before each repetition
+if ~isempty( findprop(stimulus, 'rng_init') )
+    stimulus.rng_init.state = Init_RNG_JavaStyle(stimulus.rng_init.seed);
+    stimulus.jitter.state = stimulus.rng_init.state;
+end
+
 %%%%%%%%%%% WAIT FOR TRIGGER OR KEY PRESS %%%%%%%%%%%
 if params.wait_trigger
 %     fprintf('WAITING FOR TRIGGER\n');
@@ -30,12 +36,6 @@ if params.wait_trigger
 elseif params.wait_key % wait for key press event
 %     fprintf('WAITING FOR KEY\n');
     pause;
-end
-
-% for white noise reset rng before each repetition
-if ~isempty( findprop(stimulus, 'rng_init') )
-    stimulus.rng_init.state = Init_RNG_JavaStyle(stimulus.rng_init.seed);
-    stimulus.jitter.state = stimulus.rng_init.state;
 end
 
 %%%%%%%%%%% RUN ONE STIMULUS %%%%%%%%%%%

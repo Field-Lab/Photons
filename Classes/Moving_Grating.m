@@ -125,6 +125,7 @@ classdef	Moving_Grating < handle
         
         function time_stamps = Run_Moving_Grating(stimulus)
             
+            
             tex1dsquare = cell(stimulus.temporal_period,1);
             for i=0:stimulus.temporal_period
                 icur = mod(i,stimulus.temporal_period);
@@ -133,16 +134,15 @@ classdef	Moving_Grating < handle
                 tmp = stimulus.texture(:,xlimits,ylimits);
                 tex1dsquare{i+1} = mglCreateTexture(tmp);
             end
-            
-            
+                        
             cnt = 2;
             time_stamps = zeros(floor(stimulus.frames/stimulus.temporal_period)+1,1);
             t0 = mglGetSecs;
-            RSM_Pause(stimulus.delay_frames-1);
+            RSM_Pause(stimulus.delay_frames);
+%             mglClearScreen;
+%             mglFlush % last delay frame
             Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts
             time_stamps(1) = mglGetSecs(t0);
-            mglClearScreen;
-            mglFlush % last delay frame
             
             for i=1:stimulus.frames
                 icur = mod(i-1,stimulus.temporal_period)+1;
