@@ -143,9 +143,8 @@ classdef	Moving_Grating < handle
             time_stamps = zeros(floor(stimulus.frames/stimulus.temporal_period)+1,1);
             t0 = mglGetSecs;
             RSM_Pause(stimulus.delay_frames);
+
             Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts
-%             mglClearScreen; % if we want one delay frame
-%             mglFlush
             time_stamps(1) = mglGetSecs(t0);
             
             for i=1:stimulus.frames
