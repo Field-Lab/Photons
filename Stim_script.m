@@ -161,20 +161,21 @@ parameters.class = 'MG';
 parameters.spatial_modulation = 'sine'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.frames = 5*120; % presentation of each grating, frames
+parameters.frames = 240; % presentation of each grating, frames
 % parameters.x_start = 100;  parameters.x_end = 540;
 % parameters.y_start = 100;   parameters.y_end = 380;
 % parameters.x_start = 51;  parameters.x_end = 690;
 % parameters.y_start = 51;   parameters.y_end = 530;
 parameters.x_start = 1;  parameters.x_end = 640;
 parameters.y_start = 1;   parameters.y_end = 480;
-parameters.temporal_period = 10;  % frames (how long it takes to drift one period)
-parameters.spatial_period = 100; % pixels
+parameters.temporal_period = 120;  % frames (how long it takes to drift one period)
+parameters.spatial_period = 120; % pixels
 parameters.orientation = 180; % pixels
 
 stimulus = make_stimulus(parameters, def_params);
+tic
 time_stamps = display_stimulus(stimulus, 'erase', 0);
-
+toc
 
 
 % s_params = read_stim_lisp_output_hack('/Users/alexth/test4/Photons/Maps/gratings/s03'); % read S file

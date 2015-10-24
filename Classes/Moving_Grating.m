@@ -13,11 +13,13 @@ classdef	Moving_Grating < handle
         y_start
         x_span
         y_span
-        x_delta
-        y_delta
+        
+        delta 
+        base
 
         temporal_period
         spatial_period
+        spatial_modulation
         
         delay_frames
         frames
@@ -82,59 +84,20 @@ classdef	Moving_Grating < handle
             %%%%%% calculate the wave %%%%%%
             
             angle = mod(parameters.orientation+90, 360);
-            sf = 2*pi/parameters.spatial_period;  %cycles/pixel
+%             sf = 2*pi/parameters.spatial_period;  %cycles/pixel
      
-            a=sind(angle)*sf; % change per pixel
-            b=cosd(angle)*sf;
 
-            x = [0, (parameters.x_end-parameters.x_start)+2*parameters.spatial_period];
-            y = [0, (parameters.y_end-parameters.y_start)+2*parameters.spatial_period];
-
-            x = max(x,y);
-            y = x;
-            [xMesh,yMesh] = meshgrid(x(1):x(2),y(1):y(2));
-            switch parameters.spatial_modulation
-                case 'square'
-                    myGrating = sign(sin(a*xMesh + b*yMesh));
-                case 'sine'
-                    myGrating = sin(a*xMesh + b*yMesh);
-            end   
+            [xMesh,yMesh] = meshgrid(0:(parameters.x_end-parameters.x_start),0:(parameters.y_end-parameters.y_start));
             
-            tmp = mod(parameters.orientation, 360);
+            stimulus.base = (sind(angle)*xMesh + cosd(angle)*yMesh) * (2*pi/parameters.spatial_period);
             
-            if tmp>315 || tmp<=45 || (tmp>135 && tmp<=225) % vertical
-                stimulus.x_delta = 0;
-                stimulus.y_delta = (parameters.spatial_period/parameters.temporal_period)/cosd(parameters.orientation);
-            elseif tmp<=135 || tmp>225 % horizontal
-                stimulus.x_delta = -(parameters.spatial_period/parameters.temporal_period)/sind(parameters.orientation);
-                stimulus.y_delta = 0;
-            end
-            
-            myGrating = repmat(myGrating,1,1,4);
-            for j=1:3
-                myGrating(:,:,j) = myGrating(:,:,j)*2*stimulus.rgb(j)+2*stimulus.back_rgb(j)-1;
-            end
-            myGrating = (myGrating+1)/2;
-            myGrating(:,:,4) = 1;
-            myGrating = uint8(255*myGrating);
-            myGrating = shiftdim(myGrating,2);
-            stimulus.texture = myGrating; 
+            stimulus.delta = 2*pi/parameters.temporal_period;            
                         
         end		% constructor
         
         
         function time_stamps = Run_Moving_Grating(stimulus)
             
-            
-            tex1dsquare = cell(stimulus.temporal_period,1);
-            for i=0:stimulus.temporal_period
-                icur = mod(i,stimulus.temporal_period);
-                xlimits = round(stimulus.x_delta*icur : stimulus.x_span + stimulus.x_delta*icur -1)+stimulus.spatial_period*2;
-                ylimits = round(stimulus.y_delta*icur : stimulus.y_span + stimulus.y_delta*icur -1)+stimulus.spatial_period*2;
-                tmp = stimulus.texture(:,xlimits,ylimits);
-                tex1dsquare{i+1} = mglCreateTexture(tmp);
-            end
-                        
             cnt = 2;
             time_stamps = zeros(floor(stimulus.frames/stimulus.temporal_period)+1,1);
             t0 = mglGetSecs;
@@ -146,8 +109,22 @@ classdef	Moving_Grating < handle
             
             for i=1:stimulus.frames
                 icur = mod(i-1,stimulus.temporal_period)+1;
-                mglBltTexture( tex1dsquare{icur}, [stimulus.x_start stimulus.y_start stimulus.x_span stimulus.y_span], -1, -1);
+                myGrating = sin(stimulus.base + icur*stimulus.delta);
+                if strcmp(stimulus.spatial_modulation,'square')
+                    myGrating = sign(myGrating);
+                end
+                myGrating = repmat(myGrating,1,1,4);
+                for j=1:3
+                    myGrating(:,:,j) = myGrating(:,:,j)*stimulus.rgb(j)+stimulus.back_rgb(j);
+                end
+                myGrating(:,:,4) = 1;
+                myGrating = uint8(255*myGrating);
+                myGrating = shiftdim(myGrating,2);
+                tex1dsquare = mglCreateTexture(myGrating);
+
+                mglBltTexture( tex1dsquare, [stimulus.x_start stimulus.y_start stimulus.x_span stimulus.y_span], -1, -1);
                 mglFlush
+                time_stamps(cnt) = mglGetSecs(t0);
                 if icur == stimulus.temporal_period-1 % one frame before the end of temporal period
                     Pulse_DigOut_Channel; 
                     time_stamps(cnt) = mglGetSecs(t0);
@@ -156,10 +133,10 @@ classdef	Moving_Grating < handle
             end
             time_stamps(cnt) = mglGetSecs(t0);
             
-            for i=1:stimulus.temporal_period+1
-                mglDeleteTexture(tex1dsquare{i});
-            end
-            clear tex1dsquare
+%             for i=1:stimulus.temporal_period+1
+%                 mglDeleteTexture(tex1dsquare{i});
+%             end
+%             clear tex1dsquare
             
         end
         

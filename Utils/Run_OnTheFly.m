@@ -15,6 +15,7 @@
 function time_stamps = Run_OnTheFly(stimulus, trigger_interval)
 
 jitterX = 0;jitterY=0;
+
 frametex = mglCreateTexture(zeros(1,1)); % dummy
 
 countdown = 1;
@@ -26,7 +27,6 @@ RSM_Pause(stimulus.delay_frames);
 for i=1:stimulus.frames
 
     if countdown == 1
-        
         mglDeleteTexture(frametex);
         countdown = stimulus.refresh;  % reset to the number of frames specified by "interval"
  
@@ -50,7 +50,6 @@ for i=1:stimulus.frames
         end
         
         frametex = mglCreateTexture( img_frame, [], 0, {'GL_TEXTURE_MAG_FILTER','GL_NEAREST'} );  % create new texture
-
     else
         countdown = countdown - 1;    % it wasn't time to get a new frame, so instead we just decrement the count down
     end
