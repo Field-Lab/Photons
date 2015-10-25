@@ -1,20 +1,20 @@
-% cd('/Users/vision/Desktop/Photons/Utils/mex_functions/')
-% mex Draw_Random_Frame_opt.c
-
 %% Initialization
 
-addpath(genpath('/Users/vision/Desktop/Photons'))
-cd('/Users/vision/Desktop/Photons')
+my_path = '/Users/alexth/test4/Photons';
 
-path2save = '/Users/vision/Desktop/Photons/saved_stim/2015-08-25-1';
+addpath(genpath(my_path))
+cd(my_path)
+
+path2save = [my_path, '/saved_stim/2015-08-25-1'];
 screen_number = 2;
-def_params = initialize_display('CRT', screen_number);
+def_params = initialize_display('OLED', screen_number);
 
+% real refresh rate
 tic
-for i=1:1000
+for i=1:500
     mglFlush    
 end
-toc/1000
+toc/500
 
 % set gamma
 scale = [0.9936    1.0018    0.9958];
@@ -53,15 +53,15 @@ subplot(1,2,2); plot(x, w, 'k-o', x, r+g+b, 'm-*'); legend('measured', 'sum')
 %% Set background
 
 % white
-mglClearScreen([1 1 1]);
+mglClearScreen(1);
 mglFlush
 
 % gray
-mglClearScreen([1 1 1]*0.5);
+mglClearScreen(0.5);
 mglFlush
 
 % black
-mglClearScreen([1 1 1]*0);
+mglClearScreen(0);
 mglFlush
 
 
@@ -100,9 +100,9 @@ clear parameters stimulus;
 
 parameters.class = 'PL';
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.map_file_name = '/Users/alexth/test4/Photons/Maps/map_data034/map_data034.txt';
+parameters.map_file_name = [my_path, '/Maps/map_data034/map_data034.txt'];
 
-s_params = read_stim_lisp_output_hack('/Users/alexth/test4/Photons/Maps/s36_test'); % read S file
+s_params = read_stim_lisp_output_hack([my_path, '/Maps/s36_test']); % read S file
 
 for i=2:size(s_params,2)
     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
@@ -179,7 +179,7 @@ for i=1:stimulus.temporal_period
     mglDeleteTexture(stimulus.texture{i});
 end
 
-% s_params = read_stim_lisp_output_hack('/Users/alexth/test4/Photons/Maps/gratings/s03'); % read S file
+% s_params = read_stim_lisp_output_hack([my_path, '/Maps/gratings/s03']); % read S file
 % for i=2:size(s_params,2)
 %     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
 %     stimulus{i-1} = make_stimulus(trial_params, def_params);
@@ -242,7 +242,7 @@ end
 
 %% Random Noise
 
-%cd('/Users/alexth/test4/Photons/Utils/mex_functions/')
+%cd(my_path, '/Utils/mex_functions/')
 %mex Draw_Random_Frame_opt.c
 
 fprintf('\n\n<strong> Random Noise </strong>\n');
@@ -278,7 +278,7 @@ parameters.field_width = 32;  parameters.field_height = 32;
 % parameters.stixel_width = 1;   parameters.stixel_height = 1;
 % parameters.field_width = 600;  parameters.field_height = 600;
 
-% parameters.map_file_name = '/Users/alexth/test4/Photons/Maps/2011-12-13-2_f04_vorcones/map-0000.txt';
+% parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
 
 parameters.frames = 20*120;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
 
@@ -317,8 +317,8 @@ parameters.start_frame = 1; % >0
 parameters.interval = 1;
 parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
 parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
-% parameters.movie_name = '/Users/vision/Desktop/Photons/Movies/test_5_A.rawMovie';
-parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
+parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
+% parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
 
 stimulus = make_stimulus(parameters, def_params);
 save_parameters(stimulus, path2save, 'data000');

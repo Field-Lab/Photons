@@ -31,7 +31,7 @@ stimulus = make_stimulus(def_params, 'class', 'RN', 'rgb', [0 0 0], 'independent
     'frames', 10, 'silent');
 display_stimulus(stimulus);
 stimulus = make_stimulus(def_params, 'class', 'RM', 'frames', 10, 'silent', ...
-    'movie_name', '/Users/vision/Desktop/Photons/Movies/test_5_A.rawMovie');
+    'movie_name', [pwd, '/Movies/test_5_A.rawMovie']);
 display_stimulus(stimulus);
 mglStencilSelect(0);
 
