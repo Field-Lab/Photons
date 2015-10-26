@@ -1,20 +1,20 @@
 %% Initialization
 
-my_path = '/Users/alexth/test4/Photons';
+my_path = '/Users/vision/Desktop/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_stim/2015-08-25-1'];
 screen_number = 2;
-def_params = initialize_display('OLED', screen_number);
+def_params = initialize_display('CRT', screen_number);
 
 % real refresh rate
 tic
 for i=1:500
     mglFlush    
 end
-toc/500
+toc*1000/500
 
 % set gamma
 scale = [0.9936    1.0018    0.9958];

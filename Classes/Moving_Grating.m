@@ -141,19 +141,31 @@ classdef	Moving_Grating < handle
             
             cnt = 2;
             time_stamps = zeros(floor(stimulus.frames/stimulus.temporal_period)+1,1);
+%             if params.wait_trigger
+%                 %     fprintf('WAITING FOR TRIGGER\n');
+%                 trigger_time = Scan_4_Trigger(params.trigger_sample_rate); % trigger time stamp not used now, maybe we don't need it
+%             elseif params.wait_key % wait for key press event
+%                 %     fprintf('WAITING FOR KEY\n');
+%                 pause;
+%             end
             t0 = mglGetSecs;
             RSM_Pause(stimulus.delay_frames);
-            Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts
+%             Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts
 %             mglClearScreen; % if we want one delay frame
 %             mglFlush
-            time_stamps(1) = mglGetSecs(t0);
+            
             
             for i=1:stimulus.frames
                 icur = mod(i-1,stimulus.temporal_period)+1;
-
+                if i==1
+                    Pulse_DigOut_Channel;
+                    time_stamps(1) = mglGetSecs(t0);
+                    mglClearScreen
+                    mglFlush
+                end
                 mglBltTexture( stimulus.texture{icur}, [stimulus.x_start stimulus.y_start stimulus.x_span stimulus.y_span], -1, -1);
                 mglFlush
-                if icur == stimulus.temporal_period-1 % one frame before the end of temporal period
+                if icur == stimulus.temporal_period % one frame before the end of temporal period
                     Pulse_DigOut_Channel; 
                     time_stamps(cnt) = mglGetSecs(t0);
                     cnt = cnt+1;
