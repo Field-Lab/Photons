@@ -10,11 +10,7 @@ screen_number = 2;
 def_params = initialize_display('CRT', screen_number);
 
 % real refresh rate
-tic
-for i=1:500
-    mglFlush    
-end
-toc*1000/500
+mglTestRefresh(2)
 
 % set gamma
 scale = [0.9936    1.0018    0.9958];
@@ -280,7 +276,7 @@ parameters.field_width = 32;  parameters.field_height = 32;
 
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
 
-parameters.frames = 20*120;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
+parameters.frames = 10;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
 
 parameters.jitter = 0;
 
@@ -288,9 +284,9 @@ stimulus = make_stimulus(parameters, def_params);
 % save_parameters(stimulus, path2save, 'data000');
 % time_stamps = cell(1,10);
 i=1;
-% for i=1:10
-    time_stamps = display_stimulus(stimulus, 'wait_trigger',1);
-% end
+
+    time_stamps = display_stimulus(stimulus, 'wait_trigger',0);
+
 % this is to test timing
 % figure
 % for i=1:10
