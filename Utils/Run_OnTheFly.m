@@ -19,13 +19,15 @@ jitterX = 0;jitterY=0;
 frametex = mglCreateTexture(zeros(1,1)); % dummy
 
 countdown = 1;
-time_stamps = zeros(stimulus.frames+1,1);
+time_stamps = zeros(stimulus.frames,1);
 
 t0 = mglGetSecs;
 RSM_Pause(stimulus.delay_frames);
-mglFlushAndWait
-Pulse_DigOut_Channel
-time_stamps(1) = mglGetSecs(t0);
+mglFlush
+mglFlush
+
+% time_stamps(1) = mglGetSecs(t0);
+% Pulse_DigOut_Channel
 
 for i=1:stimulus.frames
 
@@ -58,15 +60,17 @@ for i=1:stimulus.frames
     end
 
     mglBltTexture(frametex, [stimulus.x_start+jitterX, stimulus.y_start+jitterY, stimulus.span_width, stimulus.span_height], -1, -1); % put it into buffer
-    mglFlushAndWait
+    mglFlush
+    
+    
+    % collect timestamp info
+    time_stamps(i) = mglGetSecs(t0);
     
     % Test whether it is time to output another pulse to the daq
-    if mod(i, trigger_interval)==0
+    if mod(i-1, trigger_interval)==0
         Pulse_DigOut_Channel;
     end
     
-    % collect timestamp info
-    time_stamps(i+1) = mglGetSecs(t0);
     
     % following is inherited from Bill
     % Occasionally flush the DIO buffer. Why? To make sure the DIO buffer

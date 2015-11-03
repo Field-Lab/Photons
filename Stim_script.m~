@@ -247,7 +247,7 @@ clear parameters stimulus
 parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = [1 1 1]*0.48;
-parameters.interval = 1;
+parameters.interval = 2;
 parameters.seed = 11111;
 parameters.independent = 0;
 parameters.binary = 1;
@@ -259,15 +259,15 @@ parameters.delay_frames = 0;
 % parameters.stixel_width = 40;   parameters.stixel_height = 40;
 % parameters.field_width = 10;  parameters.field_height = 10;
 
-parameters.x_start = 1;  parameters.x_end = 640;
-parameters.y_start = 81;   parameters.y_end = 400;
-parameters.stixel_width = 8;   parameters.stixel_height = 8;
-parameters.field_width = 80;  parameters.field_height = 40;
+% parameters.x_start = 1;  parameters.x_end = 640;
+% parameters.y_start = 81;   parameters.y_end = 400;
+% parameters.stixel_width = 80;   parameters.stixel_height = 80;
+% parameters.field_width = 8;  parameters.field_height = 4;
 
-% parameters.x_start = 101;  parameters.x_end = 700;
-% parameters.y_start = 1;   parameters.y_end = 600;
-% parameters.stixel_width = 20;   parameters.stixel_height = 20;
-% parameters.field_width = 30;  parameters.field_height = 30;
+parameters.x_start = 101;  parameters.x_end = 700;
+parameters.y_start = 1;   parameters.y_end = 600;
+parameters.stixel_width = 20;   parameters.stixel_height = 20;
+parameters.field_width = 30;  parameters.field_height = 30;
 
 % parameters.x_start = 1;  parameters.x_end = 600;
 % parameters.y_start = 1;   parameters.y_end = 600;
@@ -276,16 +276,16 @@ parameters.field_width = 80;  parameters.field_height = 40;
 
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
 
-parameters.frames = 120*300;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
+parameters.frames = 60*900;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
 
 parameters.jitter = 0;
 
 stimulus = make_stimulus(parameters, def_params);
-% save_parameters(stimulus, path2save, 'data000');
+save_parameters(stimulus, path2save, 'data012');
 % time_stamps = cell(1,10);
 % for i=1:10
 time_stamps = display_stimulus(stimulus, 'wait_trigger',1);
-save('time_stamps_data002_minimized.mat', 'time_stamps');
+save('time_stamps_data012.mat', 'time_stamps');
 
 figure
 plot(diff(time_stamps))
