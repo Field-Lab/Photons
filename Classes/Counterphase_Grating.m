@@ -140,9 +140,9 @@ classdef	Counterphase_Grating < handle
             cnt = 2; 
             time_stamps = zeros(floor(stimulus.frames/stimulus.temporal_period)+1,1);
             t0 = mglGetSecs;
-            RSM_Pause(stimulus.delay_frames-1);
-            Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts
+            RSM_Pause(stimulus.delay_frames);
             time_stamps(1) = mglGetSecs(t0);
+            Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts            
             mglClearScreen;
             mglFlush % last delay frame
             
@@ -151,13 +151,11 @@ classdef	Counterphase_Grating < handle
                 mglBltTexture( tex1dsquare{icur}, [stimulus.x_start stimulus.y_start stimulus.x_span stimulus.y_span], -1, -1);
                 mglFlush
                 if icur == stimulus.temporal_period-1 % one frame before the end of temporal period
-                    Pulse_DigOut_Channel; 
                     time_stamps(cnt) = mglGetSecs(t0);
+                    Pulse_DigOut_Channel;                     
                     cnt = cnt+1;
                 end
-            end            
-            time_stamps(cnt) = mglGetSecs(t0);
-            
+            end                        
             for i=1:stimulus.temporal_period
                 mglDeleteTexture(tex1dsquare{i});
             end

@@ -111,15 +111,14 @@ classdef	Moving_Grating < handle
             for i=1:stimulus.frames
                 icur = mod(i-1,stimulus.temporal_period)+1;
                 if i==1
+                    Pulse_DigOut_Channel;
                     time_stamps(1) = mglGetSecs(t0);
-                    Pulse_DigOut_Channel;                    
                     mglClearScreen
                     mglFlush
                 end
                 mglBltTexture( stimulus.texture{icur}, [stimulus.x_start stimulus.y_start stimulus.x_span stimulus.y_span], -1, -1);
                 mglFlush
                 if icur == stimulus.temporal_period % one frame before the end of temporal period
-                    time_stamps(cnt) = mglGetSecs(t0);
                     Pulse_DigOut_Channel; 
                     cnt = cnt+1;
                 end

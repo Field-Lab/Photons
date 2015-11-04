@@ -143,9 +143,10 @@ classdef	Moving_Bar < handle
             time_stamps = zeros(2,1);            
             t0 = mglGetSecs;            
             
-            RSM_Pause(stimulus.delay_frames-1);              
-            Pulse_DigOut_Channel; 
+            RSM_Pause(stimulus.delay_frames);              
             time_stamps(1) = mglGetSecs(t0);
+            Pulse_DigOut_Channel; 
+            mglClearScreen;
             mglFlush
             
             for i = 1:stimulus.frames
@@ -154,9 +155,9 @@ classdef	Moving_Bar < handle
                     mglFillRect(stimulus.x_center,stimulus.y_center,[stimulus.x_span stimulus.y_span], stimulus.back_rgb);
                     mglQuad(round(x_vertices), round(y_vertices), stimulus.rgb, 0);
                     mglFlush
-            end    
-            Pulse_DigOut_Channel;
+            end
             time_stamps(2) = mglGetSecs(t0);
+            Pulse_DigOut_Channel;            
             
             mglStencilSelect(0);
         end

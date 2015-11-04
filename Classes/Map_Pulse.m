@@ -85,12 +85,14 @@ classdef	Map_Pulse < handle
             
             time_stamps = zeros(2,1);
             t0 = mglGetSecs;            
-            RSM_Pause(stimulus.delay_frames-1);
+            RSM_Pause(stimulus.delay_frames);
             Pulse_DigOut_Channel;
+            mglClearScreen;
             mglFlush
             
             mglBltTexture(stimulus.frametex, [stimulus.x_start, stimulus.y_start, stimulus.x_span, stimulus.y_span], -1,-1 );   % top left
             mglFlush
+            
             time_stamps(1) = mglGetSecs(t0); % when first stimulus frame came on            
             mglBltTexture(stimulus.frametex, [stimulus.x_start, stimulus.y_start, stimulus.x_span, stimulus.y_span], -1,-1 );   % top left
             mglFlush          
