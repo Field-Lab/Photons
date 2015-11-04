@@ -7,7 +7,8 @@ for i=1:3
 %     gamma_table(i,:) = scale(i)*linear_gamma.^power(i)+offset(i);
     gamma_table(i,:) = (nthroot(linear_gamma,power(i)))/scale(i)-offset(i);
 end
-gamma_table(gamma_table<0)=0;
-gamma_table(gamma_table>1)=1;
+% 
+% figure
+% plot(gamma_table')
 
 mglSetGammaTable(gamma_table)

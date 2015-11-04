@@ -13,32 +13,32 @@ def_params = initialize_display('CRT', screen_number);
 mglTestRefresh(2)
 
 % set gamma
-scale = [0.9936    1.0018    0.9958];
-power = [2.8349    2.8767    2.8196];
-offset = [0.0006   -0.0021    0.0004];
+scale = [0.9998    1.0072    1.0019];
+power = [2.7807    2.8437    2.7429];
+offset = [-0.0017   -0.0043   -0.0002];
 set_gamma_from_fit_params(scale, power, offset);
 
 %% Gamma calibration
 
 steps = 17;
-run_gamma_flashes('linear', steps, [0 0 1]); % FIRST PARAMETER will reset gamma to linear!
+run_gamma_flashes('linear', steps, [1 1 1]); % FIRST PARAMETER will reset gamma to linear!
 
 % linear measurements (INSERT HERE)
-r = [0.01e-3 0.01e-3 0.06e-3 0.35e-3 1.10e-3 2.40e-3 4.34e-3 6.95e-3 10.30e-3 13.90e-3 18.27e-3 2.33e-2 2.95e-2 3.72e-2 4.63e-2 5.68e-2 6.84e-2];
-g = [0e-3 0e-3 0.01e-2 0.03e-2 0.11e-2 0.27e-2 0.52e-2 0.87e-2 1.33e-2 1.82e-2 2.42e-2 3.13e-2 4.01e-2 5.08e-2 6.36e-2 7.77e-2 9.33e-2];
-b = [0.01e-3 0.01e-3 0.09e-3 0.51e-3 1.58e-3 3.42e-3 6.12e-3 9.71e-3 14.21e-3 19.05e-3 2.5e-2 3.23e-2 4.10e-2 5.15e-2 6.41e-2 7.83e-2 9.40e-2];
-w = [0.01e-3 0.02e-3 0.18e-3 1.11e-3 3.66e-3 8.15e-3 14.77e-3 2.37e-2 3.5e-2 4.75e-2 6.48e-2 8.53e-2 11.06e-2 14.08e-2 17.46e-2 0.212 0.255];
+r = [0.1 0.19 1.39 8.09 25.7 57.4 105 170 252 343 453 583 739 930 1140 1400 1670];
+g = [0.1 0.12 0.7 5.88 24.7 63.8 127 216 330 457 614 802 1030 1300 1610 1970 2350];
+b = [0.1 0.4 3.86 19.1 53.5 112 195 304 438 583 767 990 1250 1570 1940 2360 2790];
+w = [0.1 .052 5.93 33.0 103 225 404 647 950 1290 1730 2300 2980 3830 4740 5770 6850];
 
 [scale, power, offset] = fit_gamma([r',g',b']);
 
 % control
-run_gamma_flashes([scale, power, offset], steps, [1 0 0]);
+run_gamma_flashes([scale, power, offset], steps, [0 1 0]);
 
 % corrected measurements (INSERT HERE, then proceed below)
-r = [];
-g = [];
-b = [];
-w = [];
+r = [0.1 101 212 322 429 529 627 736 834 930 1030 1140 1240 1350 1450 1560 1660];
+g = [0.1 130 289 445 590 736 879 1030 1170 1300 1450 1580 1720 1870 2010 2160 2310];
+b = [0.1 176 367 541 704 874 1050 1210 1400 1550 1720 1880 2080 2260 2430 2600 2780];
+w = [0.1 389 813 1220 1610 2040 2480 2920 3370 3780 4220 4640 5100 5520 5950 6370 6790];
 
 % plot
 x = linspace(0,255,steps);

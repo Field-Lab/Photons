@@ -11,7 +11,7 @@ elseif length(params)==9
     power = params(4:6);
     offset = params(7:9);
     
-    set_gamma_from_fit_params (scale, power, offset);
+    set_gamma_from_fit_params(scale, power, offset);
     
 else
     
@@ -23,9 +23,10 @@ end
 
 coef = linspace(0,1,steps);
 
-for i = 1:steps-1    
+for i = 1:steps   
     mglClearScreen(guns*coef(i));
     mglFlush
     pause;
 end
+
    
