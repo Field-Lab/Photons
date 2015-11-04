@@ -90,10 +90,11 @@ classdef	Moving_Grating < handle
 %             sf = 2*pi/parameters.spatial_period;  %cycles/pixel
      
 
-            [xMesh,yMesh] = meshgrid(0:(parameters.x_end-parameters.x_start),0:(parameters.y_end-parameters.y_start));
+            [xMesh,yMesh] = meshgrid(0:(parameters.y_end-parameters.y_start),0:(parameters.x_end-parameters.x_start));
             
             base = (sind(angle)*xMesh + cosd(angle)*yMesh) * (2*pi/parameters.spatial_period);
             
+           
             stimulus.delta = 2*pi/parameters.temporal_period;
             
             for i = 1:parameters.temporal_period
