@@ -22,11 +22,14 @@ else
 end
 
 coef = linspace(0,1,steps);
+seq = get_sequence(steps);
 
 for i = 1:steps   
-    mglClearScreen(guns*coef(i));
+    mglClearScreen(guns*coef(seq(i)));
+    mglFlush
+    pause;
+    mglClearScreen(0.5);
     mglFlush
     pause;
 end
 
-   
