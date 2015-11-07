@@ -6,10 +6,6 @@ classdef	Moving_Bar < handle
 %         by: william vinje
 %       date: Date
 %  copyright: (c) Date William Vinje, Eduardo Jose Chichilnisky (GPL see RSM/COPYING)
-% NB: when using mglQuad my convention is to start in upper left as 0, 0
-% then always work in clockwise manner for sub-quads
-% within each quad or sub-quad vertices are also described in a clockwise
-% manner.
 
     properties
         
@@ -141,13 +137,11 @@ classdef	Moving_Bar < handle
             mglStencilSelect(1);
            
             time_stamps = zeros(2,1);            
-            t0 = mglGetSecs;            
-            
-            RSM_Pause(stimulus.delay_frames);              
-            time_stamps(1) = mglGetSecs(t0);
-            Pulse_DigOut_Channel; 
+            t0 = mglGetSecs;
+            RSM_Pause(stimulus.delay_frames);
             mglClearScreen;
             mglFlush
+            mglFlush            
             
             for i = 1:stimulus.frames
                     x_vertices = stimulus.x_first + stimulus.x_delta*i;
@@ -155,6 +149,10 @@ classdef	Moving_Bar < handle
                     mglFillRect(stimulus.x_center,stimulus.y_center,[stimulus.x_span stimulus.y_span], stimulus.back_rgb);
                     mglQuad(round(x_vertices), round(y_vertices), stimulus.rgb, 0);
                     mglFlush
+                    if i==1
+                        time_stamps(1) = mglGetSecs(t0);
+                        Pulse_DigOut_Channel;  
+                    end
             end
             time_stamps(2) = mglGetSecs(t0);
             Pulse_DigOut_Channel;            

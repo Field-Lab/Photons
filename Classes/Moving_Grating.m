@@ -39,7 +39,7 @@ classdef	Moving_Grating < handle
             
             addParameter(p,'temporal_period', []); % forced
             addParameter(p,'spatial_period', []); % forced
-            addParameter(p,'orientation', []); % forced
+            addParameter(p,'direction', []); % forced
             addParameter(p,'frames', []); % forced
             addParameter(p,'rgb', []); % forced
                        
@@ -71,7 +71,7 @@ classdef	Moving_Grating < handle
             
             %%%%%% calculate the wave %%%%%%
             
-            angle = mod(parameters.orientation+90, 360);
+            angle = mod(parameters.direction+90, 360);
 %             sf = 2*pi/parameters.spatial_period;  %cycles/pixel
 
             [xMesh,yMesh] = meshgrid(0:(parameters.y_end-parameters.y_start),0:(parameters.x_end-parameters.x_start));
@@ -100,31 +100,24 @@ classdef	Moving_Grating < handle
         
         function time_stamps = Run_Moving_Grating(stimulus)
             
-            cnt = 2;
-            time_stamps = zeros(floor(stimulus.frames/stimulus.temporal_period)+1,1);
+            cnt = 1;
+            time_stamps = zeros(floor(stimulus.frames/stimulus.temporal_period),1);
             t0 = mglGetSecs;
             RSM_Pause(stimulus.delay_frames);
-%             Pulse_DigOut_Channel; % because we want the trigger one frame before the stimulus starts
-%             mglClearScreen; % if we want one delay frame
-%             mglFlush
+            mglClearScreen;
+            mglFlush
+            mglFlush 
                         
             for i=1:stimulus.frames
                 icur = mod(i-1,stimulus.temporal_period)+1;
-                if i==1
-                    time_stamps(1) = mglGetSecs(t0);
-                    Pulse_DigOut_Channel;                    
-                    mglClearScreen
-                    mglFlush
-                end
                 mglBltTexture( stimulus.texture{icur}, [stimulus.x_start stimulus.y_start stimulus.x_span stimulus.y_span], -1, -1);
                 mglFlush
-                if icur == stimulus.temporal_period % one frame before the end of temporal period
+                if icur==1
                     time_stamps(cnt) = mglGetSecs(t0);
                     Pulse_DigOut_Channel; 
                     cnt = cnt+1;
                 end
-            end
-            
+            end            
         end
         
     end	% methods block

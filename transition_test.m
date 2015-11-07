@@ -1,44 +1,4 @@
 
-%% Rectangular Flashing Pulses
-fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
-clear parameters stimulus;
-
-parameters.class = 'FP';
-parameters.frames = 30;
-parameters.delay_frames = 30;
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.x_start = 120;  parameters.x_end = 620;
-parameters.y_start = 50;   parameters.y_end = 400;
-
-rgb = [1 0 1; 1 1 1; 0 1 0; -1 -1 -1]*0.5;
-for i=1:size(rgb,1)
-    stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
-    save_parameters(stimulus, path2save, 'data000');
-    display_stimulus(stimulus);
-end
-
-
-%% Cone-Isolating Pulse
-fprintf('\n\n<strong> Cone-Isolating Pulse </strong>\n');
-clear parameters stimulus;
-
-parameters.class = 'PL';
-parameters.back_rgb = [1 1 1]*0.5;
-
-% UDCR type for OLED
-parameters.map_file_name = [my_path, '/Maps/udcr/map-0000.txt'];
-s_params = read_stim_lisp_output_hack([my_path, '/Maps/udcr/s03']);
-
-for i=2:size(s_params,2)
-    trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
-    stimulus{i-1} = make_stimulus(trial_params, def_params);
-end
-
-for i=1:length(stimulus)
-    display_stimulus(stimulus{i});
-end
-
-
 %% Moving bar
 
 fprintf('\n\n<strong> Moving bar. </strong>\n');
@@ -47,24 +7,20 @@ clear parameters stimulus;
 parameters.class = 'MB';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = -[1, 1, 1]*0.48;
-parameters.bar_width = 30;
-parameters.orientation = 45;
+parameters.bar_width = 40;
 parameters.delta = 2;  % pixels per frame
-parameters.x_start = 100;  parameters.x_end = 300;
-parameters.y_start = 100;   parameters.y_end = 350;
-parameters.frames = 200;
-parameters.delay_frames = 30;
+parameters.x_start = 1;  parameters.x_end = 640;
+parameters.y_start = 1;   parameters.y_end = 480;
+parameters.frames = 280;
+parameters.delay_frames = 0;
+parameters.orientation = 90;
 
-orientation = [0 30 45];
-for i = 1:length(orientation)
-    stimulus{i} = make_stimulus(parameters,'orientation', orientation(i), def_params);    
+stimulus = make_stimulus(parameters, def_params);
+pause(5)
+for j=1:10
+time_stamps = display_stimulus(stimulus);
+a(j)=diff(time_stamps)/(1/119.5);
 end
-
-for i=1:length(stimulus)
-    display_stimulus(stimulus{i});
-end
-
-
 
 
 %% Moving Grating
@@ -78,25 +34,28 @@ parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.x_start = 1;  parameters.x_end = 640;
 parameters.y_start = 1;   parameters.y_end = 480;
-parameters.spatial_period = 30;
-parameters.orientation = 45;
+parameters.spatial_period = 100;
+parameters.direction = 225;
+parameters.frames = 10.075*120; %10s on CRT, 20s on OLED
+parameters.temporal_period = 30;
 
-parameters.frames = 10*120; %10s on CRT, 20s on OLED
-
-temporal_period = [15 30 60];
-for i = 1:length(temporal_period)
-    stimulus{i} = make_stimulus(parameters,'temporal_period', temporal_period(i), def_params);    
+stimulus = make_stimulus(parameters, def_params);    
+pause(5)
+time_stamps = cell(3,1);
+for i=1:3
+time_stamps{i} = display_stimulus(stimulus, 'wait_trigger', 0);
 end
-
-for i = 1:length(temporal_period)
-    display_stimulus(stimulus, 'wait_trigger', 1);
-end
-
-for i=1:length(temporal_period)
-    for j=1:stimulus{i}.temporal_period
-        mglDeleteTexture(stimulus{i}.texture{j});
-    end
-end
+figure
+plot(diff(time_stamps{1})*1000, '*-')
+hold on
+plot(diff(time_stamps{2})*1000, '*-')
+plot(diff(time_stamps{3})*1000, '*-')
+figure
+plot(time_stamps{3})
+% 
+% for j=1:stimulus.temporal_period
+%         mglDeleteTexture(stimulus.texture{j});
+% end
 
 
 %% Counterphase Grating
@@ -113,18 +72,60 @@ parameters.back_rgb = [1 1 1]*0.5;
 parameters.x_start = 1;  parameters.x_end = 640;
 parameters.y_start = 1;   parameters.y_end = 480;
 parameters.spatial_phase = 0; % pixels - offset
-parameters.spatial_period = 60; % pixels
+parameters.spatial_period = 100; % pixels
 parameters.orientation = 135;
+parameters.temporal_period = 60;
 
 parameters.frames = 10*120; %10s on CRT, 20s on OLED
 
-temporal_period = [15 30 60];
-for i = 1:length(temporal_period)
-    stimulus{i} = make_stimulus(parameters,'temporal_period', temporal_period(i), def_params);    
+stimulus = make_stimulus(parameters, def_params);    
+pause(5)
+time_stamps = cell(3,1);
+for i=1:3
+    time_stamps{i} = display_stimulus(stimulus, 'wait_trigger', 0);
+end
+figure
+plot(diff(time_stamps{1})*1000, '*-')
+hold on
+plot(diff(time_stamps{2})*1000, '*-')
+plot(diff(time_stamps{3})*1000, '*-')
+figure
+plot(time_stamps{3})
+
+%% Rectangular Flashing Pulses
+fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'FP';
+parameters.frames = 30;
+parameters.delay_frames = 30;
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.x_start = 120;  parameters.x_end = 620;
+parameters.y_start = 50;   parameters.y_end = 400;
+
+rgb = [1 0 1; 1 1 1; 0 1 0; -1 -1 -1]*0.5;
+for i=1:size(rgb,1)
+    stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
+    save_parameters(stimulus, path2save, 'data000');
+    display_stimulus(stimulus, 'wait_trigger', 1);
 end
 
-for i = 1:length(temporal_period)
-    display_stimulus(stimulus, 'wait_trigger', 1);
+
+%% Cone-Isolating Pulse
+fprintf('\n\n<strong> Cone-Isolating Pulse </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'PL';
+parameters.back_rgb = [1 1 1]*0.5;
+
+% UDCR type for OLED
+parameters.map_file_name = [my_path, '/Maps/udcr/map-0000.txt'];
+s_params = read_stim_lisp_output_hack([my_path, '/Maps/udcr/s03']);
+
+for i=2:100
+    trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
+    stimulus = make_stimulus(trial_params, def_params);
+    display_stimulus(stimulus);
 end
 
 
@@ -184,7 +185,7 @@ parameters.back_rgb = [1 1 1]*0.5;
 parameters.x_start = 1;
 parameters.y_start = 1;
 parameters.stixel_width = 1;   parameters.stixel_height = 1;
-parameters.frames = 1200; % 10s on CRT, 20s on OLED
+parameters.frames = 5*120; % 10s on CRT, 20s on OLED
 parameters.start_frame = 1; % >0
 parameters.interval = 1;
 parameters.flip = 1;
@@ -194,10 +195,18 @@ parameters.reverse = 0;
 parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
 
 % hard
-parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
+% parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
 
 stimulus = make_stimulus(parameters, def_params);
-display_stimulus(stimulus,'wait_trigger',1);
+pause(5)
+time_stamps = cell(1,2);
+for i=1:2
+    time_stamps{i}=display_stimulus(stimulus,'wait_trigger',0);
+end
+figure
+plot(diff(time_stamps{1}(1:100:end))*1000)
+hold on
+plot(diff(time_stamps{2}(1:100:end))*1000)
 
 
 
