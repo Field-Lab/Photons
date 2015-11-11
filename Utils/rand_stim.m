@@ -4,7 +4,7 @@ function[stimulus, seq, trial_num_total] = rand_stim(stim_in)
 % peroid and direction.
 
 % xyao 05/21/14
-if (strcmp(stim_in.type, 'MG') || strcmp(stim_in.type, 'CG'))
+if strcmp(stim_in.class, 'MG')
     
     if (isfield(stim_in, 'temporal_period'))
         if (isfield(stim_in, 'spatial_period'))
@@ -34,7 +34,8 @@ if (strcmp(stim_in.type, 'MG') || strcmp(stim_in.type, 'CG'))
 
     trial_num = length(tp)*length(sp)*length(dr);
     trial_num_total = trial_num*rp;
-    stimulus_temp(1:trial_num) = stim_in;
+    stim_in_ = rmfield(stim_in, 'n_for_each_stim');
+    stimulus_temp(1:trial_num) = stim_in_;
 
 
     % create structure arrays with non-randomized stimuli sequence
@@ -49,7 +50,63 @@ if (strcmp(stim_in.type, 'MG') || strcmp(stim_in.type, 'CG'))
             end
         end
     end
-elseif strcmp(stim_in.type, 'MB')
+    
+elseif strcmp(stim_in.class, 'CG')
+    
+    if (isfield(stim_in, 'temporal_period'))
+        if (isfield(stim_in, 'spatial_period'))
+            if (isfield(stim_in, 'orientation'))
+                if (isfield(stim_in, 'spatial_phase'))
+                    if (isfield(stim_in, 'n_for_each_stim'))
+                        tp = stim_in.temporal_period;
+                        sp = stim_in.spatial_period;
+                        dr = stim_in.orientation;
+                        sph = stim_in.spatial_phase;
+                        rp = stim_in.n_for_each_stim;
+                    else
+                       fprintf('\t RSM ERROR: repeats not recognized. Please define repeats and try again. \n');
+                       return
+                    end
+                else
+                    fprintf('\t RSM ERROR: spatial_phase not recognized. Please define spatial_phase and try again. \n');
+                   return
+                end
+            else
+               fprintf('\t RSM ERROR: direction not recognized. Please define direction and try again. \n');
+               return
+            end
+        else
+           fprintf('\t RSM ERROR: spatial period not recognized. Please define spatial period and try again. \n');
+           return
+        end
+    else
+       fprintf('\t RSM ERROR: temporal period not recognized. Please define temporal period and try again. \n');
+       return
+    end
+
+
+    trial_num = length(tp)*length(sp)*length(dr)*length(sph);
+    trial_num_total = trial_num*rp;
+    stim_in_ = rmfield(stim_in, 'n_for_each_stim');
+    stimulus_temp(1:trial_num) = stim_in_;
+
+
+    % create structure arrays with non-randomized stimuli sequence
+
+    for i = 1:length(sp)
+        for j = 1:length(tp)
+            for k = 1:length(dr)
+                for l = 1:length(sph)
+                    idx = length(tp)*length(dr)*length(sph)*(i-1) + length(dr)*length(sph)*(j-1) + length(sph)*(k-1) + l;
+                    stimulus_temp(idx).temporal_period = tp(j);
+                    stimulus_temp(idx).spatial_period = sp(i);
+                    stimulus_temp(idx).orientation = dr(k);
+                    stimulus_temp(idx).spatial_phase = sph(l);
+                end
+            end
+        end
+    end
+elseif strcmp(stim_in.class, 'MB')
     
     if (isfield(stim_in, 'delta'))
         if (isfield(stim_in, 'bar_width'))
@@ -77,7 +134,8 @@ elseif strcmp(stim_in.type, 'MB')
     end
     trial_num = length(tp)*length(sp)*length(dr);
     trial_num_total = trial_num*rp;
-    stimulus_temp(1:trial_num) = stim_in;
+    stim_in_ = rmfield(stim_in, 'n_for_each_stim');
+    stimulus_temp(1:trial_num) = stim_in_;
 
 
     % create structure arrays with non-randomized stimuli sequence

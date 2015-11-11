@@ -51,7 +51,7 @@ classdef	Moving_Bar < handle
             addParameter(p,'rgb', []); % forced
             addParameter(p,'bar_width', []); % forced
             addParameter(p,'delta', []); % forced
-            addParameter(p,'orientation', []); % forced
+            addParameter(p,'direction', []); % forced
             addParameter(p,'frames', []); % forced
             parse(p,parameters{:});
             parameters = p.Results;
@@ -81,7 +81,7 @@ classdef	Moving_Bar < handle
             stimulus.y_span = parameters.y_end-parameters.y_start;
             stimulus.x_center = parameters.x_start + stimulus.x_span/2;
             stimulus.y_center = parameters.y_start + stimulus.y_span/2;
-            angle = parameters.orientation;
+            angle = parameters.direction;
             
             L = 3000; % Length of the bar, the idea of making this number large is to ensure that it covers the whole display.
             if angle >= 0 && angle < 90
