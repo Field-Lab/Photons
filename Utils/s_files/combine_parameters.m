@@ -24,15 +24,19 @@ if isfield(parameters, 'rgb') && iscell(parameters.rgb) % moving bars
     parameters.rgb = cell2mat(parameters.rgb);
 end
 
+if isfield(parameters, 'back_rgb') && iscell(parameters.back_rgb)
+    parameters.back_rgb = cell2mat(parameters.back_rgb);
+end
+
 if isfield(parameters, 'x_delta') % moving bars
     parameters.delta = parameters.x_delta;
     parameters = rmfield(parameters, 'x_delta');
 end
 
-if isfield(parameters, 'direction') % for gratings?
-    parameters.orientation = parameters.direction;
-    parameters = rmfield(parameters, 'direction');
-end
+% if isfield(parameters, 'direction') % for gratings?
+%     parameters.orientation = parameters.direction;
+%     parameters = rmfield(parameters, 'direction');
+% end
 
 if isfield(parameters, 'filter_scale')  % moving bars
     parameters = rmfield(parameters, 'filter_scale');

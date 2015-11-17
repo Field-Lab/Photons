@@ -96,11 +96,12 @@ parameters.y_start = 50;   parameters.y_end = 400;
 rgb = [1 0 1; 1 1 1; 0 1 0; -1 -1 -1]*0.5;
 for i=1:size(rgb,1)
     stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
+    save_parameters(stimulus, path2save, 'data000');
     display_stimulus(stimulus);
 end
 
 
-%% Map based Pulse
+%% Cone-Isolating Pulse
 fprintf('\n\n<strong> Cone-Isolating Pulse </strong>\n');
 clear parameters stimulus;
 
@@ -108,14 +109,23 @@ parameters.class = 'PL';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.map_file_name = [my_path, '/Maps/map_data034/map_data034.txt'];
 
-s_params = read_s_file([my_path, '/Maps/s03']);
+s_params = read_s_file([my_path, '/Maps/s03']); % read S file
 
 for i=2:size(s_params,2)
     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
-    stimulus = make_stimulus(trial_params, def_params);
-    display_stimulus(stimulus)
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+%     save_parameters(stimulus{i-1}, path2save, 'data000');
 end
 
+time_stamps = cell(1,length(stimulus));
+
+for i=1:length(stimulus)
+    time_stamps{i} = display_stimulus(stimulus{i});
+end
+
+for i=1:length(stimulus)
+    save_time_stamps(time_stamps{i}, path2save, 'data000');
+end
 
 %% Moving bar
 
