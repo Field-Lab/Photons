@@ -54,7 +54,7 @@ for i=1:stimulus.frames
             jitterY = mod(double(random_uint16(stimulus.jitter.state)), stimulus.stixel_height) - stimulus.stixel_height/2;
         end
         
-        if isprop(stimulus, 'mask'); img_frame(4,:,:)=stimulus.mask.mask; end % put the mask into the alpha channel
+        if stimulus.mask.flag; img_frame(4,:,:)=stimulus.mask.mask; end % put the mask into the alpha channel
         
         frametex = mglCreateTexture( img_frame, [], 0, {'GL_TEXTURE_MAG_FILTER','GL_NEAREST'} );  % create new texture
     else

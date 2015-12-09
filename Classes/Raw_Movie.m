@@ -68,7 +68,6 @@ classdef	Raw_Movie < handle
             addParameter(p,'flip', 1); % def no flip
             addParameter(p,'reverse', 0); % def no reverse
             addParameter(p,'interval', 1); % def 1
-            
             addParameter(p,'mask', 0); % 0 if no mask
             
             addParameter(p,'movie_name', []); % forced 

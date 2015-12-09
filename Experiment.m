@@ -5,7 +5,7 @@ my_path = '/Users/Nora/Documents/Photons';
 addpath(genpath(my_path))
 cd(my_path)
 
-path2save = [my_path, '/saved_stim/2015-11-02'];
+path2save = [my_path, '/saved_stim/nora_test'];
 screen_number = 2;
 def_params = initialize_display('CRT', screen_number);
 
@@ -291,6 +291,11 @@ parameters.frames = 120*300;%ceil(1*60*60);  % min * refresh rate (ceil it?) * 6
 
 parameters.jitter = 0;
 
+% mask example
+% mask = zeros(80,40);
+% mask(1:10, 1:10) = 255;
+% parameters.mask = mask;
+
 stimulus = make_stimulus(parameters, def_params);
 % save_parameters(stimulus, path2save, 'data000');
 % time_stamps = cell(1,10);
@@ -336,7 +341,7 @@ stimulus = make_stimulus(parameters, def_params);
 save_parameters(stimulus, path2save, 'data000');
 time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1, 'erase', 1);
 
-%% Raw Movie with mask
+%% Raw Movie with mask (also works with white noise)
 
 fprintf('\n\n<strong> Raw Movie with mask </strong>\n');
 clear parameters stimulus;
@@ -357,7 +362,7 @@ parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movie
 % parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
 
 % mask
-mask = 0.5*zeros(320,160);
+mask = zeros(320,160);
 mask(1:10, 1:10) = 255;
 parameters.mask = mask;
 

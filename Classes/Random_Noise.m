@@ -41,6 +41,7 @@ classdef	Random_Noise < handle
         rng_init
         probability  
         jitter
+        mask
         
         
     end			% properties block
@@ -69,7 +70,8 @@ classdef	Random_Noise < handle
             addParameter(p,'interval', 1); % def 1
             addParameter(p,'probability', 1.0); % def probability 1
             addParameter(p,'jitter', 0); % def no jitter
-            addParameter(p,'binary', 1); % def BW            
+            addParameter(p,'binary', 1); % def BW    
+            addParameter(p,'mask', 0); % 0 if no mask
             
             addParameter(p,'rgb', []);  % forced
             addParameter(p,'independent', []);
@@ -169,6 +171,14 @@ classdef	Random_Noise < handle
                 stimulus.span_height = stimulus.span_height + 2*parameters.stixel_height; 
                 stimulus.x_start = parameters.x_start-parameters.stixel_width;
                 stimulus.y_start = parameters.y_start-parameters.stixel_height;
+            end
+            
+            % mask
+            if length(parameters.mask)>1
+                stimulus.mask.flag = 1;
+                stimulus.mask.mask = parameters.mask;
+            else
+                stimulus.mask.flag = 0;
             end
             
             % duration, interval, seed
