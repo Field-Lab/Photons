@@ -65,9 +65,9 @@ clear parameters stimulus time_stamps;
 dataname = 'data000';
 
 % For repeats
-%{
-repeats = 10;
-parameters.frames = 120;
+%%{
+repeats = 3;
+parameters.frames = 240;
 interleaved = 0;
 %}
 
@@ -79,7 +79,7 @@ interleaved = 0;
 %}
 
 % For interleaved
-%%{
+%{
 interleaved = 1;
 repeats = 1; % for straight through
 frames_testing = 120;
@@ -90,22 +90,24 @@ parameters.frames = frames_testing;
 %}
 
 % For masking
-%{
-mask = zeros(320,160); % this should be in stixels, not pixels
-mask(1:300, 1:100) = 255;
+%%{
+final_mask = mod(final_mask+1, 2);
+mask = final_mask'*255;
 parameters.mask = mask;
 %}
 
 % Movie Name
 parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movies/NSbrownian/NSbrownian_3000_movies/NSbrownian_3000_A_025.rawMovie';
+% parameters.movie_name = '/Volumes/Lab/Users/Nora/new_stim_nora/mask_NSEM/testmask_3_stix2/comp_LES/movie_3_comp_LES.rawMovie';
 
 % Don't need to change
 parameters.class = 'RM';
 parameters.back_rgb = [1 1 1]*0.25;
 parameters.x_start = 1; % x_end and y_end wil depend on movie size (and stixel size)!
 parameters.y_start = 81;
-parameters.stixel_width = 2;   parameters.stixel_height = 2;
-parameters.start_frame = 120; % >0
+parameters.stixel_width = 2;   
+parameters.stixel_height = 2;
+parameters.start_frame = 1; % >0
 parameters.interval = 1;
 parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
 parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
