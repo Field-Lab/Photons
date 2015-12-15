@@ -1,4 +1,4 @@
-function time_stamps = display_stimulus(stimulus, varargin)
+function [time_stamps] = display_stimulus(stimulus, varargin)
 
 if stimulus.class == 'f'
     fprintf('\n Could not construct the stimulus\n');
@@ -10,6 +10,7 @@ addParameter(p,'trigger_interval', 100);
 addParameter(p,'wait_trigger', 0); % for now, normally def is 1
 addParameter(p,'wait_key', 0);
 addParameter(p,'erase', 1);
+addParameter(p, 'erase_to_gray', 0);
 parse(p,varargin{:});
 params = p.Results;
 
@@ -41,6 +42,13 @@ end
 %%%%%%%%%%% RUN ONE STIMULUS %%%%%%%%%%%
 
 time_stamps = eval(stimulus.run_script);
+
+if p.Results.erase_to_gray
+    mglClearScreen(0.5);
+    mglFlush
+    mglClearScreen(0.5);
+    mglFlush
+end
 
 if p.Results.erase
     mglClearScreen;
