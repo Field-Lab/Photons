@@ -1,6 +1,6 @@
 %% Initialization
 
-my_path = '/Users/Nora/Documents/Photons';
+my_path = '/Users/vision/Desktop/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
@@ -301,7 +301,7 @@ stimulus = make_stimulus(parameters, def_params);
 % time_stamps = cell(1,10);
 % for i=1:10
 time_stamps = display_stimulus(stimulus, 'wait_trigger',0);
-save('time_stamps_data002_minimized.mat', 'time_stamps');
+%save('time_stamps_data002_minimized.mat', 'time_stamps');
 
 figure
 plot(diff(time_stamps))
