@@ -54,6 +54,8 @@ for i=1:stimulus.frames
             jitterY = mod(double(random_uint16(stimulus.jitter.state)), stimulus.stixel_height) - stimulus.stixel_height/2;
         end
         
+        if stimulus.mask.flag; img_frame(4,:,:)=stimulus.mask.mask; end % put the mask into the alpha channel
+        
         frametex = mglCreateTexture( img_frame, [], 0, {'GL_TEXTURE_MAG_FILTER','GL_NEAREST'} );  % create new texture
     else
         countdown = countdown - 1;    % it wasn't time to get a new frame, so instead we just decrement the count down

@@ -5,7 +5,7 @@ my_path = '/Users/vision/Desktop/Photons';
 addpath(genpath(my_path))
 cd(my_path)
 
-path2save = [my_path, '/saved_stim/2015-11-19_test'];
+path2save = [my_path, '/saved_stim/nora_test'];
 screen_number = 2;
 def_params = initialize_display('CRT', screen_number);
 
@@ -350,8 +350,12 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
 
-stimulus = make_stimulus(parameters, def_params);
+% mask example
+% mask = zeros(80,40);
+% mask(1:10, 1:10) = 255;
+% parameters.mask = mask;
 
+stimulus = make_stimulus(parameters, def_params);
 time_stamps = display_stimulus(stimulus, 'wait_trigger', 1);
 
 
@@ -370,13 +374,42 @@ parameters.start_frame = 1; % >0
 parameters.interval = 1;
 parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
 parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
-parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
+% parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
+%parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movies/NSbrownian/NSbrownian_3000_movies/NSbrownian_3000_A_025.rawMovie';
+ parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
+
+stimulus = make_stimulus(parameters, def_params); 
+save_parameters(stimulus, path2save, 'data000');
+time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1, 'erase', 1);
+
+%% Raw Movie with mask (also works with white noise)
+
+fprintf('\n\n<strong> Raw Movie with mask </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'RM';
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.x_start = 1; % x_end and y_end wil depend on movie size (and stixel size)!
+parameters.y_start = 1;
+parameters.stixel_width = 1;   parameters.stixel_height = 1;
+% parameters.frames = ceil(0.05*60*60);  % min * refresh rate (ceil it?) * 60(sec in min) - duration of each repetition!
+parameters.frames = 1200;
+parameters.start_frame = 1; % >0
+parameters.interval = 1;
+parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
+parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
+% parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
+parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movies/NSbrownian/NSbrownian_3000_movies/NSbrownian_3000_A_025.rawMovie';
 % parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
 
-stimulus = make_stimulus(parameters, def_params);
+% mask
+mask = zeros(320,160);
+mask(1:10, 1:10) = 255;
+parameters.mask = mask;
 
-time_stamps = display_stimulus(stimulus);
-
+stimulus = make_stimulus(parameters, def_params); 
+save_parameters(stimulus, path2save, 'data000');
+time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1, 'erase', 1);
 
 %% photographic mapping
 

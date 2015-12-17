@@ -22,13 +22,13 @@ if do_silent % silent prerun
     mglFillRect(0,0,[1 1]);
     mglStencilCreateEnd;
     mglStencilSelect(1);
-else % if moving bar was interrupted or after silent prerun 
+else % if moving bar was interrupted or after silent prerun
     mglStencilSelect(0);
 end
 
 class_index = find(cell2mat(cellfun(@(x) strcmp(x,'class'), parameters, 'UniformOutput', 0)));
 
-switch parameters{class_index+1}    
+switch parameters{class_index+1}
     case 'FS'   % focus squares
         stimulus = Focus_Squares(def_params, parameters);
         
@@ -49,7 +49,9 @@ switch parameters{class_index+1}
         
     case 'RN'  % random noise
         stimulus = Random_Noise(def_params, parameters);
-                
+        
     case 'RM'   % raw movie
-        stimulus = Raw_Movie(def_params, parameters);        
+        stimulus = Raw_Movie(def_params, parameters);
+end
+
 end
