@@ -334,8 +334,8 @@ parameters.interval = 1;
 parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
 parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
 % parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
-parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movies/NSbrownian/NSbrownian_3000_movies/NSbrownian_3000_A_025.rawMovie';
-% parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
+%parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movies/NSbrownian/NSbrownian_3000_movies/NSbrownian_3000_A_025.rawMovie';
+ parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
 
 stimulus = make_stimulus(parameters, def_params); 
 save_parameters(stimulus, path2save, 'data000');
