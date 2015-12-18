@@ -14,6 +14,7 @@ def_params.y_start = 1;
 def_params.y_end = height;
 def_params.back_rgb = [0.5 0.5 0.5];
 def_params.delay_frames = 0;
+def_params.tail_frames = 0;
 
 % initialize MGL
 fprintf('Configuring %s display for %4.3f [Hz] , width: %d , height: %d \n', dev_type, refresh_rate, width, height);
