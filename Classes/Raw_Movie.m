@@ -130,12 +130,15 @@ classdef	Raw_Movie < handle
                 else
                     parameters.frames = total_movie_frames - stimulus.start_frame;
                 end
-            end            
-            if (parameters.reverse && stimulus.start_frame-parameters.frames<0) || (~parameters.reverse && stimulus.start_frame+parameters.frames-1>total_movie_frames)
+            end    
+            
+            check_frames = ceil(parameters.frames/parameters.interval);
+            if (parameters.reverse && stimulus.start_frame-check_frames<0) || (~parameters.reverse && stimulus.start_frame+check_frames-1>total_movie_frames)
                 fprintf('\t duration is more than movie length');
                 stimulus.class = 'f';
                 return;
             end
+            
             stimulus.frames = parameters.frames;
             stimulus.delay_frames = parameters.delay_frames;
                       
