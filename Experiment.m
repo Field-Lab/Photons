@@ -174,8 +174,8 @@ parameters.tail_frames = 0;
 % parameters.rgb = [1 1 1]*0.48;
 parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
-base_file_path = [my_path, '/saved_stim/2015-11-19-test/2015-11-09-7/'];
-maps = {'80_0', '151_0'};
+base_file_path = [my_path, '/saved_stim/2015-11-19-test/'];
+maps = {'335', '5615'};
 rgb = {[0.48, 0.48, 0.48], [-0.48, -0.48, -0.48]};
 % parameters.map_file_name = [base_file_path, '.txt'];
 
