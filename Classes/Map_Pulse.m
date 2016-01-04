@@ -13,6 +13,7 @@ classdef	Map_Pulse < handle
         back_rgb
               
         delay_frames
+        tail_frames
         frames
 
         frametex
@@ -36,6 +37,7 @@ classdef	Map_Pulse < handle
             addParameter(p,'y_start', def_params.y_start);
             addParameter(p,'y_end', def_params.y_end);
             addParameter(p,'delay_frames', def_params.delay_frames);
+            addParameter(p,'tail_frames', def_params.tail_frames);
 
             addParameter(p,'rgb', []);%  forced
             addParameter(p,'frames', []); %  forced            
@@ -64,7 +66,8 @@ classdef	Map_Pulse < handle
             
             stimulus.frames = parameters.frames;
             stimulus.delay_frames = parameters.delay_frames;
-            
+            stimulus.tail_frames = parameters.tail_frames;
+
             back_rgb_full = repmat(parameters.back_rgb, size(parameters.rgb,1),1);
             rgb = uint8( round( 255*(back_rgb_full + parameters.rgb)));
             stimulus.back_rgb = parameters.back_rgb;
@@ -86,10 +89,11 @@ classdef	Map_Pulse < handle
             time_stamps = zeros(2,1);
             t0 = mglGetSecs;            
             RSM_Pause(stimulus.delay_frames);            
-            mglClearScreen;
+            mglClearScreen(0.5);
             mglFlush
-            mglFlush           
-                       
+            mglClearScreen(0.5);
+            mglFlush         
+      
             mglBltTexture(stimulus.frametex, [stimulus.x_start, stimulus.y_start, stimulus.x_span, stimulus.y_span], -1,-1 );   % top left
             mglFlush
             
@@ -102,6 +106,12 @@ classdef	Map_Pulse < handle
             RSM_Pause(stimulus.frames-2);                        
             time_stamps(2) = mglGetSecs(t0);
             Pulse_DigOut_Channel;
+
+            mglClearScreen(0.5);
+            mglFlush
+            mglClearScreen(0.5);
+            mglFlush
+            RSM_Pause(stimulus.tail_frames);            
             
         end     
     end    
