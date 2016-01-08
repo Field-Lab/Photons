@@ -215,18 +215,17 @@ parameters.class = 'MB';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = -[1, 1, 1]*0.48;
 parameters.bar_width = 30;
-parameters.orientation = 45;
-parameters.delta = 2;  % pixels per frame
-parameters.x_start = 100;  parameters.x_end = 300;
-parameters.y_start = 100;   parameters.y_end = 350;
-parameters.frames = 200;
-parameters.delay_frames = 30;
-parameters.orientation = 90;
+parameters.direction = 90;
+parameters.delta = 3;  % pixels per frame
+parameters.x_start = 1;  parameters.x_end = 640;
+parameters.y_start = 1;   parameters.y_end = 480;
+parameters.frames = 300;
+parameters.delay_frames = 0;
 
 stimulus = make_stimulus(parameters, def_params);
 
 % show 10 times
-for i=1:10
+for i=1:100
     display_stimulus(stimulus);
 end
 
@@ -398,7 +397,7 @@ parameters.rgb = [1 1 1]*0.48;
 parameters.seed = 11111;
 parameters.binary = 1;
 parameters.probability = 1;
-parameters.jitter = 1;
+parameters.jitter = 0;
 parameters.delay_frames = 0;
 
 %%%%%%%%%%%%%% OLED %%%%%%%%%%%%%% 
@@ -410,9 +409,9 @@ parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
 
 parameters.independent = 0;
-parameters.interval = 12;
-parameters.stixel_width = 20;
-parameters.frames = 120*5;
+parameters.interval = 1;
+parameters.stixel_width = 1;
+parameters.frames = 120*500;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
@@ -427,6 +426,8 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 % parameters.mask = mask;
 
 stimulus = make_stimulus(parameters, def_params);
+
+
 time_stamps = display_stimulus(stimulus, 'wait_trigger', 1);
 
 %% Raw Movie
@@ -485,6 +486,7 @@ stimulus = make_stimulus(parameters, def_params);
 for i = 1:num_repeats
     time_stamps{i} = display_stimulus(stimulus);
 end
+
 save_parameters(stimulus, path2save, 'data000');
 
 %% photographic mapping
