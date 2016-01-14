@@ -5,7 +5,7 @@ my_path = '/Users/vision/Desktop/Photons';
 addpath(genpath(my_path))
 cd(my_path)
 
-path2save = [my_path, '/saved_stim/nora_test'];
+path2save = [my_path, '/saved_stim/2016-01-05'];
 screen_number = 2;
 def_params = initialize_display('CRT', screen_number);
 
@@ -409,8 +409,8 @@ parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
 
 parameters.independent = 0;
-parameters.interval = 1;
-parameters.stixel_width = 1;
+parameters.interval = 2;
+parameters.stixel_width = 5;
 parameters.frames = 120*500;
 
 parameters.stixel_height = parameters.stixel_width;
@@ -428,7 +428,7 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 stimulus = make_stimulus(parameters, def_params);
 
 
-time_stamps = display_stimulus(stimulus, 'wait_trigger', 1);
+time_stamps = display_stimulus(stimulus, 'wait_trigger', 0);
 
 %% Raw Movie
 
@@ -504,7 +504,7 @@ parameters.y_start = 101;   parameters.y_end = 420;
 % large 
 parameters.stixel_width = 32;   parameters.stixel_height = 32;
 parameters.field_width = 10;  parameters.field_height = 10;
-
+%{
 % medium 
 parameters.stixel_width = 10;   parameters.stixel_height = 10;
 parameters.field_width = 32;  parameters.field_height = 32;
@@ -515,7 +515,7 @@ parameters.field_width = 320;  parameters.field_height = 320;
 
 stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus, 'erase',0);
-
+%}
 
 %%
 Stop_Photons
