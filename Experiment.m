@@ -13,10 +13,10 @@ def_params = initialize_display('CRT', screen_number);
 %mglTestRefresh(2)
 
 % set gamma CRT nov 2015
-scale = [0.9998    1.0072    1.0019];
-power = [2.7807    2.8437    2.7429];
-offset = [-0.0017   -0.0043   -0.0002];
-set_gamma_from_fit_params(scale, power, offset);
+% scale = [0.9998    1.0072    1.0019];
+% power = [2.7807    2.8437    2.7429];
+% offset = [-0.0017   -0.0043   -0.0002];
+% set_gamma_from_fit_params(scale, power, offset);
 
 % set gamma OLED nov 2015
 % scale = [1.1156    1.0919    1.0921];
