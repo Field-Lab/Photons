@@ -153,11 +153,11 @@ parameters.spatial_modulation = 'square'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*120; % presentation of each grating, frames
-parameters.x_start = 50;  parameters.x_end = 700;
-parameters.y_start = 50;   parameters.y_end = 500;
+parameters.x_start = 0;  parameters.x_end = 800;
+parameters.y_start = 0;   parameters.y_end = 600;
 parameters.direction = 0;
 parameters.temporal_period = 60;  % frames 
-parameters.spatial_period = 100; % pixels
+parameters.spatial_period = 200; % pixels
 
 stimulus = make_stimulus(parameters, def_params);
 time_stamps = display_stimulus(stimulus);

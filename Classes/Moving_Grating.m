@@ -56,7 +56,7 @@ classdef	Moving_Grating < handle
                 return
             end
             
-            display = GetDisplayParams();
+            display = GetDisplayParams(def_params);
 
             mglSetParam('visualAngleSquarePixels',0,1);
             mglVisualAngleCoordinates(display.distance,[display.physical_width, display.physical_height]);
