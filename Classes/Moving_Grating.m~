@@ -93,7 +93,6 @@ classdef	Moving_Grating < handle
             numCycles = ceil(sf_dva*texWidth/2)*2;
             texWidth = numCycles/sf_dva;
             texHeight = texWidth;
-            
             % convert to pixels
             texWidthPixels = round(mglGetParam('xDeviceToPixels')*texWidth);
             texHeightPixels = round(mglGetParam('yDeviceToPixels')*texHeight);

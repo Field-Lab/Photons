@@ -1,13 +1,14 @@
 %% Initialization
 
-my_path = '/Users/vision/Desktop/Photons';
+my_path = '/Users/xyao/Documents/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_stim/2015-11-02'];
-screen_number = 2;
+screen_number = 0;
 def_params = initialize_display('OLED', screen_number);
+mglMoveWindow(1, 1080)
 
 % real refresh rate
 mglTestRefresh(2)
@@ -126,13 +127,13 @@ parameters.class = 'MB';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = -[1, 1, 1]*0.48;
 parameters.bar_width = 30;
-parameters.orientation = 45;
+parameters.direction = 45;
 parameters.delta = 2;  % pixels per frame
 parameters.x_start = 100;  parameters.x_end = 300;
 parameters.y_start = 100;   parameters.y_end = 350;
 parameters.frames = 200;
 parameters.delay_frames = 30;
-parameters.orientation = 90;
+parameters.direction = 90;
 
 stimulus = make_stimulus(parameters, def_params);
 
@@ -148,22 +149,22 @@ fprintf('\n\n<strong> Moving Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'MG';
-parameters.spatial_modulation = 'sine'; % sine or square
+parameters.spatial_modulation = 'square'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*120; % presentation of each grating, frames
-parameters.x_start = 1;  parameters.x_end = 640;
-parameters.y_start = 1;   parameters.y_end = 480;
-parameters.direction = 45;
+parameters.x_start = 50;  parameters.x_end = 700;
+parameters.y_start = 50;   parameters.y_end = 500;
+parameters.direction = 0;
 parameters.temporal_period = 60;  % frames 
-parameters.spatial_period = 120; % pixels
+parameters.spatial_period = 100; % pixels
 
 stimulus = make_stimulus(parameters, def_params);
 time_stamps = display_stimulus(stimulus);
 
 %%%%%%%%%% clean up %%%%%%%%%% 
 for i=1:stimulus.temporal_period
-    mglDeleteTexture(stimulus.texture{i});
+    mglDeleteTexture(stimulus.texture.tex1d);
 end
 
 
@@ -245,15 +246,15 @@ fprintf('\n\n<strong> Moving Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'MG';
-parameters.spatial_modulation = 'sine'; % sine or square
+parameters.spatial_modulation = 'square'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*30; % presentation of each grating, frames
-parameters.x_start = 1;  parameters.x_end = 640;
-parameters.y_start = 1;   parameters.y_end = 480;
-parameters.direction = 45;
+parameters.x_start = 50;  parameters.x_end = 750;
+parameters.y_start = 50;   parameters.y_end = 550;
+% parameters.direction = 45;
 
-variable_parameters = randomize_parameters('temporal_period', [30, 60], 'spatial_period', [60, 90, 120], 'nrepeats',3);
+variable_parameters = randomize_parameters('direction', [0 45 90 135 180 225 270 315], 'temporal_period', [12 24 60 120 240 480 720 960 1440], 'spatial_period', [240], 'nrepeats',4);
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
@@ -262,7 +263,7 @@ for i=2:size(s_params,2)
     trial_params = combine_parameters(s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
     display_stimulus(stimulus{i-1});
-end
+end 
 
 %%%%%%%%%% clean up %%%%%%%%%% 
 for i=1:length(stimulus)
@@ -278,8 +279,8 @@ fprintf('\n\n<strong> Counterphase Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'CG';
-parameters.spatial_modulation = 'sine'; % sine or square
-parameters.temporal_modulation = 'sine'; % sine or square
+parameters.spatial_modulation = 'square'; % sine or square
+parameters.temporal_modulation = 'square'; % sine or square
 parameters.rgb = [1 1 0]*0.2;
 parameters.back_rgb = [1 1 1]*0.4;
 parameters.frames = 120; % presentation of each grating, frames
