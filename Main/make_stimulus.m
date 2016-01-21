@@ -52,6 +52,9 @@ switch parameters{class_index+1}
         
     case 'RM'   % raw movie
         stimulus = Raw_Movie(def_params, parameters);
+        
+    case 'CH' % chirp stimulus
+        stimulus = Chirp_Stimulus(def_params, parameters);
 end
 
 end
