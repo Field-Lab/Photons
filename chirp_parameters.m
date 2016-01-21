@@ -20,10 +20,17 @@ parameters.y_start = 0;   parameters.y_end = 479;
 parameters.independent = 0;
 parameters.interval = 1;
 parameters.stixel_width = 1;
-parameters.frames = 120*19.5; % total for all parts of chirp
-parameters.freq_frames = 120*8.25;
-parameters.cont_frames = 120*8.25;
-paramters.pause_in_middle = 120*3;
+parameters.frames = 120*32.5; % total for all parts of chirp
+
+parameters.step_start =120*2;
+parameters.step_length =120*3;
+parameters.pre_freq_low =120*3;
+parameters.pre_freq_mid  =120*2;
+parameters.freq_frames= 120*8.25;
+parameters.mid_freq_cont  =120*2;
+parameters.cont_frames= 120*8.25;
+parameters.post_cont_mid =120*2;
+parameters.post_cont_low=120*2;
 
 
 parameters.stixel_height = parameters.stixel_width;
@@ -37,7 +44,10 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 parameters.current_state = 0;
 stimulus = make_stimulus(parameters, def_params); 
 save_parameters(stimulus, path2save, 'data000');
-time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',0, 'erase', 1);
+
+for i = 1:3
+time_stamps{i} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',0, 'erase', 1);
+end
 
 % t = linspace(0,8.25, 120*8.25); 
 % frame_values = 30+30*sin(pi*(t.^2+t/10))

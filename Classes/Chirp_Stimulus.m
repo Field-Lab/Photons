@@ -40,16 +40,22 @@ classdef	Chirp_Stimulus < handle
         current_state
         freq_values
         cont_values
+        step_start
+        step_length
+        pre_freq_low
+        pre_freq_mid
         freq_frames
+        mid_freq_cont
         cont_frames
-        pause_in_middle
+        post_cont_mid
+        post_cont_low
         
         
     end			% properties block
     
     properties(Constant)
         run_script = 'Run_OnTheFly(stimulus, trigger_interval);';
-        make_frame_script = ['img_frame = Get_Chirp_Frame(i, stimulus.freq_values, stimulus.span_width, stimulus.span_height, stimulus.cont_values, stimulus.freq_frames, stimulus.cont_frames, stimulus.pause_in_middle);'];
+        make_frame_script = ['img_frame = Get_Chirp_Frame(i, stimulus.span_width, stimulus.span_height,  stimulus.freq_values, stimulus.cont_values, stimulus.step_start, stimulus.step_length,stimulus.pre_freq_low,stimulus.pre_freq_mid, stimulus.freq_frames,stimulus.mid_freq_cont, stimulus.cont_frames, stimulus.post_cont_mid, stimulus.post_cont_low);'];
     end
     
     methods
@@ -72,10 +78,17 @@ classdef	Chirp_Stimulus < handle
             addParameter(p,'mask', 0); % 0 if no mask
             addParameter(p,'current_state', 0); % 0 test
             addParameter(p,'freq_values', 0); % 0 test
-            addParameter(p,'cont_values', 0); % 0 test
-            addParameter(p,'freq_frames', 0); % 0 test
+            addParameter(p,'cont_values', 0); % 0 test\
+             addParameter(p,'step_start', 0); % 0 test
+              addParameter(p,'step_length', 0); % 0 test
+               addParameter(p,'pre_freq_low', 0); % 0 test
+                addParameter(p,'pre_freq_mid', 0); % 0 test
+                 addParameter(p,'freq_frames', 0); % 0 test
+                  addParameter(p,'mid_freq_cont', 0); % 0 test
             addParameter(p,'cont_frames', 0); % 0 test
-            addParameter(p,'pause_in_middle', 0); % 0 test
+             addParameter(p,'post_cont_mid', 0); % 0 test
+              addParameter(p,'post_cont_low', 0); % 0 test
+     
             
             addParameter(p,'rgb', []);  % forced
             addParameter(p,'independent', []);
@@ -116,11 +129,16 @@ classdef	Chirp_Stimulus < handle
             contrast_values = 30+3.81*t_cont.*cos(4*pi*t_cont);
             contrast_values = contrast_values*(255-0)./(max(contrast_values)+min(contrast_values));
             stimulus.cont_values = contrast_values;
-            stimulus.freq_frames = parameters.freq_frames;
-            
-            stimulus.cont_frames = parameters.cont_frames;
-            stimulus.pause_in_middle = parameters.pause_in_middle;
-            
+
+             stimulus.step_start = parameters.step_start;
+        stimulus.step_length =parameters.step_length;
+        stimulus.pre_freq_low=parameters.pre_freq_low;
+        stimulus.pre_freq_mid=parameters.pre_freq_mid;
+        stimulus.freq_frames=parameters.freq_frames;
+        stimulus.mid_freq_cont=parameters.mid_freq_cont;
+        stimulus.cont_frames=parameters.cont_frames;
+        stimulus.post_cont_mid=parameters.post_cont_mid;
+       stimulus.post_cont_low=parameters.post_cont_low;
             
             % noise type
             % 0 - binary BW; n_bits = 1

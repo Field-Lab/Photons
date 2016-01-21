@@ -1,6 +1,6 @@
 %% Initialization
 
-my_path = '/Users/Nora/Documents/Photons';
+my_path = '/Users/vision/Desktop/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
