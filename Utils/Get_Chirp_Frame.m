@@ -3,13 +3,13 @@ function img_frame = Get_Chirp_Frame(current_state, width, height, freq_values, 
 
 
 if current_state <= step_start
-    img_frame = uint8(0*ones(4,width,height));
+    img_frame = uint8(5*ones(4,width,height));
     
 elseif current_state > step_start && current_state <=step_start+step_length
-    img_frame = uint8(255*ones(4,width,height));
+    img_frame = uint8(250*ones(4,width,height));
     
 elseif current_state > step_start+step_length && current_state <=step_start+step_length+pre_freq_low
-    img_frame = uint8(0*ones(4,width,height));
+    img_frame = uint8(5*ones(4,width,height));
     
     
 elseif current_state > step_start+step_length+pre_freq_low && current_state<=step_start+step_length+pre_freq_low+pre_freq_mid
@@ -28,7 +28,7 @@ elseif current_state > step_start+step_length+pre_freq_low+pre_freq_mid + freq_f
     img_frame = uint8(127*ones(4,width,height));
 
 elseif current_state > step_start+step_length+pre_freq_low+pre_freq_mid + freq_frames + mid_freq_cont+cont_frames+post_cont_mid && current_state <=step_start+step_length+pre_freq_low+pre_freq_mid + freq_frames + mid_freq_cont+cont_frames+post_cont_mid + post_cont_low   
-    img_frame = uint8(0*ones(4,width,height));
+    img_frame = uint8(5*ones(4,width,height));
 
 else
     img_frame = uint8(127*ones(4,width,height));
