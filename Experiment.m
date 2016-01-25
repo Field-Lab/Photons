@@ -1,6 +1,6 @@
 %% Initialization
 
-my_path = '/Volumes/Lab/Development/Photons';
+my_path = '/Users/vision/Desktop/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
@@ -9,7 +9,7 @@ path2save = [my_path, '/saved_stim/2016-01-05'];
 screen_number = 2;
 def_params = initialize_display('CRT', screen_number);
 
-% real refresh rate
+% real refresh rate 
 %mglTestRefresh(2)
 
 % set gamma CRT nov 2015
@@ -155,7 +155,7 @@ parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
 
 num_repeats = 30;
-rgb = [1 1 1]*0.5;
+rgb = [0 0 0]*0.5;
 for z = 1:num_repeats
     for i=1:size(rgb,1)
         stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
@@ -412,7 +412,7 @@ parameters.y_start = 0;   parameters.y_end = 479;
 
 parameters.independent = 0;
 parameters.interval = 2;
-parameters.stixel_width = 5;
+parameters.stixel_width = 20;
 parameters.frames = 120*500;
 
 parameters.stixel_height = parameters.stixel_width;
