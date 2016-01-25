@@ -49,7 +49,7 @@ parameters.stixel_width = 1;   parameters.stixel_height = 1;
 parameters.field_width = 640;  parameters.field_height = 320;
 %}
 
-stimulus = make_stimulus(parameters, def_params); 
+stimulus = make_stimulus(parameters, def_params);
 for i = 1:repeats
     time_stamps{i} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_trigger',0,'wait_key', 1, 'erase', 1);
 end
@@ -105,14 +105,14 @@ parameters.class = 'RM';
 parameters.back_rgb = [1 1 1]*0.25;
 parameters.x_start = 1; % x_end and y_end wil depend on movie size (and stixel size)!
 parameters.y_start = 81;
-parameters.stixel_width = 2;   
+parameters.stixel_width = 2;
 parameters.stixel_height = 2;
 parameters.start_frame = 1; % >0
 parameters.interval = 1;
 parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
 parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
 
-stimulus = make_stimulus(parameters, def_params); 
+stimulus = make_stimulus(parameters, def_params);
 count = 1;
 for i = 1:repeats
     time_stamps{count} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_trigger',0, 'erase', 1);
@@ -127,7 +127,134 @@ for i = 1:repeats
         parameters.frames = frames_testing;
         stimulus = make_stimulus(parameters, def_params);
         start_frame_fitting = start_frame_fitting + frames_fitting;
-    end 
+    end
+end
+
+% Save stuff
+% save([path2save '/' dataname '_time_stamps.mat'], 'time_stamps');
+% save_parameters(stimulus, path2save, dataname);
+
+%% Raw Movie LES + complement test
+% mask
+% LES
+% complement
+% LES + complement
+
+fprintf('\n\n<strong> Raw Movie </strong>\n');
+clear parameters stimulus time_stamps;
+
+dataname = 'data000';
+
+conditions = 4;
+repeats = 2; % for straight through
+parameters.frames = 120*2;
+interleaved = 0;
+
+% Don't need to change
+parameters.class = 'RM';
+parameters.back_rgb = [1 1 1]*0.25;
+parameters.x_start = 1; % x_end and y_end wil depend on movie size (and stixel size)!
+parameters.y_start = 81;
+parameters.stixel_width = 2;
+parameters.stixel_height = 2;
+parameters.start_frame = 1; % >0
+parameters.interval = 1;
+parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
+parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
+
+count = 1;
+for i_cond = 1:conditions
+    
+    % define params of this condition
+    switch i_cond
+        case 1 % mask
+            mask = final_mask'*255;
+            parameters.mask = mask;
+            parameters.movie_name = '/Users/vision/Desktop/Stimuli/NSinterval_3600_025.rawMovie';
+        case 2 % LES
+            parameters.movie_name = '/Users/vision/Desktop/local/2015-12-18-2/movie_168_LES.rawMovie';
+        case 3 % complement
+            final_mask = mod(final_mask+1, 2);
+            mask = final_mask'*255;
+            parameters.mask = mask;
+            parameters.movie_name = '/Users/vision/Desktop/Stimuli/NSinterval_3600_025.rawMovie';
+        case 4 % complement + LES
+            parameters = rmfield(parameters, 'mask');
+            parameters.movie_name = '/Users/vision/Desktop/local/2015-12-18-2/movie_168_comp_LES.rawMovie';
+    end
+    
+    stimulus = make_stimulus(parameters, def_params);
+    for i = 1:repeats
+        time_stamps{count} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_trigger',0,'wait_key',1, 'erase', 1);
+        count = count + 1;
+    end
+    
+    % gray
+    mglClearScreen(0.25);
+    mglFlush
+    % gray
+    mglClearScreen(0.25);
+    mglFlush
+    pause(0.5)
+end
+
+% Save stuff
+% save([path2save '/' dataname '_time_stamps.mat'], 'time_stamps');
+% save_parameters(stimulus, path2save, dataname);
+
+%% Raw Movie split screen test
+
+% full
+% other
+
+fprintf('\n\n<strong> Raw Movie </strong>\n');
+clear parameters stimulus time_stamps;
+
+dataname = 'data000';
+
+conditions = 2;
+repeats = 2; % for straight through
+parameters.frames = 120*2;
+interleaved = 0;
+parameters.movie_name = '/Users/vision/Desktop/Stimuli/NSinterval_3600_025.rawMovie';
+
+% Don't need to change
+parameters.class = 'RM';
+parameters.back_rgb = [1 1 1]*0.25;
+parameters.x_start = 1; % x_end and y_end wil depend on movie size (and stixel size)!
+parameters.y_start = 81;
+parameters.stixel_width = 2;
+parameters.stixel_height = 2;
+parameters.start_frame = 1; % >0
+parameters.interval = 1;
+parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
+parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
+
+count = 1;
+for i_cond = 1:conditions
+    
+    % define params of this condition
+    switch i_cond
+        case 1 
+            parameters.mask = ones(320, 160)*255;
+        case 2
+            parameters.mask = ones(320, 160)*255;
+            parameters.mask(81:end,:) = 0;
+     end
+    
+    stimulus = make_stimulus(parameters, def_params);
+    for i = 1:repeats
+        time_stamps{count} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_trigger',1,'wait_key',0, 'erase', 1);
+        count = count + 1;
+    end
+    
+    % gray
+    mglClearScreen(0.25);
+    mglFlush
+    % gray
+    mglClearScreen(0.25);
+    mglFlush
+    pause(0.5)
 end
 
 % Save stuff

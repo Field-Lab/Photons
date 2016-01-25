@@ -1,6 +1,6 @@
 %% Initialization
 
-my_path = '/Users/vision/Desktop/Photons';
+my_path = '/Volumes/Lab/Development/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
@@ -148,18 +148,20 @@ fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
 clear parameters stimulus;
 
 parameters.class = 'FP';
-parameters.frames = 30;
-parameters.delay_frames = 30;
+parameters.frames = 1;
+parameters.delay_frames = 0;
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.x_start = 120;  parameters.x_end = 620;
-parameters.y_start = 50;   parameters.y_end = 400;
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 479;
 
-rgb = [1 0 1; 1 1 1; 0 1 0; -1 -1 -1]*0.5;
-for i=1:size(rgb,1)
-    stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
-    display_stimulus(stimulus);
+num_repeats = 30;
+rgb = [1 1 1]*0.5;
+for z = 1:num_repeats
+    for i=1:size(rgb,1)
+        stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
+        display_stimulus(stimulus);
+    end
 end
-
 
 %% Map based Pulse
 fprintf('\n\n<strong> Cone-Isolating Pulse </strong>\n');
