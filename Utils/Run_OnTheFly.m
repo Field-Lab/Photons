@@ -83,5 +83,8 @@ for i=1:stimulus.frames
     end
     
 end
+RSM_Pause(stimulus.tail_frames);
+mglFlush
+mglFlush
 
 mglDeleteTexture(frametex); % last frame
