@@ -121,18 +121,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     
     if (m_height==1){ // map based noise, transform. Make sure in matlab class that height is 1, width is not!
         
-        for( h=0; h <= height; h++) {
+        for( h=0; h < height; h++) {
             image_index = 4 * h * width;
             map_index = h * width;
-            for( w=0; w <= width; w++) {
+            for( w=0; w < width; w++) {
                 
                 map_value = (int) map[map_index++];
                 
                 if (map_value>0){ //'cone'
-                    cnt = map_value * 4;
+                    cnt = (map_value-1) * 4;
                     image_pattern[image_index++] = prefilled_seq[cnt++];
                     image_pattern[image_index++] = prefilled_seq[cnt++];
                     image_pattern[image_index++] = prefilled_seq[cnt];
+
                 }
                 else{ // intercone space
                     image_pattern[image_index++] = backrgb[0];  //  R
@@ -148,8 +149,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     else{ // simply copy stuff
         memcpy(image_pattern, prefilled_seq, sizeof(unsigned char)*4*width*height);
     }
-//     for(cnt=0; cnt<height*width*4; cnt++){
-//         mexPrintf("%d\n", image_pattern[cnt]);
-//     }
+
     return;
 }  // mex file
