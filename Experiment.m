@@ -407,13 +407,13 @@ parameters.delay_frames = 0;
 % parameters.y_start = 1;   parameters.y_end = 600;
 
 %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
-parameters.x_start = 0;  parameters.x_end = 639;
-parameters.y_start = 0;   parameters.y_end = 479;
+parameters.x_start = 0;  parameters.x_end = 399;
+parameters.y_start = 0;   parameters.y_end = 399;
 
 parameters.independent = 0;
-parameters.interval = 1;
+parameters.interval = 10;
 parameters.stixel_width = 1;
-parameters.frames = 120*500;
+parameters.frames = 120*10;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
@@ -421,7 +421,9 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
+% parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
 
+parameters.map_file_name = ['/Volumes/Data/2016-01-05-1/Visual/maps/map_data001.txt'];
 % mask example
 % mask = zeros(80,40);
 % mask(1:10, 1:10) = 255;
