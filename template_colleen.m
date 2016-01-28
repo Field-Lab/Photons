@@ -212,3 +212,52 @@ end
 % white
 mglClearScreen(1);
 mglFlush
+
+
+%% White noise over a mosaic of cells
+
+
+%% Random Noise
+
+fprintf('\n\n<strong> Random Noise </strong>\n');
+clear parameters stimulus
+
+parameters.class = 'RN';
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.rgb = [1 1 1]*0.48;
+parameters.seed = 11111;
+parameters.binary = 1;
+parameters.probability = 1;
+parameters.jitter = 0;
+parameters.delay_frames = 0;
+
+%%%%%%%%%%%%%% OLED %%%%%%%%%%%%%% 
+% parameters.x_start = 1;  parameters.x_end = 800;
+% parameters.y_start = 1;   parameters.y_end = 600;
+
+%%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 479;
+
+parameters.independent = 0;
+parameters.interval = 1;
+parameters.stixel_width = 1;
+parameters.frames = 120*10;
+
+parameters.stixel_height = parameters.stixel_width;
+parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
+parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.stixel_height;
+
+% For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
+% parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
+parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
+% mask example
+% mask = zeros(80,40);
+% mask(1:10, 1:10) = 255;
+% parameters.mask = mask;
+
+stimulus = make_stimulus(parameters, def_params);
+
+
+time_stamps = display_stimulus(stimulus, 'wait_trigger', 0);
+
