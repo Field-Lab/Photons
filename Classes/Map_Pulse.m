@@ -111,7 +111,9 @@ classdef	Map_Pulse < handle
             mglFlush
             mglClearScreen(0.5);
             mglFlush
-            RSM_Pause(stimulus.tail_frames);            
+            RSM_Pause(stimulus.tail_frames); 
+            mglDeleteTexture(stimulus.frametex);
+            mglDeleteTexture(stimulus.frametex);
             
         end     
     end    

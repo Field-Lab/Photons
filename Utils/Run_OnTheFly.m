@@ -36,7 +36,6 @@ for i=1:stimulus.frames
         countdown = stimulus.refresh;  % reset to the number of frames specified by "interval"
  
         eval(stimulus.make_frame_script);  % get new WN pattern
-        
         if stimulus.jitter.flag % jitter stuff
             tmp = ones(size(img_frame,1), size(img_frame,2)+2,size(img_frame,3)+2);
             

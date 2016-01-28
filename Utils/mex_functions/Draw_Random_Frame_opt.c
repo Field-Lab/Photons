@@ -129,10 +129,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
                 map_value = (int) map[map_index++];
                 
                 if (map_value>0){ //'cone'
-                    cnt = map_value * 4;
+                    cnt = (map_value-1) * 4;
                     image_pattern[image_index++] = prefilled_seq[cnt++];
                     image_pattern[image_index++] = prefilled_seq[cnt++];
                     image_pattern[image_index++] = prefilled_seq[cnt];
+
                 }
                 else{ // intercone space
                     image_pattern[image_index++] = backrgb[0];  //  R

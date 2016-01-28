@@ -1,6 +1,6 @@
 %% Initialization
 
-my_path = '/Users/vision/Desktop/Photons';
+my_path = '/Volumes/Lab/Development/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
@@ -429,6 +429,7 @@ parameters.map_file_name = ['/Volumes/Data/2016-01-05-1/Visual/maps/map_data001.
 % mask(1:10, 1:10) = 255;
 % parameters.mask = mask;
 
+parameters.map_file_name = '/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt';
 stimulus = make_stimulus(parameters, def_params);
 
 
