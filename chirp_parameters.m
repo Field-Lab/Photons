@@ -2,6 +2,7 @@
 
 
 %% RN
+pause(5)
 clear parameters stimulus;
 
 parameters.class = 'CH';
@@ -26,7 +27,7 @@ parameters.post_cont_mid =rate*2;
 parameters.post_cont_low=rate*2;
 
 parameters.frames = parameters.step_start + parameters.step_length + parameters.pre_freq_low +parameters.pre_freq_mid+parameters.freq_frames+parameters.mid_freq_cont+parameters.cont_frames+parameters.post_cont_mid+parameters.post_cont_low; % total for all parts of chirp
-parameters.stixel_width = 1;
+parameters.stixel_width = 20;
 parameters.stixel_height = parameters.stixel_width;
 
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
