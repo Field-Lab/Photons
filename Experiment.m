@@ -1,15 +1,15 @@
 %% Initialization
 
-my_path = '/Users/vision/Desktop/Photons';
+my_path = '/Volumes/Lab/Development/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
-path2save = [my_path, '/saved_stim/nora_test'];
+path2save = [my_path, '/saved_stim/2016-01-05'];
 screen_number = 2;
 def_params = initialize_display('CRT', screen_number);
 
-% real refresh rate
+% real refresh rate 
 %mglTestRefresh(2)
 
 % set gamma CRT nov 2015
@@ -148,18 +148,20 @@ fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
 clear parameters stimulus;
 
 parameters.class = 'FP';
-parameters.frames = 30;
-parameters.delay_frames = 30;
+parameters.frames = 1;
+parameters.delay_frames = 0;
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.x_start = 120;  parameters.x_end = 620;
-parameters.y_start = 50;   parameters.y_end = 400;
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 479;
 
-rgb = [1 0 1; 1 1 1; 0 1 0; -1 -1 -1]*0.5;
-for i=1:size(rgb,1)
-    stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
-    display_stimulus(stimulus);
+num_repeats = 30;
+rgb = [0 0 0]*0.5;
+for z = 1:num_repeats
+    for i=1:size(rgb,1)
+        stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
+        display_stimulus(stimulus);
+    end
 end
-
 
 %% Map based Pulse
 fprintf('\n\n<strong> Cone-Isolating Pulse </strong>\n');
@@ -405,13 +407,13 @@ parameters.delay_frames = 0;
 % parameters.y_start = 1;   parameters.y_end = 600;
 
 %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
-parameters.x_start = 0;  parameters.x_end = 639;
-parameters.y_start = 0;   parameters.y_end = 479;
+parameters.x_start = 0;  parameters.x_end = 399;
+parameters.y_start = 0;   parameters.y_end = 399;
 
 parameters.independent = 0;
-parameters.interval = 1;
+parameters.interval = 10;
 parameters.stixel_width = 1;
-parameters.frames = 120*500;
+parameters.frames = 120*10;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
@@ -419,16 +421,19 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
+% parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
 
+parameters.map_file_name = ['/Volumes/Data/2016-01-05-1/Visual/maps/map_data001.txt'];
 % mask example
 % mask = zeros(80,40);
 % mask(1:10, 1:10) = 255;
 % parameters.mask = mask;
 
+parameters.map_file_name = '/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt';
 stimulus = make_stimulus(parameters, def_params);
 
 
-time_stamps = display_stimulus(stimulus, 'wait_trigger', 1);
+time_stamps = display_stimulus(stimulus, 'wait_trigger', 0);
 
 %% Raw Movie
 
@@ -504,7 +509,7 @@ parameters.y_start = 101;   parameters.y_end = 420;
 % large 
 parameters.stixel_width = 32;   parameters.stixel_height = 32;
 parameters.field_width = 10;  parameters.field_height = 10;
-
+%{
 % medium 
 parameters.stixel_width = 10;   parameters.stixel_height = 10;
 parameters.field_width = 32;  parameters.field_height = 32;
@@ -515,7 +520,7 @@ parameters.field_width = 320;  parameters.field_height = 320;
 
 stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus, 'erase',0);
-
+%}
 
 %%
 Stop_Photons
