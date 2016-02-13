@@ -11,6 +11,8 @@ addParameter(p,'wait_trigger', 0); % for now, normally def is 1
 addParameter(p,'wait_key', 0);
 addParameter(p,'erase', 1);
 addParameter(p, 'erase_to_gray', 0);
+addParameter(p, 'erase_to_black', 0);
+
 parse(p,varargin{:});
 params = p.Results;
 
@@ -47,6 +49,13 @@ if p.Results.erase_to_gray
     mglClearScreen(0.5);
     mglFlush
     mglClearScreen(0.5);
+    mglFlush
+end
+
+if p.Results.erase_to_black
+    mglClearScreen(0);
+    mglFlush
+    mglClearScreen(0);
     mglFlush
 end
 

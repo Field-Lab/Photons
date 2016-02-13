@@ -140,7 +140,7 @@ classdef	Random_Noise < handle
             if ~strcmp(parameters.map_file_name, 'dummy')
                 user_map = load(parameters.map_file_name);
                 stimulus.map = uint16( user_map' );
-                stimulus.m_width = max(stimulus.map(:));
+                stimulus.m_width = max(stimulus.map(:))+1;
                 stimulus.m_height = 1;
             else
                 stimulus.map =[];

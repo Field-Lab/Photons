@@ -1,6 +1,6 @@
 %% Initialization
 
-my_path = '/Volumes/Lab/Development/Photons';
+my_path = '/Users/vision/Desktop/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
@@ -177,7 +177,8 @@ parameters.tail_frames = 0;
 parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
 base_file_path = [my_path, '/saved_stim/2015-11-19-test/'];
-maps = {'335', '5615'};
+base_file_path = '/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/';
+maps = {'5'};
 rgb = {[0.48, 0.48, 0.48], [-0.48, -0.48, -0.48]};
 % parameters.map_file_name = [base_file_path, '.txt'];
 
@@ -423,7 +424,8 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
 % parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
 
-parameters.map_file_name = ['/Volumes/Data/2016-01-05-1/Visual/maps/map_data001.txt'];
+%parameters.map_file_name = ['/Volumes/Data/2016-01-05-1/Visual/maps/map_data001.txt'];
+
 % mask example
 % mask = zeros(80,40);
 % mask(1:10, 1:10) = 255;
@@ -493,6 +495,102 @@ for i = 1:num_repeats
 end
 
 save_parameters(stimulus, path2save, 'data000');
+
+
+
+%% chirp stimulus
+% Rectangular Flashing Pulses
+fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
+clear parameters stimulus time_stamps;
+
+parameters.class = 'FP';
+parameters.frames = 1*120;
+parameters.delay_frames = 120;
+parameters.tail_frames = 120;
+
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 479;
+
+num_repeats = 3;
+rgb = [1 1 1]*0.48;
+% start with a black screen
+
+
+stimulus{1} = make_stimulus(parameters, 'rgb', rgb, def_params);
+
+
+
+% increase in contrast
+
+parameters.class = 'CH';
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.rgb = [1 1 1]*0.48;
+parameters.delay_frames = 120;
+parameters.tail_frames = 120;
+
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 479;
+parameters.jitter = 0;
+parameters.interval = 1;
+
+rate = 120;
+
+% increase in contrast
+parameters.frames = rate*8.25;%parameters.step_start + parameters.step_length + parameters.pre_freq_low +parameters.pre_freq_mid+parameters.freq_frames+parameters.mid_freq_cont+parameters.cont_frames+parameters.post_cont_mid+parameters.post_cont_low; % total for all parts of chirp
+parameters.stixel_width = 1;
+parameters.stixel_height = parameters.stixel_width;
+
+parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
+parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.stixel_height;
+
+t_cont = linspace(0,parameters.frames/rate, parameters.frames);
+contrast_values = 30+3.81*t_cont.*cos(4*pi*t_cont);
+contrast_values = contrast_values*(floor(parameters.rgb(1)*2*256))./(max(contrast_values)+min(contrast_values));
+parameters.intensity_values = contrast_values;
+
+parameters.current_state = 0;
+stimulus{2} = make_stimulus(parameters, def_params); 
+% save_parameters(stimulus, path2save, 'data000');
+% 
+% %start with gray screen
+% mglClearScreen(0.5);
+% mglFlush
+% mglClearScreen(0.5);
+% mglFlush
+
+
+
+
+% increase in frequency
+t_freq = linspace(0,parameters.frames/120, parameters.frames);
+frame_values = 30+30*sin(pi*(3*t_freq.^2+t_freq/10));
+range = floor(parameters.rgb(1)*2*256);
+frame_values = frame_values*(range)./(max(frame_values)+min(frame_values));
+parameters.intensity_values = frame_values;
+
+stimulus{3} = make_stimulus(parameters, def_params); 
+% save_parameters(stimulus, path2save, 'data000');
+
+
+
+
+% display all of them
+
+for i = 1:num_repeats
+    mglClearScreen(0);
+    mglFlush
+    mglClearScreen(0);
+    mglFlush
+
+    time_stamps{1}{i} = display_stimulus(stimulus{1}, 'wait_trigger', 1,'erase_to_black', 1);
+
+    time_stamps{2}{i} = display_stimulus(stimulus{2}, 'wait_trigger',1, 'erase_to_gray', 1);
+    
+    time_stamps{3}{i} = display_stimulus(stimulus{3}, 'wait_trigger',1, 'erase_to_gray', 1);
+end
+
+
 
 %% photographic mapping
 
