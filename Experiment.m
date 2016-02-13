@@ -422,7 +422,7 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
-parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
+% parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
 % mask example
 % mask = zeros(80,40);
 % mask(1:10, 1:10) = 255;

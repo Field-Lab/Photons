@@ -21,8 +21,8 @@ parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
 
 parameters.independent = 0;
-parameters.interval = 12;
-parameters.stixel_width = 20;
+parameters.interval = 1;
+parameters.stixel_width = 8;
 parameters.frames = 120*900; % 120*length of stimulus in seconds
 
 parameters.stixel_height = parameters.stixel_width;
@@ -31,6 +31,7 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
+parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
 
 stimulus = make_stimulus(parameters, def_params);
 
