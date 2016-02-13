@@ -35,6 +35,7 @@ classdef	Random_Noise < handle
         map
         
         delay_frames
+        tail_frames
         frames
         
         refresh
@@ -66,6 +67,8 @@ classdef	Random_Noise < handle
             addParameter(p,'y_start', def_params.y_start);
             addParameter(p,'y_end', def_params.y_end);
             addParameter(p,'delay_frames', def_params.delay_frames);
+                        addParameter(p,'tail_frames', def_params.tail_frames);
+
             addParameter(p,'frames', intmax('int64')); % def max
             addParameter(p,'interval', 1); % def 1
             addParameter(p,'probability', 1.0); % def probability 1
@@ -184,6 +187,8 @@ classdef	Random_Noise < handle
             % duration, interval, seed
             stimulus.frames = parameters.frames;
             stimulus.delay_frames = parameters.delay_frames;
+                        stimulus.tail_frames = parameters.tail_frames;
+
             stimulus.refresh = parameters.interval;
             stimulus.rng_init.state = parameters.seed;
             stimulus.rng_init.seed = parameters.seed;
