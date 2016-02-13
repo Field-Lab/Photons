@@ -13,22 +13,20 @@ parameters.back_rgb = [1 1 1]*0.5;
 parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
 
-num_repeats = 2;
+num_repeats = 1;
 rgb = [1 1 1]*0.48;
 % start with a black screen
 mglClearScreen(0);
 mglFlush
 mglClearScreen(0);
 mglFlush
-for z = 1:num_repeats
-    for i=1:size(rgb,1)
-        stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
-        display_stimulus(stimulus, 'erase_to_black', 1);
-    end
-end
+
+stimulus{1} = make_stimulus(parameters, 'rgb', rgb, def_params);
+
+
 
 %% increase in contrast
-clear parameters stimulus;
+% clear parameters;
 
 parameters.class = 'CH';
 parameters.back_rgb = [1 1 1]*0.5;
@@ -57,18 +55,16 @@ contrast_values = contrast_values*(floor(parameters.rgb(1)*2*256))./(max(contras
 parameters.intensity_values = contrast_values;
 
 parameters.current_state = 0;
-stimulus = make_stimulus(parameters, def_params); 
-save_parameters(stimulus, path2save, 'data000');
+stimulus{2} = make_stimulus(parameters, def_params); 
+% save_parameters(stimulus, path2save, 'data000');
+% 
+% %start with gray screen
+% mglClearScreen(0.5);
+% mglFlush
+% mglClearScreen(0.5);
+% mglFlush
 
-%start with gray screen
-mglClearScreen(0.5);
-mglFlush
-mglClearScreen(0.5);
-mglFlush
 
-for i = 1:1
-time_stamps{i} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',0, 'erase_to_gray', 1);
-end
 
 
 %% increase in frequency
@@ -78,10 +74,18 @@ range = floor(parameters.rgb(1)*2*256);
 frame_values = frame_values*(range)./(max(frame_values)+min(frame_values));
 parameters.intensity_values = frame_values;
 
-stimulus = make_stimulus(parameters, def_params); 
-save_parameters(stimulus, path2save, 'data000');
+stimulus{3} = make_stimulus(parameters, def_params); 
+% save_parameters(stimulus, path2save, 'data000');
 
-for i = 1:1
-time_stamps{i} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',0, 'erase_to_gray', 1);
+
+
+
+%% display all of them
+
+for i = 1:num_repeats
+    time_stamps{1}{i} = display_stimulus(stimulus{1}, 'erase_to_black', 1);
+
+    time_stamps{2}{i} = display_stimulus(stimulus{2}, 'trigger_interval', 100, 'wait_key',0, 'erase_to_gray', 1);
+    
+    time_stamps{3}{i} = display_stimulus(stimulus{3}, 'trigger_interval', 100, 'wait_key',0, 'erase_to_gray', 1);
 end
-
