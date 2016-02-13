@@ -1,8 +1,7 @@
 %% chirp stimulus
-
-%% Rectangular Flashing Pulses
+% Rectangular Flashing Pulses
 fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
-clear parameters stimulus;
+clear parameters stimulus time_stamps;
 
 parameters.class = 'FP';
 parameters.frames = 1*120;
@@ -13,13 +12,10 @@ parameters.back_rgb = [1 1 1]*0.5;
 parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
 
-num_repeats = 1;
+num_repeats = 3;
 rgb = [1 1 1]*0.48;
 % start with a black screen
-mglClearScreen(0);
-mglFlush
-mglClearScreen(0);
-mglFlush
+
 
 stimulus{1} = make_stimulus(parameters, 'rgb', rgb, def_params);
 
@@ -83,9 +79,14 @@ stimulus{3} = make_stimulus(parameters, def_params);
 %% display all of them
 
 for i = 1:num_repeats
-    time_stamps{1}{i} = display_stimulus(stimulus{1}, 'erase_to_black', 1);
+    mglClearScreen(0);
+    mglFlush
+    mglClearScreen(0);
+    mglFlush
 
-    time_stamps{2}{i} = display_stimulus(stimulus{2}, 'trigger_interval', 100, 'wait_key',0, 'erase_to_gray', 1);
+    time_stamps{1}{i} = display_stimulus(stimulus{1}, 'wait_trigger', 1,'erase_to_black', 1);
+
+    time_stamps{2}{i} = display_stimulus(stimulus{2}, 'wait_trigger',1, 'erase_to_gray', 1);
     
-    time_stamps{3}{i} = display_stimulus(stimulus{3}, 'trigger_interval', 100, 'wait_key',0, 'erase_to_gray', 1);
+    time_stamps{3}{i} = display_stimulus(stimulus{3}, 'wait_trigger',1, 'erase_to_gray', 1);
 end
