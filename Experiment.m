@@ -1,13 +1,13 @@
 %% Initialization
 
-my_path = '/Volumes/Lab/Development/Photons';
+my_path = '/Users/alexth/test4/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
-path2save = [my_path, '/saved_stim/2016-01-05'];
+path2save = [my_path, '/saved_stim/2016-02-22'];
 screen_number = 2;
-def_params = initialize_display('CRT', screen_number);
+def_params = initialize_display('OLED', screen_number);
 
 % real refresh rate 
 %mglTestRefresh(2)
@@ -396,10 +396,10 @@ clear parameters stimulus
 parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = [1 1 1]*0.48;
-parameters.seed = 11111;
+parameters.seed = 22222;
 parameters.binary = 1;
 parameters.probability = 1;
-parameters.jitter = 0;
+parameters.jitter = 1;
 parameters.delay_frames = 0;
 
 %%%%%%%%%%%%%% OLED %%%%%%%%%%%%%% 
@@ -407,13 +407,13 @@ parameters.delay_frames = 0;
 % parameters.y_start = 1;   parameters.y_end = 600;
 
 %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
-parameters.x_start = 0;  parameters.x_end = 399;
-parameters.y_start = 0;   parameters.y_end = 399;
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 319;
 
-parameters.independent = 0;
-parameters.interval = 10;
-parameters.stixel_width = 1;
-parameters.frames = 120*10;
+parameters.independent = 1;
+parameters.interval = 1;
+parameters.stixel_width = 16;
+parameters.frames = 10;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
@@ -423,17 +423,17 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
 % parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
 
-parameters.map_file_name = ['/Volumes/Data/2016-01-05-1/Visual/maps/map_data001.txt'];
+% parameters.map_file_name = ['/Volumes/Data/2016-01-05-1/Visual/maps/map_data001.txt'];
 % mask example
 % mask = zeros(80,40);
 % mask(1:10, 1:10) = 255;
 % parameters.mask = mask;
 
-parameters.map_file_name = '/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt';
+% parameters.map_file_name = '/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt';
 stimulus = make_stimulus(parameters, def_params);
 
 
-time_stamps = display_stimulus(stimulus, 'wait_trigger', 0);
+time_stamps = display_stimulus(stimulus, 'wait_trigger', 0, 'erase', 0);
 
 %% Raw Movie
 

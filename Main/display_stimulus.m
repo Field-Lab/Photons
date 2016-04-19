@@ -27,7 +27,8 @@ end
 % for white noise reset rng before each repetition
 if ~isempty( findprop(stimulus, 'rng_init') )
     stimulus.rng_init.state = Init_RNG_JavaStyle(stimulus.rng_init.seed);
-    stimulus.jitter.state = stimulus.rng_init.state;
+    stimulus.jitter.state = Init_RNG_JavaStyle(stimulus.rng_init.seed);
+%stimulus.rng_init.state;
 end
 
 %%%%%%%%%%% WAIT FOR TRIGGER OR KEY PRESS %%%%%%%%%%%
