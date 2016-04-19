@@ -30,30 +30,35 @@ classdef	Chirp_Stimulus < handle
         
         map
         
-        delay_frames
+        
         frames
         
         refresh
         mask
-        current_state
-        freq_values
-        cont_values
-        step_start
-        step_length
-        pre_freq_low
-        pre_freq_mid
-        freq_frames
-        mid_freq_cont
-        cont_frames
-        post_cont_mid
-        post_cont_low
+%         current_state
+%         freq_values
+%         cont_values
+%         step_start
+%         step_length
+%         pre_freq_low
+%         pre_freq_mid
+%         freq_frames
+%         mid_freq_cont
+%         cont_frames
+%         post_cont_mid
+%         post_cont_low
+        intensity_values
+        
+        
+        delay_frames
+        tail_frames
         
         
     end			% properties block
     
     properties(Constant)
         run_script = 'Run_OnTheFly(stimulus, trigger_interval);';
-        make_frame_script = ['img_frame = Get_Chirp_Frame(i, stimulus.span_width, stimulus.span_height,  stimulus.freq_values, stimulus.cont_values, stimulus.step_start, stimulus.step_length,stimulus.pre_freq_low,stimulus.pre_freq_mid, stimulus.freq_frames,stimulus.mid_freq_cont, stimulus.cont_frames, stimulus.post_cont_mid, stimulus.post_cont_low);'];
+        make_frame_script = ['img_frame = Get_Chirp_Frame(i, stimulus.span_width, stimulus.span_height,  stimulus.intensity_values);'];
     end
     
     methods
@@ -69,20 +74,26 @@ classdef	Chirp_Stimulus < handle
             addParameter(p,'y_end', def_params.y_end);
             addParameter(p,'frames', intmax('int64')); % def max
             addParameter(p,'interval', 1); % def 1
+                        addParameter(p,'delay_frames', 0); % def 1
+
+                                    addParameter(p,'tail_frames', 0); % def 1
+
             addParameter(p,'jitter', 0); % def no jitter
             addParameter(p,'mask', 0); % 0 if no mask
+                        addParameter(p,'intensity_values', 0); % 0 if no mask
+
             addParameter(p,'current_state', 0); % 0 test
-            addParameter(p,'freq_values', 0); % 0 test
-            addParameter(p,'cont_values', 0); % 0 test\
-             addParameter(p,'step_start', 0); % 0 test
-              addParameter(p,'step_length', 0); % 0 test
-               addParameter(p,'pre_freq_low', 0); % 0 test
-                addParameter(p,'pre_freq_mid', 0); % 0 test
-                 addParameter(p,'freq_frames', 0); % 0 test
-                  addParameter(p,'mid_freq_cont', 0); % 0 test
-            addParameter(p,'cont_frames', 0); % 0 test
-             addParameter(p,'post_cont_mid', 0); % 0 test
-              addParameter(p,'post_cont_low', 0); % 0 test
+%             addParameter(p,'freq_values', 0); % 0 test
+%             addParameter(p,'cont_values', 0); % 0 test\
+%              addParameter(p,'step_start', 0); % 0 test
+%               addParameter(p,'step_length', 0); % 0 test
+%                addParameter(p,'pre_freq_low', 0); % 0 test
+%                 addParameter(p,'pre_freq_mid', 0); % 0 test
+%                  addParameter(p,'freq_frames', 0); % 0 test
+%                   addParameter(p,'mid_freq_cont', 0); % 0 test
+%             addParameter(p,'cont_frames', 0); % 0 test
+%              addParameter(p,'post_cont_mid', 0); % 0 test
+%               addParameter(p,'post_cont_low', 0); % 0 test
      
             
             addParameter(p,'rgb', []);  % forced
@@ -112,27 +123,7 @@ classdef	Chirp_Stimulus < handle
             stimulus.back_rgb = parameters.back_rgb;
             
             % equations that define chirp stimulus
-            stimulus.current_state = 0;
-            t_freq = linspace(0,parameters.freq_frames/120, parameters.freq_frames);
-            frame_values = 30+30*sin(pi*(t_freq.^2+t_freq/10));
-            range = floor(parameters.rgb(1)*2*256);
-            frame_values = frame_values*(range)./(max(frame_values)+min(frame_values));
-            stimulus.freq_values = frame_values;
             
-            t_cont = linspace(0,parameters.cont_frames/120, parameters.cont_frames);
-            contrast_values = 30+3.81*t_cont.*cos(4*pi*t_cont);
-            contrast_values = contrast_values*(range)./(max(contrast_values)+min(contrast_values));
-            stimulus.cont_values = contrast_values;
-
-             stimulus.step_start = parameters.step_start;
-        stimulus.step_length =parameters.step_length;
-        stimulus.pre_freq_low=parameters.pre_freq_low;
-        stimulus.pre_freq_mid=parameters.pre_freq_mid;
-        stimulus.freq_frames=parameters.freq_frames;
-        stimulus.mid_freq_cont=parameters.mid_freq_cont;
-        stimulus.cont_frames=parameters.cont_frames;
-        stimulus.post_cont_mid=parameters.post_cont_mid;
-       stimulus.post_cont_low=parameters.post_cont_low;
             
           
             % fork for map-based (voronoi) WN
@@ -154,7 +145,7 @@ classdef	Chirp_Stimulus < handle
             stimulus.y_start = parameters.y_start;
             stimulus.span_width = stimulus.field_width * parameters.stixel_width;
             stimulus.span_height = stimulus.field_height * parameters.stixel_height;
-            
+            stimulus.intensity_values = parameters.intensity_values;
             if stimulus.span_width ~= parameters.x_end - parameters.x_start+1 ||...
                     stimulus.span_height ~= parameters.y_end - parameters.y_start +1
                 fprintf('\n\nCheck size parameters!!\n');
@@ -175,7 +166,10 @@ classdef	Chirp_Stimulus < handle
             % duration, interval, seed
             stimulus.frames = parameters.frames;
             stimulus.refresh = parameters.interval;
-            
+                        stimulus.delay_frames = parameters.delay_frames;
+
+                                    stimulus.tail_frames = parameters.tail_frames;
+
         end		% constructor
         
     end			% methods block

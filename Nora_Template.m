@@ -54,8 +54,8 @@ for i = 1:repeats
     time_stamps{i} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_trigger',0,'wait_key', 1, 'erase', 1);
 end
 % Save stuff
-%save([path2save '/' dataname '_time_stamps.mat'], 'time_stamps');
-%save_parameters(stimulus, path2save, dataname);
+save([path2save '/' dataname '_time_stamps.mat'], 'time_stamps');
+save_parameters(stimulus, path2save, dataname);
 
 %% Raw Movie
 
