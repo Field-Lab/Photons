@@ -22,7 +22,7 @@ parameters.y_start = 0;   parameters.y_end = 479;
 
 parameters.independent = 0;
 
-parameters.interval = 1;
+parameters.interval = 2;
 parameters.stixel_width = 8;
 parameters.frames = 120*900; % 120*length of stimulus in seconds
 
@@ -32,7 +32,7 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
-parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
+%parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
 
 stimulus = make_stimulus(parameters, def_params);
 
@@ -330,7 +330,7 @@ stimulus{2} = make_stimulus(parameters, def_params);
 
 % increase in frequency
 t_freq = linspace(0,parameters.frames/120, parameters.frames);
-frame_values = 30+30*sin(pi*(3*t_freq.^2+t_freq/10));
+frame_values = 30+30*sin(pi*(t_freq.^2+t_freq/10));
 range = floor(parameters.rgb(1)*2*256);
 frame_values = frame_values*(range)./(max(frame_values)+min(frame_values));
 parameters.intensity_values = frame_values;
