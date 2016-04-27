@@ -1,13 +1,13 @@
 %% Initialization
 
-my_path = '/Users/alexth/test4/Photons';
+my_path = '/Volumes/Lab/Users/crhoades/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_stim/2016-02-22'];
 screen_number = 2;
-def_params = initialize_display('OLED', screen_number);
+def_params = initialize_display('CRT', screen_number);
 
 % real refresh rate 
 %mglTestRefresh(2)
