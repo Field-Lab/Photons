@@ -396,7 +396,7 @@ clear parameters stimulus
 parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = [1 1 1]*0.48;
-parameters.seed = 22222;
+parameters.seed = 11111;
 parameters.binary = 1;
 parameters.probability = 1;
 parameters.jitter = 1;
@@ -408,12 +408,12 @@ parameters.delay_frames = 0;
 
 %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
 parameters.x_start = 0;  parameters.x_end = 639;
-parameters.y_start = 0;   parameters.y_end = 319;
+parameters.y_start = 80;   parameters.y_end = 399;
 
 parameters.independent = 1;
-parameters.interval = 1;
-parameters.stixel_width = 16;
-parameters.frames = 10;
+parameters.interval = 20;
+parameters.stixel_width = 20;
+parameters.frames = 1;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
