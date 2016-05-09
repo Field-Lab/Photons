@@ -1,23 +1,24 @@
 %% Initialization
 
-my_path = '/Users/alexth/test4/Photons';
+my_path = '/Users/vision/Desktop/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
-path2save = [my_path, '/saved_stim/2016-02-22'];
+path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
 screen_number = 2;
-def_params = initialize_display('OLED', screen_number);
+def_params = initialize_display('CRT', screen_number);
 
 % real refresh rate 
 %mglTestRefresh(2)
 
 % set gamma CRT nov 2015
+%{
 scale = [0.9998    1.0072    1.0019];
 power = [2.7807    2.8437    2.7429];
 offset = [-0.0017   -0.0043   -0.0002];
 set_gamma_from_fit_params(scale, power, offset);
-
+%}
 % set gamma OLED nov 2015
 % scale = [1.1156    1.0919    1.0921];
 % power = [1.1799    1.2878    1.2614];
@@ -218,10 +219,10 @@ parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = -[1, 1, 1]*0.48;
 parameters.bar_width = 30;
 parameters.direction = 90;
-parameters.delta = 3;  % pixels per frame
+parameters.delta = 1;  % pixels per frame
 parameters.x_start = 1;  parameters.x_end = 640;
 parameters.y_start = 1;   parameters.y_end = 480;
-parameters.frames = 300;
+parameters.frames = 600;
 parameters.delay_frames = 0;
 
 stimulus = make_stimulus(parameters, def_params);
@@ -396,10 +397,10 @@ clear parameters stimulus
 parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = [1 1 1]*0.48;
-parameters.seed = 22222;
+parameters.seed = 11111;
 parameters.binary = 1;
 parameters.probability = 1;
-parameters.jitter = 1;
+parameters.jitter = 0;
 parameters.delay_frames = 0;
 
 %%%%%%%%%%%%%% OLED %%%%%%%%%%%%%% 
@@ -408,15 +409,15 @@ parameters.delay_frames = 0;
 
 %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
 parameters.x_start = 0;  parameters.x_end = 639;
-parameters.y_start = 0;   parameters.y_end = 319;
+parameters.y_start = 80;   parameters.y_end = 400;
 
-parameters.independent = 1;
-parameters.interval = 1;
-parameters.stixel_width = 16;
-parameters.frames = 10;
+parameters.independent = 0;
+parameters.interval = 6;
+parameters.stixel_width = 4;
+parameters.frames = 1000*120;
 
 parameters.stixel_height = parameters.stixel_width;
-parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;  
+parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;
 parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.stixel_height;
 
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
@@ -442,9 +443,9 @@ clear parameters stimulus;
 
 parameters.class = 'RM';
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.x_start = 1; % x_end and y_end wil depend on movie size (and stixel size)!
-parameters.y_start = 1;
-parameters.stixel_width = 1;   parameters.stixel_height = 1;
+parameters.x_start = 0; % x_end and y_end wil depend on movie size (and stixel size)!
+parameters.y_start = 0;
+parameters.stixel_width = 8;   parameters.stixel_height = 8;
  parameters.frames = 5*120;  % duration of each repetition, default whole movie
 parameters.start_frame = 1; % >0
 parameters.interval = 1;
@@ -453,11 +454,12 @@ parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
 
 % parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
 %parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movies/NSbrownian/NSbrownian_3000_movies/NSbrownian_3000_A_025.rawMovie';
- parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
+%parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
+parameters.movie_name = '/Users/vision/Desktop/1.rawMovie';
 
 stimulus = make_stimulus(parameters, def_params); 
 save_parameters(stimulus, path2save, 'data000');
-time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1, 'erase', 1);
+time_stamps = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_key',1, 'erase', 0);
 
 %% Raw Movie with mask (also works with white noise)
 
@@ -504,11 +506,12 @@ parameters.rgb = [1 1 1]*0.48;
 parameters.independent = 0;
 parameters.seed = 11111;
 parameters.frames = 1;
-parameters.x_start = 101;  parameters.x_end = 420;
-parameters.y_start = 101;   parameters.y_end = 420;
-% large 
-parameters.stixel_width = 32;   parameters.stixel_height = 32;
-parameters.field_width = 10;  parameters.field_height = 10;
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 80;   parameters.y_end = 399;
+%%{ 
+%large 
+parameters.stixel_width = 1;   parameters.stixel_height = 1;
+parameters.field_width = 640;  parameters.field_height = 320;
 %{
 % medium 
 parameters.stixel_width = 10;   parameters.stixel_height = 10;
@@ -516,6 +519,7 @@ parameters.field_width = 32;  parameters.field_height = 32;
 % small 
 parameters.stixel_width = 1;   parameters.stixel_height = 1;
 parameters.field_width = 320;  parameters.field_height = 320;
+%}
 stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus, 'erase',0);
 %}

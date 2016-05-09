@@ -21,7 +21,7 @@ parameters.frames = 120;
 % For straight through
 %%{
 repeats = 1; % for straight through
-parameters.frames = 120*1000;
+parameters.frames = 120*10;
 %}
 
 % For masking
@@ -54,8 +54,8 @@ for i = 1:repeats
     time_stamps{i} = display_stimulus(stimulus, 'trigger_interval', 100, 'wait_trigger',0,'wait_key', 1, 'erase', 1);
 end
 % Save stuff
-save([path2save '/' dataname '_time_stamps.mat'], 'time_stamps');
-save_parameters(stimulus, path2save, dataname);
+%save([path2save '/' dataname '_time_stamps.mat'], 'time_stamps');
+%save_parameters(stimulus, path2save, dataname);
 
 %% Raw Movie
 
@@ -99,7 +99,7 @@ parameters.mask = mask;
 % Movie Name
 % parameters.movie_name = '/Volumes/Data/Stimuli/movies/eye-movement/current_movies/NSbrownian/NSbrownian_3000_movies/NSbrownian_3000_A_025.rawMovie';
 % parameters.movie_name = '/Volumes/Lab/Users/Nora/new_stim_nora/mask_NSEM/testmask_3_stix2/comp_LES/movie_3_comp_LES.rawMovie';
-parameters.movie_name = '/Users/vision/Desktop/Stimuli/NSbrownian_3000_A_025.rawMovie';
+parameters.movie_name = '/Users/vision/Desktop/Stimuli/NSinterval_3600_025.rawMovie';
 % Don't need to change
 parameters.class = 'RM';
 parameters.back_rgb = [1 1 1]*0.25;

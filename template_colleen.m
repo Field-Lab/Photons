@@ -18,12 +18,12 @@ parameters.delay_frames = 0;
 
 %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
 parameters.x_start = 0;  parameters.x_end = 639;
-parameters.y_start = 0;   parameters.y_end = 479;
+parameters.y_start = 80;   parameters.y_end = 399;
 
 parameters.independent = 0;
 
-parameters.interval = 2;
-parameters.stixel_width = 8;
+parameters.interval = 6;
+parameters.stixel_width = 1;
 parameters.frames = 120*900; % 120*length of stimulus in seconds
 
 parameters.stixel_height = parameters.stixel_width;
@@ -37,6 +37,7 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 stimulus = make_stimulus(parameters, def_params);
 
 [time_stamps] = display_stimulus(stimulus, 'wait_trigger', 0);
+%save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
 
 %% White noise rasters
 
@@ -77,6 +78,7 @@ stimulus = make_stimulus(parameters, def_params);
 for i  = 1:nrepeat
     [time_stamps] = display_stimulus(stimulus, 'wait_trigger', 0);
 end
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
 
 %% NSEM repeat
 fprintf('\n\n<strong> Raw Movie </strong>\n');
@@ -94,7 +96,8 @@ parameters.start_frame = 1; % >0
 parameters.interval = 1;
 parameters.flip = 1;  % 1 = normal; 2 = vertical flip; 3 = horizontal flip; 4 = vertical + horizontal flip
 parameters.reverse = 0;   % 1 = backward (reverse), 0 = forward
-parameters.movie_name = [my_path, '/Movies/test_5_A.rawMovie'];
+parameters.movie_name = '/Users/vision/Desktop/Stimuli/NSinterval_3600_025.rawMovie';
+
 % parameters.movie_name = '/Users/vision/Desktop/1stix_test.rawMovie';
 num_repeats = 3;
 stimulus = make_stimulus(parameters, def_params);
@@ -102,13 +105,14 @@ stimulus = make_stimulus(parameters, def_params);
 for i = 1:num_repeats
     time_stamps = display_stimulus(stimulus);
 end
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
 
 
 %% Gray screen for correlations
 mglClearScreen(0.5);
 mglFlush
 
-%% Spot of light/dark in a mapped location (i.e. Map based Pulse)
+%% Spot of light/dark in a mapped location; increasing spot (i.e. Map based Pulse)
 fprintf('\n\n<strong> Cone-Isolating Pulse </strong>\n');
 clear parameters stimulus;
 
@@ -123,8 +127,8 @@ parameters.tail_frames = 0;
 % parameters.rgb = [1 1 1]*0.48;
 parameters.x_start = 0;  parameters.x_end = 639;
 parameters.y_start = 0;   parameters.y_end = 479;
-base_file_path = [my_path, '/saved_stim/2015-11-19-test/'];
-maps = {'335', '5615'};
+base_file_path = [my_path, '/saved_stim/2015-11-19-test/2015-11-09-7/'];
+maps = {'80_0'};
 rgb = {[0.48, 0.48, 0.48], [-0.48, -0.48, -0.48]}; % light and dark
 % parameters.map_file_name = [base_file_path, '.txt'];
 
@@ -142,8 +146,9 @@ for i=2:size(s_params,2)
 
 end
 for i = 2:size(s_params,2)
-    display_stimulus(stimulus{i-1}, 'wait_trigger', 1, 'erase_to_gray', 1);
+    display_stimulus(stimulus{i-1}, 'wait_trigger', 0, 'erase_to_gray', 1);
 end
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
 
 
 %% Moving bar
@@ -163,9 +168,10 @@ parameters.frames = 320;
 parameters.delay_frames = 0;
 
 base_file_path = [my_path, '/saved_stim/2015-11-19-test/'];
-direction = [0 90];
+direction = [0 90 180 270];
+delta = [2 4];
 
-variable_parameters = randomize_parameters('direction', direction,'nrepeats',5);
+variable_parameters = randomize_parameters('direction', direction, 'delta', delta, 'nrepeats',5);
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
@@ -177,10 +183,11 @@ end
 for i = 2:size(s_params,2)
     display_stimulus(stimulus{i-1}, 'wait_trigger', 0);
 end
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
 
 
 %% Moving Grating S File write
-
+% trigger interval 7.99
 fprintf('\n\n<strong> Moving Grating. </strong>\n');
 clear parameters stimulus
 
@@ -214,12 +221,10 @@ end
 % white
 mglClearScreen(1);
 mglFlush
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
 
 
 %% White noise over a mosaic of cells
-
-
-%% Random Noise
 
 fprintf('\n\n<strong> Random Noise </strong>\n');
 clear parameters stimulus
@@ -252,7 +257,7 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 
 % For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
 % parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
-parameters.map_file_name = ['/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt'];
+parameters.map_file_name = [my_path, '/saved_stim/2015-11-19-test/2015-11-09-7/80_0.txt'];
 % mask example
 % mask = zeros(80,40);
 % mask(1:10, 1:10) = 255;
@@ -262,10 +267,12 @@ stimulus = make_stimulus(parameters, def_params);
 
 
 time_stamps = display_stimulus(stimulus, 'wait_trigger', 0);
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
 
 
 %% chirp stimulus
 % Rectangular Flashing Pulses
+% trigger interavl 1.99
 fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
 clear parameters stimulus time_stamps;
 
@@ -355,3 +362,93 @@ for i = 1:num_repeats
     
     time_stamps{3}{i} = display_stimulus(stimulus{3}, 'wait_trigger',1, 'erase_to_gray', 1);
 end
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
+
+
+%% Contrast Reversing Gratings
+%trigger 1.99
+fprintf('\n\n<strong> Counterphase Grating. </strong>\n');
+clear parameters stimulus
+
+parameters.class = 'CG';
+parameters.spatial_modulation = 'sine'; % sine or square
+parameters.temporal_modulation = 'sine'; % sine or square
+parameters.rgb = [1 1 1]*0.48;
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.frames = 120*6; % presentation of each grating, frames
+parameters.x_start = 0;  parameters.x_end = 640;
+parameters.y_start = 79;   parameters.y_end = 400;
+parameters.spatial_phase = 0; % pixels - offset
+temporal_period = [15 30 60];  % frames (how long it takes to return to initial phase)
+spatial_period = [48 96 384 768]; % pixels
+parameters.orientation = 90;
+
+
+variable_parameters = randomize_parameters('spatial_period', spatial_period, 'temporal_period', temporal_period, 'nrepeats',3);
+path2file = write_s_file(parameters, variable_parameters);
+s_params = read_s_file(path2file);
+
+% see second option example in "S File read"
+for i=2:size(s_params,2)
+    trial_params = combine_parameters(s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+    time_stamps{i} = display_stimulus(stimulus{i-1}, 'wait_trigger', 1);
+end
+
+%%%%%%%%%% clean up %%%%%%%%%% 
+for i=1:length(stimulus)
+    for j=1:stimulus{i}.temporal_period
+        mglDeleteTexture(stimulus{i}.texture{j});
+    end
+end
+
+% white
+mglClearScreen(1);
+mglFlush
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
+
+%% Moving Bar
+
+fprintf('\n\n<strong> Moving bar. </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'MB';
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.rgb = -[1, 1, 1]*0.48;
+parameters.bar_width = 30;
+direction = [0 90 180 270];
+delta = [1 2 4 8];  % pixels per frame
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 479;
+parameters.delay_frames = 0;
+% parameters.frames = parameters.x_end./min(delta);
+
+variable_parameters = randomize_parameters('direction', direction,'delta', delta, 'nrepeats',3);
+
+path2file = write_s_file(parameters, variable_parameters);
+s_params = read_s_file(path2file);
+
+% see second option example in "S File read"
+for i=2:size(s_params,2)
+
+    trial_params = combine_parameters(s_params{1}, s_params{i});
+     trial_params.frames = (parameters.x_end+1)./trial_params.delta;
+
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+    time_stamps{i} = display_stimulus(stimulus{i-1}, 'wait_trigger', 1);
+end
+
+%%%%%%%%%% clean up %%%%%%%%%% 
+for i=1:length(stimulus)
+    for j=1:stimulus{i}.temporal_period
+        mglDeleteTexture(stimulus{i}.texture{j});
+    end
+end
+
+% white
+mglClearScreen(1);
+mglFlush
+save('/Users/vision/Desktop/2016-04-21-x/data002', 'time_stamps')
+
+
+
