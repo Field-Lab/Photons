@@ -47,11 +47,13 @@ classdef Moving_Flashing_Squares < handle
         
         trial_num
         trial_num_total
+        trial_list
         
         run_duration
         reps_run
         
-        seq
+        x_vertices_all
+        y_vertices_all
         
     end       % properties block
     
@@ -124,26 +126,9 @@ classdef Moving_Flashing_Squares < handle
             
             stimulus.reps_run = 1;
             
-            sequence = [];
-            for i = 1:stimulus.repeats
-                sequence = [sequence; randperm(stimulus.trial_num)];
-            end
-
-            % sequence of square presentation
-            sequence = reshape(sequence', 1, stimulus.trial_num_total);
-            stimulus.seq = sequence;
-            stim_out = parameters;
-            stim_out.trial_list = sequence;
-            uisave('stim_out')
-        end
-        
-        
-        function time_stamps = Run_Moving_Flashing_Squares( stimulus )
-            
-            time_stamps = nans(1) ; % temp
-            
-            x_vertices_all = cell(stimulus.trial_num, 1);
-            y_vertices_all = cell(stimulus.trial_num, 1);
+            % find square verticies
+            stimulus.x_vertices_all = cell(stimulus.trial_num, 1);
+            stimulus.y_vertices_all = cell(stimulus.trial_num, 1);
             
             if stimulus.sub_region == 0
                 i=1 ;
@@ -155,8 +140,8 @@ classdef Moving_Flashing_Squares < handle
                             y1 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b-1) ;
                             y2 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b) ;
 
-                            x_vertices_all{i} = [x1; x2; x2; x1];
-                            y_vertices_all{i} = [y1; y1; y2; y2];
+                            stimulus.x_vertices_all{i} = [x1; x2; x2; x1];
+                            stimulus.y_vertices_all{i} = [y1; y1; y2; y2];
                             i=i+1 ;
                         end
                     end
@@ -171,20 +156,36 @@ classdef Moving_Flashing_Squares < handle
                             y1 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b-1) ;
                             y2 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b) ;
 
-
                             x_vertexi = [x1; x2; x2; x1];
                             y_vertexi = [y1; y1; y2; y2];
 
                             half_width = (stimulus.x_end - stimulus.x_start)/2; 
                             half_height = (stimulus.y_end - stimulus.y_start)/2;
 
-                            x_vertices_all{i} = [x_vertexi x_vertexi+half_width x_vertexi+half_width x_vertexi];
-                            y_vertices_all{i} = [y_vertexi y_vertexi y_vertexi+half_height y_vertexi+half_height];
+                            stimulus.x_vertices_all{i} = [x_vertexi x_vertexi+half_width x_vertexi+half_width x_vertexi];
+                            stimulus.y_vertices_all{i} = [y_vertexi y_vertexi y_vertexi+half_height y_vertexi+half_height];
                             i=i+1 ;
                         end
                     end
                 end
             end
+            
+            % sequence of square presentation
+            sequence = [];
+            for i = 1:stimulus.repeats
+                sequence = [sequence; randperm(stimulus.trial_num)];
+            end
+            stimulus.trial_list = reshape(sequence', 1, stimulus.trial_num_total);
+            
+            % save important stim params
+            stim_out = stimulus;
+            uisave('stim_out')
+        end
+        
+        
+        function time_stamps = Run_Moving_Flashing_Squares( stimulus )
+            
+            time_stamps = nans(1) ; % temp
             
             mglClearScreen( stimulus.backgrndcolor );
             mglFlush();
@@ -194,8 +195,8 @@ classdef Moving_Flashing_Squares < handle
             
             for i = 1:stimulus.trial_num_total
                 
-                x_vertices = x_vertices_all{stimulus.seq(i)};
-                y_vertices = y_vertices_all{stimulus.seq(i)};
+                x_vertices = stimulus.x_vertices_all{stimulus.trial_list(i)};
+                y_vertices = stimulus.y_vertices_all{stimulus.trial_list(i)};
                 
                 cl = repmat(stimulus.color, 1, size(x_vertices, 2));
                 bgrd_cl = repmat(stimulus.backgrndcolor', 1, size(x_vertices, 2));
