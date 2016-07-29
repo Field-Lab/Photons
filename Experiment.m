@@ -1,14 +1,15 @@
 %% Initialization
 
-my_path = '/Users/vision/Desktop/Photons';
+my_path = '/Users/jcafaro/Documents/MATLAB/Photons';
 
 
 addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
-screen_number = 2;
-def_params = initialize_display('CRT', screen_number);
+screen_number = 0; %0=test on current monitor, 2= is two monitor display
+def_params = initialize_display('OLED', screen_number); % default parameters
+%mglMoveWindow([])
 
 % real refresh rate 
 %mglTestRefresh(2)
@@ -119,7 +120,6 @@ figure
 subplot(1,2,1); plot(x, r, 'r', x, g, 'g', x, b, 'b');
 subplot(1,2,2); plot(x, w, 'k-o', x, r+g+b, 'm-*'); legend('measured', 'sum')
 
-
 %% Set background
 
 % white
@@ -134,7 +134,6 @@ mglFlush
 mglClearScreen(0);
 mglFlush
 
-
 %% Focus Squares
 
 fprintf('\n\n<strong> Focus squares. </strong>\n');
@@ -144,20 +143,19 @@ parameters.class = 'FS';
 stimulus = make_stimulus(parameters,def_params);
 display_stimulus(stimulus);
 
-
 %% Rectangular Flashing Pulses
 fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
 clear parameters stimulus;
 
 parameters.class = 'FP';
-parameters.frames = 1;
-parameters.delay_frames = 0;
+parameters.frames = 30;
+parameters.delay_frames = 30;
 parameters.back_rgb = [1 1 1]*0.5;
-parameters.x_start = 0;  parameters.x_end = 639;
-parameters.y_start = 0;   parameters.y_end = 479;
+parameters.x_start = 500;  parameters.x_end = 600;
+parameters.y_start = 300;   parameters.y_end = 400;
 
 num_repeats = 30;
-rgb = [0 0 0]*0.5;
+rgb = [1 1 1]*1;
 for z = 1:num_repeats
     for i=1:size(rgb,1)
         stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
@@ -209,7 +207,6 @@ end
 %     display_stimulus(stimulus)
 % end
 
-
 %% Moving bar
 
 fprintf('\n\n<strong> Moving bar. </strong>\n');
@@ -232,7 +229,6 @@ stimulus = make_stimulus(parameters, def_params);
 for i=1:100
     display_stimulus(stimulus);
 end
-
 
 %% Moving Grating single trial
 
@@ -257,7 +253,6 @@ time_stamps = display_stimulus(stimulus);
 for i=1:stimulus.temporal_period
     mglDeleteTexture(stimulus.texture{i});
 end
-
 
 %% Moving Grating simple sequence
 
@@ -294,7 +289,6 @@ for i=1:length(stimulus)
     end
 end
 
-
 %% Moving Grating S File read
 
 fprintf('\n\n<strong> Moving Grating. </strong>\n');
@@ -328,8 +322,6 @@ for i=1:length(stimulus)
         mglDeleteTexture(stimulus{i}.texture{j});
     end
 end
-
-
 
 %% Moving Grating S File write
 
@@ -366,6 +358,7 @@ end
 % white
 mglClearScreen(1);
 mglFlush
+
 %% Counterphase Grating
 
 fprintf('\n\n<strong> Counterphase Grating. </strong>\n');
@@ -387,8 +380,6 @@ parameters.orientation = 90;
 stimulus = make_stimulus(parameters, def_params);
 
 time_stamps = display_stimulus(stimulus);
-
-
 
 %% Random Noise
 
@@ -526,7 +517,33 @@ stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus, 'erase',0);
 %}
 
-%%
+%% Moving flashing square 
+
+fprintf('\n\n<strong> Moving flashing squares </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'MFS';  
+parameters.rgb = [.5, .5, .5];
+parameters.back_rgb = [0, 0, 0];
+parameters.frames = 60;                       % "frames" is the number of frame refreshes to wait for each half-cycle (i.e. the pulse is on for the number of frames set here
+                                            % and then off for the same number of frames. This completes one repetition of the pulse.
+
+parameters.x_start = 200;  parameters.x_end = 600;  % These fields set the region of stimulation with full square overlap coverage
+parameters.y_start = 100;   parameters.y_end = 500; % actual presentation area will be end-start+(stix_w-stix_shift)
+parameters.stixel_width = 25;         % size of each stixel in pixels 
+parameters.stixel_shift = 5 ; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
+
+parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
+parameters.repeats = 3; % repeats of the whole stimulus block
+parameters.wait_trigger = 0;
+parameters.wait_key = 0;
+parameters.sub_region = 1; % if 1: subdivide the stimulus field into 4 regions, show 4 spatially correlated flash squares 
+                         % otherwise: 0
+stimulus = make_stimulus(parameters, def_params);
+display_stimulus(stimulus);
+clear stimulus;
+
+%% end photons
 Stop_Photons
 
 make_normal_table(8)

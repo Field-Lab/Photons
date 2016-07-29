@@ -1,4 +1,4 @@
-function Stop_RSM
+function Stop_Photons
 
 mglDigIO('quit');
 mglDigIO('shutdown');
