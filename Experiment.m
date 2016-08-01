@@ -1,6 +1,6 @@
 %% Initialization
 
-my_path = '/Users/xyao/Documents/Photons';
+my_path = '/Users/xyao/Documents/Field-lab/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
@@ -126,23 +126,33 @@ clear parameters stimulus;
 parameters.class = 'MB';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = -[1, 1, 1]*0.48;
-parameters.bar_width = 30;
-parameters.direction = 45;
-parameters.delta = 2;  % pixels per frame
-parameters.x_start = 100;  parameters.x_end = 300;
-parameters.y_start = 100;   parameters.y_end = 350;
-parameters.frames = 200;
+parameters.x_start = 200;  parameters.x_end = 600;
+parameters.y_start = 100;   parameters.y_end = 500;
+parameters.frames_p_bar = 1; % 1:no need to set frames. 0: have to set frames
+parameters.frames = 70;
 parameters.delay_frames = 30;
-parameters.direction = 90;
 
-stimulus = make_stimulus(parameters, def_params);
+variable_parameters = randomize_parameters('direction', [0 45 90 135 180 225 270 315], ...
+                                           'delta', [4 8], ...
+                                           'bar_width', [60 120], ...
+                                           'nrepeats',2);
+path2file = write_s_file(parameters, variable_parameters);
+s_params = read_s_file(path2file);
 
-% show 10 times
-for i=1:10
-    display_stimulus(stimulus);
+% see second option example in "S File read"
+for i=2:size(s_params,2)
+    trial_params = combine_parameters(s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
 end
 
-
+for i=1:length(stimulus)
+    if i == 1
+        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 1);
+    else
+        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0);
+    end
+end
+    
 %% Moving Grating single trial
 
 fprintf('\n\n<strong> Moving Grating. </strong>\n');
