@@ -32,7 +32,7 @@ for i = 1:steps
     
     mglClearScreen(0.5);
     mglFlush
-    disp(num2str(i))
     pause;
+    disp(num2str(i))
 end
 

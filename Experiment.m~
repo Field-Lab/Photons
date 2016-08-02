@@ -14,10 +14,10 @@ def_params = initialize_display('OLED', screen_number); % default parameters
 % real refresh rate 
 %mglTestRefresh(2)
 
-% set gamma OLED Aug 2 2016
-scale = [1.1399    1.0998    1.1027];
-power = [1.1741    1.2998    1.3112];
-offset = [-0.1445   -0.1023   -0.1054];
+% set gamma OLED nov 2015
+scale = [1.1156    1.0919    1.0921];
+power = [1.1799    1.2878    1.2614];
+offset = [-0.1228   -0.0961   -0.0955];
 set_gamma_from_fit_params(scale, power, offset);
 
 %% Gamma calibration (new)
@@ -39,7 +39,7 @@ g = g(i);
 b = b(i);
 w = w(i);
 
-[scale, power, offset] = fit_gamma([r',g',b']);
+[scale, power, offset] = fit_gamma([r,g,b]);
 
 % control
 run_gamma_flashes([scale, power, offset], steps, [0 1 0]);
