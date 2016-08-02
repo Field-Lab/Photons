@@ -14,27 +14,56 @@ def_params = initialize_display('OLED', screen_number); % default parameters
 % real refresh rate 
 %mglTestRefresh(2)
 
-% set gamma CRT nov 2015
-%{
-scale = [0.9998    1.0072    1.0019];
-power = [2.7807    2.8437    2.7429];
-offset = [-0.0017   -0.0043   -0.0002];
-set_gamma_from_fit_params(scale, power, offset);
-%}
 % set gamma OLED nov 2015
-% scale = [1.1156    1.0919    1.0921];
-% power = [1.1799    1.2878    1.2614];
-% offset = [-0.1228   -0.0961   -0.0955];
-% set_gamma_from_fit_params(scale, power, offset);
-
-% set gamma CRT Rig 4
-scale = [0.9489    1.0203    1.0090];
-power = [2.4109    2.5974    2.5376];
-offset = [0.0561    0.0040    0.0038];
+scale = [1.1156    1.0919    1.0921];
+power = [1.1799    1.2878    1.2614];
+offset = [-0.1228   -0.0961   -0.0955];
 set_gamma_from_fit_params(scale, power, offset);
 
-%% Gamma calibration
- 
+%% Gamma calibration (new)
+
+steps = 17;
+
+run_gamma_flashes('linear', steps, [1 1 1]); % FIRST PARAMETER will reset gamma to linear! 
+
+% linear measurements (INSERT HERE)
+r = [0.1 0.19 1.39 8.09 25.7 57.4 105 170 252 343 453 583 739 930 1140 1400 1670];
+g = [0.1 0.12 0.7 5.88 24.7 63.8 127 216 330 457 614 802 1030 1300 1610 1970 2350];
+b = [0.1 0.4 3.86 19.1 53.5 112 195 304 438 583 767 990 1250 1570 1940 2360 2790];
+w = [0.1 .052 5.93 33.0 103 225 404 647 950 1290 1730 2300 2980 3830 4740 5770 6850];
+
+[~,i] = sort(get_sequence(steps));
+
+r = r(i);
+g = g(i);
+b = b(i);
+w = w(i);
+
+[scale, power, offset] = fit_gamma([r',g',b']);
+
+% control
+run_gamma_flashes([scale, power, offset], steps, [0 1 0]);
+
+% corrected measurements (INSERT HERE, theses measures should show linearity if scale, power, offset are correct)
+r = [0.1 101 212 322 429 529 627 736 834 930 1030 1140 1240 1350 1450 1560 1660];
+g = [0.1 130 289 445 590 736 879 1030 1170 1300 1450 1580 1720 1870 2010 2160 2310];
+b = [0.1 176 367 541 704 874 1050 1210 1400 1550 1720 1880 2080 2260 2430 2600 2780];
+w = [0.1 389 813 1220 1610 2040 2480 2920 3370 3780 4220 4640 5100 5520 5950 6370 6790];
+
+r = r(i);
+g = g(i);
+b = b(i);
+w = w(i);
+
+% plot
+x = linspace(0,255,steps);
+
+figure
+subplot(1,2,1); plot(x, r, 'r', x, g, 'g', x, b, 'b');
+subplot(1,2,2); plot(x, w, 'k-o', x, r+g+b, 'm-*'); legend('measured', 'sum')
+
+%% Gamma calibration (old)
+
 % linear measurements (INSERT HERE)
 % CRT, 2015-11-03, ATH
 r = [0.1 0.19 1.39 8.09 25.7 57.4 105 170 252 343 453 583 739 930 1140 1400 1670];

@@ -192,7 +192,6 @@ classdef Moving_Flashing_Squares < handle
             mglClearScreen( stimulus.backgrndcolor );
             mglFlush();
             
-            
             for i = 1:stimulus.trial_num_total
                 
                 x_vertices = stimulus.x_vertices_all{stimulus.trial_list(i)};
