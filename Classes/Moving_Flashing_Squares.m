@@ -7,19 +7,11 @@ classdef Moving_Flashing_Squares < handle
         stim_name
         parameters
         class
-        
-        run_date_time
-        run_time_total
-        tmain0
-        trep0
-        
-        main_trigger
-        rep_trigger
-        
+
         run_script
 
-        stixel_width
-        stixel_shift
+        stixel_width % (pix) width of square
+        stixel_shift % (pix) how much square will shift
         
         x_start
         x_end
@@ -35,8 +27,7 @@ classdef Moving_Flashing_Squares < handle
         
         repeats
         num_reps
-        
-        repeat_num
+        random_seq
         
         backgrndcolor
         color
@@ -49,8 +40,7 @@ classdef Moving_Flashing_Squares < handle
         trial_num_total
         trial_list
         
-        run_duration
-        reps_run
+        total_frame_num % number of frames of the entire stim
         
         x_vertices_all
         y_vertices_all
@@ -76,7 +66,7 @@ classdef Moving_Flashing_Squares < handle
                 stimulus.num_reps = parameters.num_reps;
                 stimulus.frames = parameters.frames;
                 stimulus.color = [parameters.rgb(1); parameters.rgb(2); parameters.rgb(3)];   
-                stimulus.color = Color_Test( stimulus.color );
+                %stimulus.color = Color_Test( stimulus.color );
                 stimulus.backgrndcolor = parameters.back_rgb ;
                 stimulus.sub_region = parameters.sub_region ;
                 stimulus.wait_trigger = parameters.wait_trigger;                            
@@ -113,10 +103,10 @@ classdef Moving_Flashing_Squares < handle
                     fprintf('\t RSM ERROR: field_width or field height is not even. \n');
                     return
                 else
-                    stimulus.trial_num = stimulus.field_width * stimulus.field_height * stimulus.shiftFactor / 4;
+                    stimulus.trial_num = stimulus.field_width * stimulus.field_height * stimulus.shiftFactor^2 / 4;
                 end
             elseif stimulus.sub_region == 0;
-                stimulus.trial_num = stimulus.field_width * stimulus.field_height * stimulus.shiftFactor;
+                stimulus.trial_num = stimulus.field_width * stimulus.field_height * stimulus.shiftFactor^2;
             else
                 fprintf('\t RSM ERROR: sub_region must be 1 or 0. Please define sub_region value and try again. \n');
                 return
@@ -124,47 +114,49 @@ classdef Moving_Flashing_Squares < handle
 
             stimulus.trial_num_total = stimulus.trial_num * stimulus.repeats;
             
-            stimulus.reps_run = 1;
-            
             % find square verticies
             stimulus.x_vertices_all = cell(stimulus.trial_num, 1);
             stimulus.y_vertices_all = cell(stimulus.trial_num, 1);
             
             if stimulus.sub_region == 0
                 i=1 ;
-                for a=1:stimulus.field_width ; % for each square 
-                    for b=1:stimulus.field_height ; 
-                        for c=1:stimulus.shiftFactor ;
-                            x1 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a-1) ;
-                            x2 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a) ;
-                            y1 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b-1) ;
-                            y2 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b) ;
+                for a=1:stimulus.field_width ; % for each row x 
+                    for b=1:stimulus.field_height ; % for each column y 
+                        for c=1:stimulus.shiftFactor ; % for each shift along x
+                            for d=1:stimulus.shiftFactor ; % for each shift along y
+                                x1 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a-1) ;
+                                x2 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a) ;
+                                y1 = stimulus.y_start + stimulus.stixel_shift*(d-1) + stimulus.stixel_width*(b-1) ;
+                                y2 = stimulus.y_start + stimulus.stixel_shift*(d-1) + stimulus.stixel_width*(b) ;
 
-                            stimulus.x_vertices_all{i} = [x1; x2; x2; x1];
-                            stimulus.y_vertices_all{i} = [y1; y1; y2; y2];
-                            i=i+1 ;
+                                stimulus.x_vertices_all{i} = [x1; x2; x2; x1];
+                                stimulus.y_vertices_all{i} = [y1; y1; y2; y2];
+                                i=i+1 ;
+                            end
                         end
                     end
                 end
             else
                 i=1 ;
-                for a=1:stimulus.field_width/2 ; % for each square 
+                for a=1:stimulus.field_width/2 ; % logic as above but half the columns and rows
                     for b=1:stimulus.field_height/2 ; 
                         for c=1:stimulus.shiftFactor ;
-                            x1 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a-1) ;
-                            x2 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a) ;
-                            y1 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b-1) ;
-                            y2 = stimulus.y_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(b) ;
+                            for d=1:stimulus.shiftFactor ;
+                                x1 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a-1) ;
+                                x2 = stimulus.x_start + stimulus.stixel_shift*(c-1) + stimulus.stixel_width*(a) ;
+                                y1 = stimulus.y_start + stimulus.stixel_shift*(d-1) + stimulus.stixel_width*(b-1) ;
+                                y2 = stimulus.y_start + stimulus.stixel_shift*(d-1) + stimulus.stixel_width*(b) ;
 
-                            x_vertexi = [x1; x2; x2; x1];
-                            y_vertexi = [y1; y1; y2; y2];
+                                x_vertexi = [x1; x2; x2; x1];
+                                y_vertexi = [y1; y1; y2; y2];
 
-                            half_width = (stimulus.x_end - stimulus.x_start)/2; 
-                            half_height = (stimulus.y_end - stimulus.y_start)/2;
+                                half_width = (stimulus.x_end - stimulus.x_start)/2; 
+                                half_height = (stimulus.y_end - stimulus.y_start)/2;
 
-                            stimulus.x_vertices_all{i} = [x_vertexi x_vertexi+half_width x_vertexi+half_width x_vertexi];
-                            stimulus.y_vertices_all{i} = [y_vertexi y_vertexi y_vertexi+half_height y_vertexi+half_height];
-                            i=i+1 ;
+                                stimulus.x_vertices_all{i} = [x_vertexi x_vertexi+half_width x_vertexi+half_width x_vertexi];
+                                stimulus.y_vertices_all{i} = [y_vertexi y_vertexi y_vertexi+half_height y_vertexi+half_height];
+                                i=i+1 ;
+                            end
                         end
                     end
                 end
@@ -173,13 +165,23 @@ classdef Moving_Flashing_Squares < handle
             % sequence of square presentation
             sequence = [];
             for i = 1:stimulus.repeats
-                sequence = [sequence; randperm(stimulus.trial_num)];
+                if stimulus.random_seq ;
+                    sequence = [sequence; randperm(stimulus.trial_num)];
+                else
+                    sequence = [sequence; [1:stimulus.trial_num]];
+                end
             end
             stimulus.trial_list = reshape(sequence', 1, stimulus.trial_num_total);
+            
+            % total number of frames that will be shown
+            stimulus.total_frame_num = stimulus.trial_num_total*stimulus.num_reps*stimulus.frames*2 ; % each trial has off and on frames
             
             % save important stim params
             stim_out = stimulus;
             uisave('stim_out')
+            
+            % display number necessary time (s)
+            disp(['run time: ', num2str(stimulus.total_frame_num/mglGetParam('frameRate')), 's']) ;   
         end
         
         
