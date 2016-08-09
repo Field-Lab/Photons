@@ -1,6 +1,6 @@
 % writeDigPort.m
 %
-%        $Id: writeDigPort.m 669 2009-12-23 13:18:50Z justin $
+%        $Id$
 %      usage: retval = writeDigPort(portNum,val);
 %         by: justin gardner
 %       date: 09/21/06

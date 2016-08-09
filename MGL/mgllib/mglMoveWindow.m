@@ -1,6 +1,6 @@
 % mglMoveWindow.m
 %
-%        $Id: mglMoveWindow.m 927 2011-06-02 02:17:25Z justin $
+%        $Id$
 %      usage: mglMoveWindow(leftPos,topPos)
 %         by: Christopher Broussard
 %       date: 10/23/07

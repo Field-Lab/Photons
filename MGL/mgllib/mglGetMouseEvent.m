@@ -1,6 +1,6 @@
 % mglGetMouseEvent.m
 %
-%        $Id: mglGetMouseEvent.m 334 2008-12-28 02:49:05Z justin $
+%        $Id$
 %      usage: mglGetMouseEvent(<waitTime>,<getAllEvents>)
 %  alt usage: [buttons when x y] = mglGetMouseEvent(<waitTime>,<getAllEvents>)
 %         by: justin gardner

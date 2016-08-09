@@ -30,7 +30,7 @@ function y = comm( op, port, data)
 %
 %  COMM( 'status', PORT ) prints some status info. 
 
-% $Id: comm.m 676 2010-01-09 00:34:04Z justin $
+% $Id$
 
 
 disp(sprintf('(comm) Is not compiled on this platform. You will need to download a complied version from the MathWorks site or use a version of Matlab that supports this functions (32 bit intel/G4 matlab)'));

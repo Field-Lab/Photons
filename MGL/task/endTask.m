@@ -1,6 +1,6 @@
 % endTask.m
 %
-%        $Id: endTask.m 1125 2014-05-06 09:08:39Z justin $
+%        $Id$
 %      usage: myscreen = endTask(myscreen,task)
 %         by: justin gardner
 %       date: 09/18/06

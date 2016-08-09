@@ -1,6 +1,6 @@
 % mglCreateTexture.m
 %
-%        $Id: mglCreateTexture.m 1027 2012-05-17 12:46:17Z justin $
+%        $Id$
 %      usage: mglCreateTexture(image)
 %         by: justin gardner
 %       date: 04/10/06

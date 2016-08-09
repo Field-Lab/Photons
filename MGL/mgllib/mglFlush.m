@@ -1,6 +1,6 @@
 % mglFlush.m
 %
-%        $Id: mglFlush.m 18 2006-09-13 15:41:18Z justin $
+%        $Id$
 %      usage: mglFlush()
 %         by: justin gardner; X support by Jonas Larsson
 %       date: 04/10/06

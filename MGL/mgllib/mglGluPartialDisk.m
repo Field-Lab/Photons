@@ -1,6 +1,6 @@
 % mglGluPartialDisk - draw partial disk(s) at location x,y
 %
-%        $Id: mglGluPartialDisk.m 206 2007-03-20 00:55:13Z ds $ 
+%        $Id$ 
 %      usage: [  ] = mglGluPartialDisk( x, y, isize, osize, startAngles, sweepAngles, color, [nslices], [nloops] )
 %         by: denis schluppeck
 %       date: 2007-03-19

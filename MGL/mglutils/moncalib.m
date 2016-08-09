@@ -7,7 +7,7 @@
 %             moncalib(calib);
 %
 %             Options that you can use:
-%             calib = moncalib('numRepeats=4','stepsize=1/32',...
+%             calib = moncalib('numRepeats=4','stepsize=1/256',...
 %               numRepeats = number of repeats of each measurement to make when measuring luminance
 %               stepsize = step size to measure luminance values in. Use 1/256 to check every value in an 8 bit display
 %               initWaitTime = number of seconds to wait at beginning for prep time
@@ -33,7 +33,7 @@
 %
 %             Old calling style:
 %               calib = moncalib(screenNumber,stepsize,numRepeats,testTable,bitTest,initWaitTime)
-%               stepsize is how finely you want to measure luminance changes (value < 1.0) (default is 1/32)
+%               stepsize is how finely you want to measure luminance changes (value < 1.0) (default is 1/256)
 %               numRepeats is the number of repeats you want to make of the measurements (default is 4)
 %         by: justin gardner & jonas larsson
 %       date: 10/02/06
@@ -42,7 +42,7 @@
 % 
 %             To test the serial port connection to your device, run like:
 %
-%             moncalib(-1);
+%             moncalib('commTest=1');
 %
 %             This works by using the serial port interface
 %             to the PR650 and the comm library from the
@@ -439,7 +439,7 @@ end
 % otherwise choose the right photometer
 switch photometerNum
  case {1}
-  disp(sprintf('(photometerSpectrumMeasure) Spectrum measurement not yet implemented for PR650'));
+  [wavelength radiance] = photometerSpectrumMeasurePR650(portNum);
  case {2,3}
   disp(sprintf('(photometerSpectrumMeasure) Spectrum measurement not available for Minolta'));
  case {4}
@@ -532,6 +532,7 @@ errorMsg = {'Measurement okay','No EOS signal at start of measurement',...
 i = length(quality);
 thisMessageNum = find(quality(i)==errorNum);
 if isempty(thisMessageNum)
+  thisMessageNum = -1;
   thisMessage = '';
 else
   thisMessage = errorMsg{thisMessageNum(1)};
@@ -610,7 +611,12 @@ elseif strcmp(str(1:2),'ER')
    thisMessage = errorMsg{find(strcmp(errorNum,str(3:4)))};
    data=nan;
 else
-  thisMessage = sprintf('(Unknwon error) %s',str);
+  % check to see if we have high bits set - this is some problam with 
+  % the pluggable serial adaptor
+  if any(bitand(double(str),128)')
+    disp(sprintf('(moncalib) It appears that the high bit (8) is set in the message comming back from the serial device. This should never be the case since we are doing 7 bit communication. This is probably a driver error whcih we have noticed on the Plugable driver. We were never able to get that USB/Serial adaptor to work with Minolta, so consider purchasing a Keyspan USA-19HS USB/Serial device instead.'));
+  end
+  thisMessage = sprintf('(moncalib) Unknown error: %s',str);
   data = nan;
 end
 
@@ -740,6 +746,47 @@ if length(values) >= 11
 else
   disp(sprintf('(moncalib:photometerMeasureTopcon) Uhoh, not enough data values read'));
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   photometerSpectrumMeasurePR650   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [wavelength radiance] = photometerSpectrumMeasurePR650(portNum)
+
+global verbose;
+wavelength = [];
+radiance = [];
+
+% retrieve any info that is pending from the photometer
+response = readLineSerialPort(portNum);
+while ~isempty(response)
+  response = readLineSerialPort(portNum);
+end
+
+% now take a measurement and read
+writeSerialPort(portNum,sprintf('M0\n'));
+writeSerialPort(portNum,sprintf('D5\n'));
+
+% read the masurement
+% The length doesn't really have to be exact here - guesing this number
+% but if comm is very slow, it might time out before getting this many
+len = 1700;
+str = '';readstr = 'start';
+while ~isempty(readstr) || (length(str)<len)
+  readstr = readSerialPort(portNum,256);
+  str = [str readstr];
+  mglWaitSecs(0.1);
+end
+
+% this is a bit of a hack to find the point in the string
+% where measurements start. (measurements are wavelength
+% followed by measurement - comma separaterd). There is some
+% preamble that presumably carries the error codes and other
+% info, but don't have the manual to know what those are
+startWavelength = 380;
+start = findstr(str,sprintf('%04i.',startWavelength));
+
+% parse string
+[wavelength radiance] = strread(str(22:end),'%f%f','delimiter',',');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%   photometerSpectrumMeasure   %%
@@ -929,11 +976,14 @@ end
 function portNum = initSerialPortUsingSerial(baudRate,parity,dataLen,stopBits,portNum)
 
 portNum = 0;
-disp(sprintf('(moncalib) This works for Topcon - but may bnot be working for Minolta. See code comments'));
-% This should be working for Topcon with a Plugable USB/Serial adaptor. It does not seem to work for Minolta.
-% For minolta, whatever I do, I.e. send MES with CR/LF it returns 2 weird characters followed by 00 followed by
-% another weird character. Not sure what is getting mangled there (CR/LF not right?) Anyway, it works
-% now for Topcon so the serial port itself must be working correctly
+% This should be working for Topcon with a Plugable USB/Serial adaptor. 
+%
+% It does not seem to work for Minolta. And this seems to be something about setting the 7 bit mode, I think.
+% For minolta, whatever I do, I.e. send MES with CR/LF it returns characters that look like they are ER
+% except they have the top bit set (so they are 128 too big). This should be impossible when doing 7 bit communication
+% mode, so must be some bug in the driver. Minolta does seem to work with the Keyspan USA-19HS adaptor
+%
+% Anyway, it works now for Topcon so the serial port itself must be working correctly
 %
 % Some notes. The functions that read/write charcter strings with the default Terminators liek
 % fgets, fgetl do not seem to work. They just hang. The Terminator setting below is basically
@@ -945,7 +995,7 @@ disp(sprintf('(moncalib) This works for Topcon - but may bnot be working for Min
 
 % display all serial devices
 serialDev = dir('/dev/cu.*');
-%serialDev = dir('/dev/*serial*');
+
 nSerialDev = length(serialDev);
 for i = 1:nSerialDev
   disp(sprintf('%i: %s', i,serialDev(i).name));
@@ -954,16 +1004,20 @@ serialDevNum = getnum('Choose a serial device (0 to quit)',0:length(serialDev));
 if serialDevNum == 0,return,end
 
 % try to open the device
-s = serial(fullfile('/dev',serialDev(serialDevNum).name));
+try
+  s = serial(fullfile('/dev',serialDev(serialDevNum).name));
 
-set(s,'BaudRate',baudRate);
-set(s,'Parity',parity);
-set(s,'StopBits',stopBits);
-set(s,'DataBits',dataLen);
-set(s,'Terminator','CR/LF');
-set(s,'InputBufferSize',2048);
-fopen(s);
-portNum = s;
+  set(s,'BaudRate',baudRate);
+  set(s,'Parity',parity);
+  set(s,'StopBits',stopBits);
+  set(s,'DataBits',dataLen);
+  set(s,'Terminator','CR/LF');
+  set(s,'InputBufferSize',2048);
+  fopen(s);
+  portNum = s;
+catch
+  disp(sprintf('(moncalib:initSeriaPortUsingSerial) Failed to open serial port. Sometimes restarting matlab helps. Or plugging in and unplugging in serial device. Or making sure that you have the serial device driver installed.'));
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % close the serial port
@@ -990,12 +1044,13 @@ function str = readSerialPortUsingSerial(portNum, numbytes)
 % reads however many bytes are available, rather than the numbytes (but not sure
 % this might be what was expected).
 if portNum.BytesAvailable == 0
-  disp(sprintf('(moncalib:readSerialPortUsingComm) 0 bytes available'));
+  %disp(sprintf('(moncalib:readSerialPortUsingComm) 0 bytes available'));
   str = '';
 else
-  disp(sprintf('(moncalib:readSerialPortUsingComm) Reading %i bytes',portNum.BytesAvailable));
+%  disp(sprintf('(moncalib:readSerialPortUsingComm) Reading %i bytes',portNum.BytesAvailable));
   str = char(fread(portNum,portNum.BytesAvailable,'uint8'));
-  disp(sprintf('(moncalib:readSerialPortUsingComm) Received %s',str));
+  str = str(:)';
+%  disp(sprintf('(moncalib:readSerialPortUsingComm) Received %s',str));
 end
 
 
@@ -1258,7 +1313,7 @@ for minx = minxrange
   %  for maxx = 0.8:0.05:1
   for maxx = 1
     warning off
-    [fitparams resnorm residual exitflag output lambda jacobian] = lsqnonlin(@experr,initparams,minfit,maxfit,optimset('LevenbergMarquardt','on','MaxIter',maxiter,'Display',displsqnonlin),x,y,minx,maxx);
+    [fitparams resnorm residual exitflag output lambda jacobian] = lsqnonlin(@experr,initparams,minfit,maxfit,optimset('Algorithm','levenberg-marquardt','MaxIter',maxiter,'Display',displsqnonlin),x,y,minx,maxx);
     warning on
     if (resnorm < bestparams.resnorm)
       bestparams.resnorm = resnorm;
@@ -2151,7 +2206,7 @@ for i = 1:nargs
 end
 
 % default serial port function
-serialPortFun = 'comm';
+serialPortFun = 'serial';
 commTest = 0;
 % gSerialPortFun = 'serial'; 
 % Note that the serial port function still seems busted. It crashes on fclose on my system and while
@@ -2163,14 +2218,14 @@ commTest = 0;
 % parse old style arguments
 if oldStyleArgs    
   if nargs < 1,screenNumber = [];else screenNumber = vars{1};end
-  if nargs < 2,stepsize = 1/32;else stepsize = vars{2};end
+  if nargs < 2,stepsize = 1/256;else stepsize = vars{2};end
   if nargs < 3,numRepeats = 4;else numRepeats = vars{3};end
   if nargs < 4,testTable = 1;else testTable = vars{4};end
   if nargs < 5,bitTest = 0; else bitTest = vars{5};end
   if nargs < 6,initWaitTime = 0; else initWaitTime = vars{6};end
 else
   if exist('getArgs') == 2
-    getArgs(vars,{'numRepeats=4','stepsize=1/32','initWaitTime=0','screenNumber=[]','spectrum=0','gamma=1','exponent=0','tableTest=1','bitTest=0','reset=0','gammaEachChannel=0','verbose=1','bitTestBits=10','bitTestNumRepeats=4','bitTestN=12','bitTestBase=0.5','serialPortFun=comm','commTest=0'});
+    getArgs(vars,{'numRepeats=4','stepsize=1/256','initWaitTime=0','screenNumber=[]','spectrum=0','gamma=1','exponent=0','tableTest=1','bitTest=0','reset=0','gammaEachChannel=0','verbose=1','bitTestBits=10','bitTestNumRepeats=4','bitTestN=12','bitTestBase=0.5','serialPortFun',serialPortFun,'commTest=0'});
   else
     disp(sprintf('(moncalib) To parse string arguments you need getArgs from the mrTools distribution. \nSee here: http://gru.brain.riken.jp/doku.php/mgl/gettingStarted#initial_setup'));
     todo = [];

@@ -1,6 +1,6 @@
 % mglGetSecs: Get current or elapsed time
 %
-%        $Id: mglGetSecs.m 44 2006-09-22 15:11:20Z justin $
+%        $Id$
 %     Syntax: mglGetSecs([t])
 %         By: Jonas Larsson
 %       Date: 04/10/06

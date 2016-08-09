@@ -17,7 +17,7 @@
               mouseInfo = mglGetMouse(2);
 
 
-$Id: mglGetMouse.c 970 2011-09-30 16:28:04Z chrg $
+$Id$
 =========================================================================
 #endif
 
@@ -81,7 +81,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	}
 
 	// Make sure the target screen is in bounds.
-	if (targetScreen < 0 || targetScreen >= numDisplays) {
+        if (targetScreen >= numDisplays) {
 		mexPrintf("(mglGetMouse) targetScreen is out of bounds (%d)\n", targetScreen+1);
 		return;
 	}

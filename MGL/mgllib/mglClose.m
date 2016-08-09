@@ -1,6 +1,6 @@
 % mglClose.m
 %
-%        $Id: mglClose.m 1059 2013-01-12 00:56:17Z justin $
+%        $Id$
 %     program: mglClose.m
 %          by: justin gardner
 %        date: 04/03/06
@@ -60,3 +60,11 @@ if ~isempty(originalResolution)
   end
   mglResolution(originalResolution);
 end
+
+% turn of clearing with the mask if it was on. This is an unusual
+% global that is used to tell mglClearScreen to use a mask when
+% clearing the screen (usually set with mglEditScreenParams - useScreenMask
+% its a separate global for speed because mglClearScreen is usually
+% within frame updates. Here we set it back to empty, it gets turned
+% on in initScreen.
+clear global mglGlobalClearWithMask;

@@ -2,7 +2,7 @@ function mglVisualAngleCoordinates(physicalDistance,physicalSize);
 % mglVisualAngleCoordinates(physicalDistance,physicalSize);
 % 
 %  copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
-%        $Id: mglVisualAngleCoordinates.m 1016 2012-02-06 14:07:30Z justin $
+%        $Id$
 % Sets view transformation to correspond to visual angles (in degrees)
 % given size and distance of display. Display must be open
 %
@@ -103,8 +103,8 @@ if isempty(visualAngleScale) || (length(visualAngleScale) ~= 2)
 end
   
 % computed deviceWidth and deviceHeight
-mglSetParam('deviceHeight',visualAngleScale(1)*(1/p)*atan(p*devicePhysicalSize(2)/mglGetParam('devicePhysicalDistance'))/pi*180);
-mglSetParam('deviceWidth',visualAngleScale(2)*(1/p)*atan(p*devicePhysicalSize(1)/mglGetParam('devicePhysicalDistance'))/pi*180);
+mglSetParam('deviceHeight',visualAngleScale(2)*(1/p)*atan(p*devicePhysicalSize(2)/mglGetParam('devicePhysicalDistance'))/pi*180);
+mglSetParam('deviceWidth',visualAngleScale(1)*(1/p)*atan(p*devicePhysicalSize(1)/mglGetParam('devicePhysicalDistance'))/pi*180);
 
 % It is often convenient to make sure that the pixel to degree scaling factors
 % are the same in x and y - i.e. that we have square pixels. This is now an

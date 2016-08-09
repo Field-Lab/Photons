@@ -8,7 +8,7 @@
      purpose: mex function to plot 2D points on an OpenGL screen opened with mglOpen
        usage: mglPoints2(x,y,size,color)
 
-$Id: mglPoints2.c 18 2006-09-13 15:41:18Z justin $
+$Id$
 =========================================================================
 #endif
 

@@ -1,6 +1,6 @@
 % initStimulus.m
 %
-%        $Id: initStimulus.m 631 2009-09-15 00:06:53Z justin $
+%        $Id$
 %      usage: [stimulus myscreen] = 
 %               initStimulus(stimulusName, myscreen)
 %         by: justin gardner

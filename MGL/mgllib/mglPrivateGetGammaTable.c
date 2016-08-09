@@ -6,7 +6,7 @@
         date: 05/27/06
    copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
 
-$Id: mglGetGammaTable.c 967 2011-09-14 05:00:11Z chrg $
+$Id$
 =========================================================================
 #endif
 
@@ -19,7 +19,6 @@ $Id: mglGetGammaTable.c 967 2011-09-14 05:00:11Z chrg $
 //   define section   //
 ////////////////////////
 #define kMaxDisplays 8
-#define TABLESIZE 256
 #ifdef _WIN32
 #define GAMMAVALUE WORD
 #define GAMMAVALUESIZE sizeof(WORD)
@@ -107,7 +106,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   } 
   else {
     mexPrintf("(mglGetGammaTable) Could not get gamma table values.\n");
-  
+    // return empty
+    plhs[0] = mxCreateDoubleMatrix(0,0,mxREAL);
   }
   return;
 }
@@ -121,14 +121,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 ///////////////////////
 Bool getGammaTable(int *gammaTableSize, GAMMAVALUE **redTable,GAMMAVALUE **greenTable,GAMMAVALUE **blueTable)
 {
-  // just assume table size
-  *gammaTableSize = TABLESIZE;
-
-  // allocate gamma ramps
-  *redTable=(GAMMAVALUE *) malloc(sizeof(GAMMAVALUE)*(*gammaTableSize));
-  *greenTable=(GAMMAVALUE *)malloc(sizeof(GAMMAVALUE)*(*gammaTableSize));
-  *blueTable=(GAMMAVALUE *)malloc(sizeof(GAMMAVALUE)*(*gammaTableSize));
-
   // get globals
   int verbose = (int)mglGetGlobalDouble("verbose");
   int displayNumber;
@@ -172,9 +164,17 @@ Bool getGammaTable(int *gammaTableSize, GAMMAVALUE **redTable,GAMMAVALUE **green
       whichDisplay = kCGDirectMainDisplay;
     else
       whichDisplay = displays[displayNumber-1];
+    
+    // get the size of the gamma table
+    *gammaTableSize = (int)CGDisplayGammaTableCapacity(whichDisplay);
+
+    // allocate gamma tables
+    *redTable=(GAMMAVALUE *) malloc(sizeof(GAMMAVALUE)*(*gammaTableSize));
+    *greenTable=(GAMMAVALUE *)malloc(sizeof(GAMMAVALUE)*(*gammaTableSize));
+    *blueTable=(GAMMAVALUE *)malloc(sizeof(GAMMAVALUE)*(*gammaTableSize));
 
     // and get the gamma table
-    CGTableCount capacity=*gammaTableSize, sampleCount;
+    uint32_t capacity=*gammaTableSize, sampleCount;
 
     displayErrorNum = CGGetDisplayTransferByTable(whichDisplay,*gammaTableSize,*redTable,*greenTable,*blueTable,&sampleCount);
     if (displayErrorNum) {

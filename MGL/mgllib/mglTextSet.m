@@ -1,6 +1,6 @@
 % mglTextSet.m
 %
-%        $Id: mglTextSet.m 380 2008-12-31 04:39:55Z justin $
+%        $Id$
 %      usage: mglTextSet(fontName,fontSize,fontColor,fontVFlip,fontHFlip,fontRotation,fontBold,fontItalic,fontUnderline,fontStrikeThrough)
 %         by: justin gardner
 %       date: 05/10/06

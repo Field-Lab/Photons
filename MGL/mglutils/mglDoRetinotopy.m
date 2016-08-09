@@ -1,6 +1,6 @@
 % mglDoRetinotopy.m
 %
-%        $Id: mglDoRetinotopy.m 945 2011-07-01 02:04:37Z justin $
+%        $Id$
 %      usage: mglDoRetinotopy()
 %         by: justin gardner
 %       date: 04/09/07

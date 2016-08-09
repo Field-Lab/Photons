@@ -1,6 +1,6 @@
 % mglDeleteTexture.m
 %
-%        $Id: mglDeleteTexture.m 739 2010-03-17 07:18:55Z justin $
+%        $Id$
 %      usage: mglDeleteTexture(tex)
 %         by: justin gardner
 %       date: 02/29/08

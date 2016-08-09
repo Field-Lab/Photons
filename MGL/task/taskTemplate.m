@@ -1,6 +1,6 @@
 % taskTemplate.m
 %
-%        $Id: taskTemplate.m 835 2010-06-29 04:04:08Z justin $
+%        $Id$
 %      usage: taskTemplate
 %         by: justin gardner
 %       date: 09/07/06

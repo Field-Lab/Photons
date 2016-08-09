@@ -8,7 +8,7 @@
      purpose: mex function to delete a texture
        usage: mglDeleteTexture(texnum)
 
-$Id: mglPrivateDeleteTexture.c 739 2010-03-17 07:18:55Z justin $
+$Id$
 =========================================================================
 #endif
 

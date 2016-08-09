@@ -1,6 +1,6 @@
 % mglLines2.m
 %
-%        $Id: mglLines2.m 800 2010-04-07 02:08:04Z justin $
+%        $Id$
 %       usage: mglLines(x0, y0, x1, y1,size,color,<anti-aliasing>)
 %          by: justin gardner
 %        date: 04/03/06

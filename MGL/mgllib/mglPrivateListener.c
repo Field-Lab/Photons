@@ -77,7 +77,7 @@ void mglPrivateListenerOnExit(void);
 ////////////////
 static CFMachPortRef gEventTap;
 static pthread_mutex_t mut;
-static eventTapInstalled = FALSE;
+static int eventTapInstalled = FALSE;
 static NSAutoreleasePool *gListenerPool;
 static NSMutableArray *gKeyboardEventQueue;
 static NSMutableArray *gMouseEventQueue;
@@ -122,19 +122,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       if (~eventTapInstalled) {
 	// first check if the accessibility API is enabled, cause otherwise we are F*&%ed.
 	if (!AXAPIEnabled() & !gavewarning) {
-	  mexPrintf("(mglPrivateListener) **WARNING** To get keyboard events, you must have the Accessibility API enabled. From System Preferences open Universal Access and make sure that \"Enable access for assistive devices\" is checked **WARNING **\n");
-	  int ret = NSRunAlertPanel (@"To get keyboard events, you must have the Accessibility API enabled.  Would you like to launch System Preferences so that you can turn on \"Enable access for assistive devices\".", @"", @"OK",@"", @"Cancel");
-	  switch (ret) {
-          case NSAlertDefaultReturn:
-	    [[NSWorkspace sharedWorkspace] openFile:@"/System/Library/PreferencePanes/UniversalAccessPref.prefPane"];
-	    // busy wait until accessibility is activated
-	    while (!AXAPIEnabled());
-	    break;
-          default:
-	    pthread_mutex_unlock(&mut);
-	    return;
-	    break;
-	  }
+	  // give warning (got rid of all the stuff to open the panel and help the user, since
+	  // this caused problems when run from a background thread
+	  mexPrintf("(mglPrivateListener) !!! **WARNING** To get keyboard events, you must allow Terminal to 'control your computer' by going to System Preferences/Privacy/Accessibility and adding Terminal to the list of apps that are allowed to control your computer. See http://gru.stanford.edu/doku.php/mgl/beta#keyboard_events\n !!!");
+	  pthread_mutex_unlock(&mut);
+	  return;
 	}
 	// init the event queue
 	gListenerPool = [[NSAutoreleasePool alloc] init];

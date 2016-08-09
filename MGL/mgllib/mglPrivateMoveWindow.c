@@ -7,7 +7,7 @@
    copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
      purpose: Moves the current AGL window.
 
-$Id: mglPrivateMoveWindow.c 884 2010-11-11 03:18:33Z chrg $
+$Id$
 =========================================================================
 #endif
 

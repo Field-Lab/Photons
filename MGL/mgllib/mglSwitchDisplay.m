@@ -1,6 +1,6 @@
 % mglSwitchDisplay.m
 %
-%        $Id: mglSwitchDisplay.m 613 2009-07-29 13:13:04Z justin $
+%        $Id$
 %      usage: mglSwitchDisplay(displayID,<displayNumber>)
 %         by: Christopher Broussard
 %       date: 10/16/07

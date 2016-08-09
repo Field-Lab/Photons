@@ -1,7 +1,7 @@
 % mglDescribeDisplays: Retrieves information about available displays and
 % basic computer info.
 %
-%        $Id: mglDescribeDisplays.m 975 2011-10-13 12:00:44Z justin $
+%        $Id$
 %      usage: mglDescribeDisplays
 %         by: Christopher Broussard
 %       date: 10/27/07

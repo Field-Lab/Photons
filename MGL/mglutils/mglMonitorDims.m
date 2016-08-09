@@ -1,6 +1,6 @@
 % mglMonitorDims.m
 %
-%        $Id: mglMonitorDims.m 1016 2012-02-06 14:07:30Z justin $ 
+%        $Id$ 
 %      usage: mglMonitorDims(<monitor>)
 %         by: justin gardner
 %       date: 01/28/09
@@ -49,6 +49,14 @@ for d = diameter
     mglFillOval(0,0,[d+0.5 d],c);
   end
 end
+% add polar angle lines
+for ang = 0:15:360
+    rang = d2r(ang);
+    x = cos(rang)*diameter;
+    y = sin(rang)*diameter;
+    mglLines2(0,0,x,y,1,[.5 .5 .5]);
+end
+
 % draw labels
 yPos = 1;
 for r = redDiameters
@@ -90,3 +98,9 @@ end
 
 
 
+% convert degrees to radians
+%
+% usage: radians = d2r(degrees);
+function radians = d2r(angle)
+
+radians = (angle/360)*2*pi;

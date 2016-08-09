@@ -8,7 +8,7 @@
      purpose: mex function to display/hide the mouse
        usage: mglDisplayMouse(<display>)
 
-$Id: mglDisplayCursor.c 967 2011-09-14 05:00:11Z chrg $
+$Id$
 =========================================================================
 #endif
 

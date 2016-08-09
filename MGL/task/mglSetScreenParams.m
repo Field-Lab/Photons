@@ -24,6 +24,7 @@ if isempty(screenParamsFilename)
   screenParamsFilename = fullfile('~','.mglScreenParams');
   mglSetParam('screenParamsFilename',screenParamsFilename,1);
 end
+screenParamsFilename = mglReplaceTilde(screenParamsFilename);
 
 % make sure we have a .mat extension 
 if (length(screenParamsFilename)<3) || ~isequal(screenParamsFilename(end-2:end),'mat')
@@ -50,5 +51,16 @@ saveScreenParams = mglValidateScreenParams(saveScreenParams);
 
 % save the new one
 screenParams = saveScreenParams;
-eval(sprintf('save %s screenParams',screenParamsFilename));
+disp(sprintf('(mglSetScreenParams) Saving screen params file: %s',screenParamsFilename));
+try
+  eval(sprintf('save %s screenParams',screenParamsFilename));
+catch
+  disp(sprintf('(mglSetScreenParams) !!! Could not save screen params in: %s',screenParamsFilename));
+  newScreenParamsFilename = input('Enter a new name (e.g. ~/.mglScreenParams) or hit ENTER to ignore: ','s');
+  if ~isempty(newScreenParamsFilename)
+    disp(sprintf('(mglSetScreenParams) Using mglSetParam(''screenParamsFilename'',''%s'',1); to set screenParamsFilename',newScreenParamsFilename));
+    mglSetParam('screenParamsFilename',newScreenParamsFilename,1);
+    mglSetScreenParams(saveScreenParams);
+  end
+end
 

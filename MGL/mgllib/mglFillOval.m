@@ -1,6 +1,6 @@
 % mglFillOval - draw filled oval(s) on the screen
 %
-%        $Id: mglFillOval.m 18 2006-09-13 15:41:18Z justin $
+%        $Id$
 %      usage: mglFillOval(x,y, size, color)
 %         by: denis schluppeck
 %       date: 2006-05-12

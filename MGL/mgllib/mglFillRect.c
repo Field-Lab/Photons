@@ -8,7 +8,7 @@
      purpose: mex function to plot an rect on an OpenGL screen opened with mglOpen
        usage: mglFillRect(x,y,size, color, [antialias])
               
-$Id: mglFillRect.c 334 2008-12-28 02:49:05Z justin $
+$Id$
 =========================================================================
 #endif
 

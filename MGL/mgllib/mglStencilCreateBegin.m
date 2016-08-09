@@ -1,6 +1,6 @@
 % mglStencilCreateBegin
 %
-%        $Id: mglStencilCreateBegin.m 380 2008-12-31 04:39:55Z justin $
+%        $Id$
 %      usage: mglStencilCreateBegin(stencilNumber,invert)
 %         by: justin gardner
 %       date: 05/26/2006

@@ -1,7 +1,7 @@
 function mglPlaySound(soundNum)
 % mglPlaySound: Play a system sound
 %
-%        $Id: mglPlaySound.m 654 2009-12-02 05:17:25Z justin $
+%        $Id$
 %      usage: mglPlaySound(soundNum)
 %         by: justin gardner
 %       date: 02/08/07

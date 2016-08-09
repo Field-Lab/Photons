@@ -9,7 +9,7 @@
        usage: mglGluPartialDisk(x,y, isize, osize, startAngle, sweepAngle, color, nslices, nloops)
               needs glu.h
 
-$Id: mglGluPartialDisk.c 205 2007-03-20 00:36:08Z ds $
+$Id$
 =========================================================================
 #endif
 

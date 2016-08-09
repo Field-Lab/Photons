@@ -1,6 +1,6 @@
 % mglText.m
 %
-%        $Id: mglText.m 138 2007-01-17 15:49:49Z justin $
+%        $Id$
 %      usage: mglText('string')
 %         by: justin gardner
 %       date: 05/10/06

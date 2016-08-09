@@ -1,6 +1,6 @@
 % mglBltTexture.m
 %
-%        $Id: mglBltTexture.m 694 2010-02-24 06:23:06Z justin $
+%        $Id$
 %      usage: mglBltTexture(texture,position,hAlignment,vAlignment,rotation)
 %         by: justin gardner
 %       date: 05/10/06

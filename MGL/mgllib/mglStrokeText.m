@@ -6,7 +6,7 @@ function mglStrokeText( string, x, y, scalex, scaley, linewidth, ...
 % Draws a stroked fixed-width character or string on mgl display. Default width
 % is 1, default height 1.8 (in current screen coordinates)
 % INPUT:
-%        $Id: mglStrokeText.m 380 2008-12-31 04:39:55Z justin $
+%        $Id$
 %    string : text string. Unsupported characters are printed as #
 %       x,y : center coordinates of first character (current screen coordinates)
 %    scalex : scale factor in x dimension (relative to character)

@@ -7,7 +7,7 @@
    copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
      purpose: Switches witch display/window is active.
 
-$Id: mglPrivateSwitchDisplay.c 967 2011-09-14 05:00:11Z chrg $
+$Id$
 =========================================================================
 #endif
 

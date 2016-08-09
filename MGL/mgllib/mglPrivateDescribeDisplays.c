@@ -7,7 +7,7 @@
    copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
      purpose: Returns information about available displays.
 
-$Id: mglPrivateDescribeDisplays.c 967 2011-09-14 05:00:11Z chrg $
+$Id$
 =========================================================================
 #endif
 
@@ -122,7 +122,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     io_service_t displayService = CGDisplayIOServicePort(displays[i]);
 
     //#define MACOS106
-#ifdef MACOS106
+#ifdef __MAC_10_6
     // get the displayMode for this display
     CGDisplayModeRef displayMode = CGDisplayCopyDisplayMode(displays[i]);
 

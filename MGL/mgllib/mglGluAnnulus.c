@@ -9,7 +9,7 @@
        usage: mglGluAnnulus(x,y,isize, osize,color, nslices, nloops)
               needs glu.h
 
-$Id: mglGluAnnulus.c 205 2007-03-20 00:36:08Z ds $
+$Id$
 =========================================================================
 #endif
 

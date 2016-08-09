@@ -9,7 +9,7 @@
        usage: mglFillOval(x,y,size,color)
               needs glu.h
 
-$Id: mglFillOval.c 884 2010-11-11 03:18:33Z chrg $
+$Id$
 =========================================================================
 #endif
 

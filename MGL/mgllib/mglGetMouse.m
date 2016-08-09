@@ -1,6 +1,6 @@
 % mglGetMouse.m
 %
-%        $Id: mglGetMouse.m 970 2011-09-30 16:28:04Z chrg $
+%        $Id$
 %      usage: mglGetMouse
 %         by: justin gardner
 %       date: 09/12/06

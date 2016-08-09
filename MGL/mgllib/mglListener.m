@@ -1,6 +1,6 @@
 % mglListener.m
 %
-%        $Id: mglListener.m 438 2009-01-30 04:46:05Z justin $
+%        $Id$
 %      usage: mglListener(command,<arg1>)
 %         by: justin gardner
 %       date: 06/19/08

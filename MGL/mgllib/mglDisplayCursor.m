@@ -1,6 +1,6 @@
 % mglDisplayCursor.m
 %
-%        $Id: mglDisplayCursor.m 176 2007-02-10 13:52:11Z justin $
+%        $Id$
 %      usage: mglDisplayCursor()
 %         by: Justin Gardner
 %       date: 02/10/07

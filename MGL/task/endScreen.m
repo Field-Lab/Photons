@@ -1,6 +1,6 @@
 % endScreen.m
 %
-%        $Id: endScreen.m 1123 2014-05-06 01:19:38Z justin $
+%        $Id$
 %      usage: myscreen = endScreen(myscreen)
 %         by: justin gardner
 %       date: 12/21/04

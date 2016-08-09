@@ -1,6 +1,6 @@
 % readDigPort.m
 %
-%        $Id: readDigPort.m 574 2009-06-26 05:52:04Z justin $
+%        $Id$
 %      usage: readDigPort(<portNum>)
 %         by: justin gardner
 %       date: 09/21/06

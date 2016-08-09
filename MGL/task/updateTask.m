@@ -1,6 +1,6 @@
 % updateTask - update the task in running in stimulus programs
 %
-%        $Id: updateTask.m 1099 2013-09-25 14:46:30Z justin $
+%        $Id$
 %      usage: [task, myscreen, tnum] = updateTask(task,myscreen,tnum)
 %         by: justin gardner, eric dewitt
 %       date: 2006-04-27
@@ -257,7 +257,7 @@ if (segover)
 	% we set the stored calculated variable was set to (in the user
 	% program) in task.thistrial
 	if ~isempty(task{tnum}.thistrial.(task{tnum}.randVars.calculated_names_{nVar}))
-	  if isscalar(task{tnum}.thistrial.(task{tnum}.randVars.calculated_names_{nVar}))
+	  if ~iscell(task{tnum}.randVars.(task{tnum}.randVars.calculated_names_{nVar})) && isscalar(task{tnum}.thistrial.(task{tnum}.randVars.calculated_names_{nVar}))
 	    % scalar calculated var gets an array
 	    eval(sprintf('task{tnum}.randVars.%s(task{tnum}.trialnum) = task{tnum}.thistrial.%s;',task{tnum}.randVars.calculated_names_{nVar},task{tnum}.randVars.calculated_names_{nVar}));
 	  else
@@ -481,7 +481,7 @@ else
   end
   % now get the seglen for this trial (note that seglen is a cell array
   % which allows for trials with different numbers of segments)
-  fieldRow = min(task.seglenPrecompute.seglen.nTrials,task.trialnum);
+  fieldRow = mod(task.trialnum-1,task.seglenPrecompute.seglen.nTrials)+1;
   task.thistrial.seglen = task.seglenPrecompute.seglen.vals{fieldRow};
 end
 

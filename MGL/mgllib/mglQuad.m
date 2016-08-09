@@ -1,6 +1,6 @@
 % mglQuad.m
 %
-%      $Id: mglQuad.m 18 2006-09-13 15:41:18Z justin $
+%      $Id$
 %    usage: mglQuad( vX, vY, rgbColor, [antiAliasFlag] );
 %       by: eli merriam, based on mglPoints.c by justin gardner & Jonas Larsson
 %     date: 04/20/06

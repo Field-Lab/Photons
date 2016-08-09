@@ -1,6 +1,6 @@
 % mglEatKeys.m
 %
-%        $Id: mglEatKeys.m 667 2009-12-23 07:04:25Z justin $
+%        $Id$
 %      usage: mglEatKeys(keyCodes)
 %         by: justin gardner
 %       date: 1/29/09

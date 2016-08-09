@@ -1,6 +1,6 @@
 % mglVFlip.m
 %
-%        $Id: mglVFlip.m 380 2008-12-31 04:39:55Z justin $
+%        $Id$
 %      usage: mglVFlip
 %         by: justin gardner
 %       date: 09/06/06

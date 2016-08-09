@@ -1,6 +1,6 @@
 % mglStencilCreateEnd
 %
-%        $Id: mglStencilCreateEnd.m 22 2006-09-13 18:33:01Z justin $
+%        $Id$
 %      usage: mglStencilCreateEnd
 %         by: justin gardner
 %       date: 05/26/2006

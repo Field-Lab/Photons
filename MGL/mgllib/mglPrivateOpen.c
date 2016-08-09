@@ -10,7 +10,7 @@
 
   http://developer.apple.com/documentation/GraphicsImaging/OpenGL-date.html#//apple_ref/doc/uid/TP30000440-TP30000424-TP30000549
 
-  $Id: mglPrivateOpen.c 1090 2013-07-11 07:56:51Z justin $
+  $Id$
 =========================================================================
 #endif
 
@@ -182,7 +182,7 @@ unsigned long cocoaOpen(double *displayNumber, int *screenWidth, int *screenHeig
 
   // Open window
   NSWindow *myWindow = initWindow(displayNumber,screenWidth,screenHeight);
-  if (myWindow == NULL) { [pool drain]; return; }
+  if (myWindow == NULL) { [pool drain]; return (unsigned long)NULL; }
 
   // Attach openGLView
   NSOpenGLView *myOpenGLView = addOpenGLContext(myWindow,displayNumber,screenWidth,screenHeight);
@@ -193,6 +193,7 @@ unsigned long cocoaOpen(double *displayNumber, int *screenWidth, int *screenHeig
   mglSetGlobalDouble("isCocoaWindow",1);
 
   NSOpenGLContext *myOpenGLContext = [[myWindow contentView] openGLContext];
+  [myOpenGLContext update];
 
   // return openGL context
   return((unsigned long)myOpenGLContext);
@@ -336,6 +337,12 @@ NSOpenGLView *addOpenGLContext(NSWindow *myWindow, double *displayNumber, int *s
   // sleep here seems to give enough time for something magical to happen
   usleep(100000);
 
+  // also, not precisely sure, but the window stopped showing up
+  // after some OS update - but would flash for a fraction of
+  // second on close - after this command was called. So calling
+  // it here on startup, but not really happy with why this should work
+  [[myWindow contentView] clearGLContext];
+
   // get openGL context
   myOpenGLContext = [myOpenGLView openGLContext];
   [myOpenGLContext makeCurrentContext];
@@ -348,6 +355,9 @@ NSOpenGLView *addOpenGLContext(NSWindow *myWindow, double *displayNumber, int *s
   // set the openGL context to be transparent so that we can see the movie below
   if (transparentBackground){
     const GLint alphaValue = 0;
+    [myOpenGLContext setValues:&alphaValue forParameter:NSOpenGLCPSurfaceOpacity];
+  } else{
+    const GLint alphaValue = 1;
     [myOpenGLContext setValues:&alphaValue forParameter:NSOpenGLCPSurfaceOpacity];
   }
 
@@ -560,7 +570,7 @@ unsigned long cglOpen(double *displayNumber, int *screenWidth, int *screenHeight
   displayErrorNum = CGGetActiveDisplayList(kMaxDisplays,displays,&numDisplays);
   if (displayErrorNum) {
     mexPrintf("(mglPrivateOpen) Cannot get displays (%d)\n", displayErrorNum);
-    return;
+    return (unsigned long)NULL;
   }
   if (verbose)
     mexPrintf("(mglPrivateOpen) Found %i displays\n",numDisplays);
@@ -575,7 +585,7 @@ unsigned long cglOpen(double *displayNumber, int *screenWidth, int *screenHeight
   }
   else if (*displayNumber > numDisplays) {
     mexPrintf("(mglPrivateOpen): Display %i out of range (0:%i)\n",*displayNumber,numDisplays);
-    return;
+    return (unsigned long)NULL;
   }
   else
     whichDisplay = displays[(int)*displayNumber-1];
@@ -640,7 +650,7 @@ unsigned long cglOpen(double *displayNumber, int *screenWidth, int *screenHeight
   errorNum = CGLChoosePixelFormat(attribs, &pixelFormatObj, &numPixelFormats);
   if (errorNum) {
     mexPrintf("(mglPrivateOpen) UHOH: CGLChoosePixelFormat returned %i (%s)\n",errorNum,CGLErrorString(errorNum));
-    return;
+    return (unsigned long)NULL;
   }
 
   // Set up the full screen context
@@ -648,7 +658,7 @@ unsigned long cglOpen(double *displayNumber, int *screenWidth, int *screenHeight
   errorNum = CGLCreateContext(pixelFormatObj, NULL, &contextObj ) ;
   if (errorNum) {
     mexPrintf("(mglPrivateOpen) UHOH: CGLCreateContext returned %i (%s)\n",errorNum,CGLErrorString(errorNum));
-    return;
+    return (unsigned long)NULL;
   }
 
   // clear the pixel format
@@ -675,8 +685,9 @@ unsigned long cglOpen(double *displayNumber, int *screenWidth, int *screenHeight
     CGLSetFullScreenOnDisplay( contextObj, displayMask );
 #endif
   }
-  else
+  else {
     CGLSetFullScreen( contextObj ) ;
+  }
 
   // Hide cursor
   CGDisplayHideCursor( kCGDirectMainDisplay ) ;

@@ -1,6 +1,6 @@
 % mglTransform.m
 %
-%        $Id: mglTransform.m 18 2006-09-13 15:41:18Z justin $
+%        $Id$
 %      usage: mglTransform(whichMatrix, whichTransform, [whichParameters])
 %         by: Jonas Larsson
 %       date: 2006-04-07

@@ -1,4 +1,4 @@
-%     $Id: mglPolygon.m 18 2006-09-13 15:41:18Z justin $
+%     $Id$
 % program: mglPolygon.c
 %      by: denis schluppeck, based on mglQuad/mglPoints by eli, 
 %          justin, jonas

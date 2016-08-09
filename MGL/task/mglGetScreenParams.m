@@ -21,8 +21,10 @@ end
 % get then name of the screen params filename
 screenParamsFilename = mglGetParam('screenParamsFilename');
 if isempty(screenParamsFilename)
-  screenParamsFilename = fullfile(mglGetParam('taskdir'),'mglScreenParams');
+  screenParamsFilename = fullfile('~','.mglScreenParams');
+  mglSetParam('screenParamsFilename',screenParamsFilename,1);
 end
+screenParamsFilename = mglReplaceTilde(screenParamsFilename);
 
 % make sure we have a .mat extension 
 if (length(screenParamsFilename)<3) || ~isequal(screenParamsFilename(end-2:end),'mat')
@@ -31,7 +33,7 @@ end
 
 % check for file
 if ~isfile(screenParamsFilename)
-  disp(sprintf('(mglEditScreenParams) Could not find screenParams file %s',screenParamsFilename));
+  disp(sprintf('(mglGetScreenParams) Could not find screenParams file %s',screenParamsFilename));
   screenParams = {};
 else
   % load the file
@@ -42,7 +44,7 @@ end
 if isfield(screenParams,'screenParams')
   screenParams = screenParams.screenParams;
 elseif ~isempty(screenParams)
-  disp(sprintf('(mglEditScreenParams) File %s does not contain screenParams',screenParamsFilename));
+  disp(sprintf('(mglGetScreenParams) File %s does not contain screenParams',screenParamsFilename));
   screenParams = {};
 end
 

@@ -1,6 +1,6 @@
 % upDownStaircase.m
 %
-%        $Id: upDownStaircase.m 844 2010-08-09 01:58:37Z justin $
+%        $Id$
 %      usage: upDownStaircase(nup,ndown,initialThreshold,stepsize,<stepRule=0>)
 %         by: justin gardner
 %       date: 06/20/05
@@ -41,9 +41,9 @@
 %             
 function s = upDownStaircase(varargin)
 
-if (nargin == 1)
+if ((nargin == 1) || isstr(varargin{2}))
   % compute thresholds
-  s = computeThreshold(varargin{1});
+  s = computeThreshold(varargin{1},{varargin{2:end}});
   return
 % two arguments, means an update
 elseif (nargin == 2)
@@ -276,7 +276,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %    commuteThreshold    %
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-function s = computeThreshold(s)
+function s = computeThreshold(s,args)
+
+getArgs(args,{'dispFig=0','maxIter=1000','dogoodnessoffit=0','dobootstrap=0'});
 
 % compute the mean of last k reversals
 if isfield(s,'reversals') && (length(s.reversals) > 0)
@@ -298,7 +300,9 @@ end
 
 % compute weibull fit
 if exist('fitweibull') == 2
-  s.computedThresholds.weibullFitParams = fitweibull(s.strength,s.response);
+  s.computedThresholds.weibullFitParams = fitweibull(s.strength,...
+    s.response,'dispfig',dispFig,'maxIter',maxIter,'dogoodnessoffit',...
+    dogoodnessoffit,'dobootstrap',dobootstrap);
   s.computedThresholds.weibull = s.computedThresholds.weibullFitParams.fitparams(1);
 end
 

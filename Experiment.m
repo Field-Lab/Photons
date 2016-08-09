@@ -1,36 +1,38 @@
 %% Initialization
 
-my_path = '/Users/vision/Desktop/Photons';
-
+my_path = '/Users/Suva/Desktop/GitAll/GitClones_FieldLab/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
-screen_number = 2;
-def_params = initialize_display('CRT', screen_number);
+screen_number = 0; % Value = 0 (primary screen small), 1 (primary screen full), 2 (secondary screen full)
+def_params = initialize_display('OLED', screen_number);
 
-% real refresh rate 
-%mglTestRefresh(2)
 
-% set gamma CRT nov 2015
-%{
-scale = [0.9998    1.0072    1.0019];
-power = [2.7807    2.8437    2.7429];
-offset = [-0.0017   -0.0043   -0.0002];
-set_gamma_from_fit_params(scale, power, offset);
-%}
-% set gamma OLED nov 2015
+% % set gamma OLED Aug 2, 2016
+% scale = [1.1399    1.0998    1.1027];
+% power = [1.1741    1.2998    1.3112];
+% offset = [-0.1445   -0.1023   -0.1054];
+% set_gamma_from_fit_params(scale, power, offset);
+
+% % set gamma CRT nov 2015
+% scale = [0.9998    1.0072    1.0019];
+% power = [2.7807    2.8437    2.7429];
+% offset = [-0.0017   -0.0043   -0.0002];
+% set_gamma_from_fit_params(scale, power, offset);
+
+% % set gamma OLED nov 2015
 % scale = [1.1156    1.0919    1.0921];
 % power = [1.1799    1.2878    1.2614];
 % offset = [-0.1228   -0.0961   -0.0955];
 % set_gamma_from_fit_params(scale, power, offset);
 
-% set gamma CRT Rig 4
-scale = [0.9489    1.0203    1.0090];
-power = [2.4109    2.5974    2.5376];
-offset = [0.0561    0.0040    0.0038];
-set_gamma_from_fit_params(scale, power, offset);
+% % set gamma CRT Rig 4
+% scale = [0.9489    1.0203    1.0090];
+% power = [2.4109    2.5974    2.5376];
+% offset = [0.0561    0.0040    0.0038];
+% set_gamma_from_fit_params(scale, power, offset);
 
 %% Gamma calibration
  

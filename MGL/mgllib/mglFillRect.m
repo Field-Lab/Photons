@@ -1,6 +1,6 @@
 % mglFillRect - draw filled rectangle(s) on the screen
 %
-%        $Id: mglFillRect.m 18 2006-09-13 15:41:18Z justin $
+%        $Id$
 %      usage: [  ] = mglFillRect(x,y, size, [rgb])
 %         by: denis schluppeck
 %       date: 2006-05-12

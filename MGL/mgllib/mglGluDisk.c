@@ -9,7 +9,7 @@
        usage: mglGluDisk(x,y,size,color)
               needs glu.h
 
-$Id: mglGluDisk.c 330 2008-11-13 14:08:16Z ds $
+$Id$
 =========================================================================
 #endif
 

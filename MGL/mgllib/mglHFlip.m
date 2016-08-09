@@ -1,6 +1,6 @@
 % mglHFlip.m
 %
-%        $Id: mglHFlip.m 380 2008-12-31 04:39:55Z justin $
+%        $Id$
 %      usage: mglHFlip()
 %         by: justin gardner
 %       date: 09/06/06

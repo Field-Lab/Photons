@@ -1,6 +1,6 @@
 % eyeCalibDisp.m
 %
-%        $Id: eyeCalibDisp.m 1065 2013-02-18 04:29:01Z justin $
+%        $Id$
 %      usage: myscreen = eyeCalibDisp(myscreen,<dispText>)
 %         by: justin gardner
 %       date: 12/10/04
@@ -16,7 +16,7 @@ if nargin < 1
 end
 
 % nothing to do with no eye tracker
-if strcmp(lower(myscreen.eyeTrackerType),'none')
+if ~isfield(myscreen,'eyeTrackerType') || strcmp(lower(myscreen.eyeTrackerType),'none')
   disp(sprintf('(eyeCalibDisp) Eye tracker type set to none. You can change this in mglEditScreenParams'));
   return
 end

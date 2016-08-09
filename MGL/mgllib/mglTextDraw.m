@@ -1,6 +1,6 @@
 % mglTextDraw.m
 %
-%        $Id: mglTextDraw.m 830 2010-06-26 04:37:54Z justin $
+%        $Id$
 %      usage: mglTextDraw(str,pos,hAlignment,vAlignment)
 %         by: justin gardner
 %       date: 05/13/06

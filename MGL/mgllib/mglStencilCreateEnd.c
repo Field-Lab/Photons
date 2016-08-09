@@ -6,7 +6,7 @@
         date: 05/26/06
    copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
 
-$Id: mglStencilCreateEnd.c 18 2006-09-13 15:41:18Z justin $
+$Id$
 =========================================================================
 #endif
 

@@ -1,6 +1,6 @@
 % mglMake.m
 %
-%        $Id: mglMake.m 1091 2013-07-11 15:05:44Z justin $
+%        $Id$
 %      usage: mglMake(rebuild)
 %         by: justin gardner
 %       date: 05/04/06
@@ -9,6 +9,8 @@
 %             dates to see whether it should rebuild. With
 %             rebuild set to 1 removes all mex files for
 %             the current platform and rebuilds
+%             
+%             rebuild set to 2 shows all deprecated function warnings (which are otherwise suppressed)
 %
 %             If rebuild is set to 'carbon' then it will rebuild mac files using only carbon
 %             function calls (obsolete in 64bit Mac os). If set to 'cocoa' will build using
@@ -16,9 +18,19 @@
 %
 %             To build digital I/O code (which requires the NI NIDAQ MX-base library), set
 %             rebuild to 'digio'
+%             e.g.
+%             mglMake('digio');
+%
+%             to force recompile of digio code:
+%             mglMake(1,'digio');
 %
 %             To build eyelink code (which requires the eyelink developers kit), set
 %             rebuild to 'eyelink'
+%             e.g.
+%             mglMake('eyelink');
+%
+%             To force recompile of eyelink code do:
+%             mglMake(1,'eyelink');
 %                  
 %             You can pass arbitrary command line options to the mex
 %             compilation after the first argument. (If the first argument is
@@ -29,6 +41,12 @@
 %             to have the correct SDKs installed). Note normally this will auto-detect
 %             which version to compile for:
 %             mglMake('ver=10.6');
+%          
+%             To see which version of the SDK mglMake will use to compile:
+%             mglMake ver
+%
+%             You can also force compile individual functions
+%             mglMake mglFlush
 %
 function retval = mglMake(rebuild, varargin)
 
@@ -47,8 +65,23 @@ else
   forceVer = [];
 end
 
+% check to see if user wants to recompile a specific file
+forceCompileSingleFile = false;
+if (nargin>=1) && isstr(rebuild)
+  % get mglpath
+  mglpath = fileparts(fileparts(which('mglOpen')));
+  % check if we have a file
+  mglfile = sprintf('%s.c',stripext(rebuild));
+  % check if it exists
+  mglFilename = fullfile(mglpath,'mgllib',mglfile);
+  if isfile(mglFilename)
+    forceCompileSingleFile = mglFilename;
+    rebuild = 2;
+  end
+end
+
 % interpret rebuild argument
-digio = 0;eyelink = 0;
+digio = 0;eyelink = 0;versionCheck = false;
 if ~exist('rebuild','var')
   rebuild=0;
   [s,r] = system('uname -r');
@@ -60,6 +93,8 @@ if ~exist('rebuild','var')
 else
   if isequal(rebuild,1) || isequal(rebuild,'rebuild')
     rebuild = 1;
+  elseif isequal(rebuild,2)
+    rebuild = 2;
   elseif isequal(rebuild,'carbon')
     varargin = {'-D__carbon__', varargin{:}};
     rebuild = 1;
@@ -75,6 +110,9 @@ else
   elseif ischar(rebuild) && isequal(rebuild(1), '-')
     varargin = {rebuild, varargin{:}};
     rebuild=0;
+  elseif isequal(lower(rebuild),'ver')
+    rebuild=0;
+    versionCheck = true;
   else
     help mglMake
     return
@@ -106,17 +144,23 @@ if ismac
     sysinfo = regexp(result, 'OS X 10.(?<ver>\d?)', 'names');
     ver = 10+str2double(sysinfo.ver)/10;
   end
-  if ver >= 10.6 % >= SnowLepard
-    % now check where the SDKs live. If they are in /Developer
-    if (isempty(forceVer) && isdir('/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk')) || (forceVer == 10.8)
-      optf = '-f ./mexopts.10.8.xcode.4.5.sh';
-    elseif (isempty(forceVer) && isdir('/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk')) || (forceVer == 10.7)
-      optf = '-f ./mexopts.10.7.xcode.4.3.sh';
-    elseif (isempty(forceVer) && isdir('/Developer/SDKs/MacOSX10.7.sdk'))
-      optf = '-f ./mexopts.10.7.sh';
-    elseif (isempty(forceVer) && isdir('/Developer/SDKs/MacOSX10.6.sdk')) || (forceVer == 10.6)
-      optf = '-f ./mexopts.sh';
-    else
+
+  % get what sdk versions we have
+  [sdkVersions sdkPaths sdkVersionsMajor sdkVersionsMinor] = getSDKVersion;
+  if isempty(sdkVersions)
+    disp(sprintf('(mglMake) !!! Could not find MacOSX sdk. Have you installed XCode? !!!'));
+    return
+  end
+  
+  % get the most current sdk version, if we are not forcing versions
+  if isempty(forceVer)
+    [~,i] =  max(sdkVersionsMinor);
+    sdkVersion = sdkVersions(i);
+    sdkPath = sdkPaths{i};
+  else
+    % check if we have the proper sdk
+    whichVersion = find(sdkVersions == forceVer);
+    if isempty(whichVersion)
       if isempty(forceVer)
 	disp(sprintf('(mglMake) !!! Could not find MacOSX sdk. Have you installed XCode? !!!'));
       else
@@ -124,8 +168,27 @@ if ismac
       end
       return
     end
-  else
+    % set sdkversion and path to only have the forced one
+    sdkVersion = sdkVersions(whichVersion);
+    sdkPaths = sdkPaths{whichVesion};
+  end
+      
+  % use different options depending on version
+  if sdkVersion == 10.9
+    % note this idiotic seting of char16_t is some
+    % lame crap due to mathwork screwing up
+    optf = '-Dchar16_t=uint16_T';
+  elseif sdkVersion == 10.8
+    optf = '-f ./mexopts.10.8.xcode.4.5.all.warnings.sh';
+  elseif sdkVersion == 10.7
+    optf = '-f ./mexopts.10.7.xcode.4.3.sh';
+  elseif sdkVersion == 10.6
+    optf = '-f ./mexopts.10.6.sh';
+  elseif sdkVersion == 10.5
     optf = '-f ./mexopts.10.5.sh';
+  else
+    disp(sprintf('(mglMake) No specific mex options found for sdk version %s, using generic options',num2str(sdkVersion)));
+    optf = '';
   end
 elseif ispc
   % We don't use a special options file.  The required libraries are set in
@@ -134,6 +197,32 @@ elseif ispc
   optf = '-largeArrayDims COMPFLAGS="$COMPFLAGS /TP"';
 end
 
+% just display what version is being used
+if versionCheck
+  disp(sprintf('(mglMake) Version check: OS %s',num2str(ver)));
+  disp(sprintf('SDK Versions (* indicates used version):'));
+  for iSDK = 1:length(sdkPaths)
+    if sdkVersions(iSDK) == sdkVersion
+      prefixStr = '*';
+    else
+      prefixStr = '';
+    end
+    disp(sprintf('%s%s: %s',prefixStr,num2str(sdkVersions(iSDK)),sdkPaths{iSDK}));
+  end
+  if isempty(optf)
+    disp(sprintf('Compiling with no flags',optf));
+  else
+    disp(sprintf('Compiling with: %s',optf));
+  end
+    
+  return
+end
+
+if isempty(optf)
+  disp(sprintf('(mglMake) Using standrad options for mex',optf));
+else
+  disp(sprintf('(mglMake) Using %s options for mex',optf));
+end
 % close all open displays
 mglSwitchDisplay(-1);
 
@@ -164,7 +253,20 @@ else
   mexdir{1} = mgldir;
 end
 
-if ~digio
+
+% force compile as single file
+if forceCompileSingleFile
+  command = sprintf('mex %s %s', optf,forceCompileSingleFile);
+  disp(command);
+  try
+    eval(command);
+  catch
+    err = lasterror;
+    disp(['Error compiling ' forceCompileSingleFile]);
+    disp(err.message);
+    disp(err.identifier);
+  end
+elseif ~digio
   for nDir = 1:numel(mexdir)
     % get the files in the mexdir
     cd(mexdir{nDir});
@@ -247,6 +349,11 @@ excludeList = {'mglStandaloneDigIO.c','mglDigIOSendCommand.c'};
 if strcmp(mexext,'mexmaci64')
   excludeList = {excludeList{:} 'readDigPort.c','writeDigPort.c'};
   disp(sprintf('(mglMake) Making standalone functions for digio'));
+  % force rebuild if called for
+  if rebuild
+    system('rm -f mglStandaloneDigIO');
+    system('rm -f mglDigIOSendCommand');
+  end
   system('make');
 end
 
@@ -258,9 +365,9 @@ if (mislocked('mglPrivateDigIO'))
 end
   
 % check for mexopts file
-[dummy mexoptsFilename] = strtok(optf,' ');
+[dummy mexoptsFilename] = strtok(optf,'-f ');
 mexoptsFilename = strtrim(mexoptsFilename);
-if ~isfile(mexoptsFilename)
+if ~isempty(mexoptsFilename) && ~isfile(mexoptsFilename)
   disp(sprintf('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'));
   disp(sprintf('(mglMake) Cannot find mexopts file for your setup: %s in the digin directory: %s',mexoptsFilename,pwd));
   disp(sprintf('          Consider converting one from mgl/mgllib and moving into digin'));
@@ -315,3 +422,45 @@ if ~isempty(dotloc)
   retval = filename(1:dotloc(length(dotloc))-1);
 end
 
+
+%%%%%%%%%%%%%%%%%%%%
+%    sdkVersion    %
+%%%%%%%%%%%%%%%%%%%%
+function [sdkVersion sdkPath sdkVersionMajor sdkVersionMinor] = getSDKVersion
+
+sdkVersion = [];
+sdkVersionMajor = [];
+sdkVersionMinor = [];
+sdkPath = {};
+
+% check directory
+pathNames = {'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs','/Developer/SDKs'};
+
+for iPathName = 1:length(pathNames);
+  if isdir(pathNames{iPathName})
+    % check the directory
+    d = dir(fullfile(pathNames{iPathName},'MacOSX10.*.sdk'));
+
+    % pull out the version numbers of available sdks from the directory names
+    for i = 1:length(d)
+      sdkName = d(i).name;
+      sdkloc = findstr('sdk',sdkName);
+      if ~isempty(sdkloc)
+	% pull out the number
+	sdkVersion(end+1) = str2num(sdkName(7:(sdkloc-2)));
+	% pull out major/minor version
+	verStr = sdkName(7:(sdkloc-2));
+	dotLoc = strfind(verStr,'.');
+	if ~isempty(dotLoc)
+	  sdkVersionMajor(end+1) = str2num(verStr(1:dotLoc(1)-1));
+	  sdkVersionMinor(end+1) = str2num(verStr(dotLoc(1)+1:end));
+	else
+	  sdkVersionMajor(end+1) = nan;
+	  sdkVersionMinor(end+1) = nan;
+	end
+	% save the directory
+	sdkPath{end+1} = fullfile(pathNames{iPathName},sdkName);
+      end
+    end
+  end
+end

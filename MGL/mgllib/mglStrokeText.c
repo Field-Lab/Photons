@@ -1,5 +1,5 @@
 //copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
-//$Id: mglStrokeText.c 71 2006-10-20 21:19:00Z jonas $
+//$Id$
 
 /////////////////////////
 //   include section   //

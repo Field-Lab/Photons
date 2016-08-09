@@ -1,6 +1,6 @@
 % mglGetKeyEvent.m
 %
-%        $Id: mglGetKeyEvent.m 900 2011-02-09 07:39:15Z justin $
+%        $Id$
 %      usage: keyEvent = mglGetKeyEvent(<waitTime>,<getAllEvents>)
 %  alt usage: [keyCode when charCode] = mglGetKeyEvent(<waitTime>,<getAllEvents>)
 %         by: justin gardner

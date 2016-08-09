@@ -1,6 +1,6 @@
 % mglGluDisk - draw disk(s) at location x,y; alternative to glPoints for circular dots
 %
-%        $Id: mglGluDisk.m 205 2007-03-20 00:36:08Z ds $
+%        $Id$
 %      usage: [  ] = mglGluDisk( x, y, size, color, [nslices], [nloops] )
 %         by: denis schluppeck
 %       date: 2006-05-12

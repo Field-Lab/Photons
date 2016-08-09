@@ -1,6 +1,6 @@
 % pauseTask.m
 %
-%        $Id: pauseTask.m 122 2007-01-03 17:58:58Z justin $
+%        $Id$
 %      usage: pauseTask()
 %         by: justin gardner
 %       date: 10/26/06

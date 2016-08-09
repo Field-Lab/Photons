@@ -4,7 +4,7 @@
 %			 screenUpdateCallback, <trialResponseCallback>, ...
 %			 <startTrialCallback>, <endTrialCallback>, <startBlockCallback>,...
 %                        <randCallback>);
-%        $Id: initTask.m 1109 2013-10-11 13:14:08Z tsliu $
+%        $Id$
 %         by: justin gardner
 %       date: 2006-04-27
 %  copyright: (c) 2006 Justin Gardner (GPL see mgl/COPYING)

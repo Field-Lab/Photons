@@ -1,6 +1,6 @@
 % writetrace.m
 %
-%        $Id: writeTrace.m 475 2009-02-15 21:21:04Z dep $
+%        $Id$
 %      usage: myscreen = writetrace(data,tracenum,myscreen,force)
 %         by: justin gardner
 %       date: 02/17/05

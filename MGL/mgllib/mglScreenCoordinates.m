@@ -1,6 +1,6 @@
 % mglScreenCoordinates.m
 %
-%        $Id: mglScreenCoordinates.m 384 2008-12-31 04:57:43Z justin $
+%        $Id$
 %      usage: mglScreenCoordinates()
 %         by: justin gardner
 %       date: 05/27/06

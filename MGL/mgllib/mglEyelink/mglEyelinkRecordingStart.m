@@ -46,4 +46,14 @@ else
         end
     end
 end
-mglPrivateEyelinkRecordingStart(recordingState);
+retval = mglPrivateEyelinkRecordingStart(recordingState);
+if retval == -1
+  if mglIsMrToolsLoaded
+    if ~askuser('(mglEyelinkRecordingStart) Eyelink failed to start. Do you want to continue')
+      keyboard
+    end
+  else
+    keyboard
+  end
+end
+

@@ -1,6 +1,6 @@
 % fixStairInitTask.m
 %
-%        $Id: fixStairInitTask.m 1098 2013-09-25 13:25:29Z justin $
+%        $Id$
 %      usage: [fixTask myscreen] = fixStairInitTask(myscreen)
 %         by: justin gardner
 %       date: 09/07/06

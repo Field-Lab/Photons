@@ -1,6 +1,6 @@
 % mglPoints3.m
 %
-%        $Id: mglPoints3.m 18 2006-09-13 15:41:18Z justin $
+%        $Id$
 %      usage: mglPoints3()
 %         by: justin gardner & Jonas Larsson
 %       date: 04/03/06

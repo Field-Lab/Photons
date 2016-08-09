@@ -7,7 +7,7 @@
      purpose: return state of keyboard
    copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
 
-$Id: mglGetKeys.c 334 2008-12-28 02:49:05Z justin $
+$Id$
 =========================================================================
 #endif
 

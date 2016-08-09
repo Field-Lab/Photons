@@ -1,6 +1,6 @@
 % initScreen.m
 %
-%        $Id: initScreen.m 1126 2014-05-08 06:17:08Z justin $
+%        $Id$
 %      usage: myscreen = initScreen(myscreen, randstate)
 %         by: justin gardner
 %       date: 12/10/04
@@ -21,6 +21,12 @@ if exist('myscreen','var') && (isstr(myscreen) || (isnumeric(myscreen) && isscal
   end
   % set the display name
   myscreen.displayName = displayname;
+end
+
+% check the system for any issues with keyboard/mouse
+if ~mglSystemCheck(2)
+  myscreen = [];
+  return
 end
 
 % set version number
@@ -90,24 +96,21 @@ for i = 1:length(screenParams)
     end
   end
   % validate fields
-  %% Souldn't this be in the mglValidateScreenParams?
-  thisFieldNames = fieldnames(screenParams{i});
-  for j = 1:length(thisFieldNames)
-    % match the field in the screenParamsList (do case insensitive)
-    whichField = find(strcmp(lower(thisFieldNames{j}),lower(screenParamsList)));
-    % if no match, report an error, but continue on
-    if isempty(whichField)
-      disp(sprintf('(initScreen) UHOH! Unrecogonized field %s in screenParams{%i}',thisFieldNames{j},i));
-    else
-      % now remove it from screenParams and then add it back -- this is simply
-      % to insure that the capitilization is correct
-      fieldVal = screenParams{i}.(thisFieldNames{j});
-      screenParams{i} = rmfield(screenParams{i},thisFieldNames{j});
-      screenParams{i}.(screenParamsList{whichField}) = fieldVal;
-    end
-    % check for displayName
-    if ~isfield(screenParams{i},'displayName')
-      screenParams{i}.displayName = '';
+  screenParams = mglValidateScreenParams(screenParams);
+end
+
+% if there is no displayName then see if we should use a default
+if ~isfield(myscreen,'displayName')
+  % if defaultDisplayName is set
+  defaultDisplayName = mglGetParam('defaultDisplayName');
+  if ~isempty(defaultDisplayName)
+    % then check through screen params to see
+    % if there is one with that display name
+    for i = 1:length(screenParams)
+      if isequal(screenParams{i}.displayName,defaultDisplayName)
+	% if there is, then set myscreen to use that name
+	myscreen.displayName = defaultDisplayName;
+      end
     end
   end
 end
@@ -123,7 +126,7 @@ for pnum = 1:length(screenParams)
     if (foundComputer == 0) && (isempty(screenParams{pnum}.displayName) || ~isfield(myscreen,'displayName'))
       foundComputer = pnum;
       % check for matching displayname
-    elseif isfield(myscreen,'displayName') && isstr(myscreen.displayName) && strcmp(myscreen.displayName,screenParams{pnum}.displayName)
+    elseif isfield(myscreen,'displayName') && isstr(myscreen.displayName) && strcmp(lower(myscreen.displayName),lower(screenParams{pnum}.displayName))
       foundComputer = pnum;
       % check for matching display number
     elseif isfield(myscreen,'displayName') && isnumeric(myscreen.displayName) && isequal(myscreen.displayName,screenParams{pnum}.screenNumber)
@@ -132,16 +135,32 @@ for pnum = 1:length(screenParams)
   end
 end
 
+% if not found, maybe it is because computerName is not set correctly
+% so go through again looking for any match of displayName even if
+% the computerName is not a match
+if ~foundComputer && isfield(myscreen,'displayName')
+  for pnum = 1:length(screenParams)
+    % match for display name
+    if strcmp(lower(myscreen.displayName),lower(screenParams{pnum}.displayName))
+      % choose it then.
+      if ~foundComputer
+	foundComputer = pnum;
+	disp(sprintf('(initScreen) !!! Matching displayName: %s but computerName %s does not mach this computer name: %s !!!',screenParams{pnum}.displayName,screenParams{pnum}.computerName,myscreen.computerShortname));
+      end
+    end
+  end
+end
+
 % if not found, maybe it just because displayName is not set correctly
 % so go through again looking for any match even if the displayName is
 % not a match
 if ~foundComputer
+  % also, get defaultDisplayName
+  defaultDisplayName = mglGetParam('defaultDisplayName');
   for pnum = 1:length(screenParams)
-    if ~isempty(findstr(myscreen.computerShortname,screenParams{pnum}.computerName))
-      % choose a matching computer name and if possible one with an empty displayName
-      if ~foundComputer || isempty(screenParams{pnum}.displayName) 
-	foundComputer = pnum;
-      end
+    % choose a matching computer name and if possible one with a matching defaultDisplayName
+    if ~foundComputer || isequal(screenParams{pnum}.displayName,defaultDisplayName)
+      foundComputer = pnum;
     end
   end
 end
@@ -252,8 +271,17 @@ end
 if ~isfield(myscreen,'eyeTrackerType')
   myscreen.eyeTrackerType = 'None';
 end
+if ~isfield(myscreen,'useScreenMask')
+  myscreen.useScreenMask = false;
+end
 
 myscreen.pwd = pwd;
+
+% setting to ignore initial vols
+myscreen.ignoreInitialVols = mglGetParam('ignoreInitialVols');
+if isempty(myscreen.ignoreInitialVols) myscreen.ignoreInitialVols = 0;end
+disp(sprintf('(initScreen) ignoreInitialVols = %i',myscreen.ignoreInitialVols));
+myscreen.ignoredInitialVols = myscreen.ignoreInitialVols;
 
 %%%%%%%%%%%%%%%%%
 % print display settings
@@ -339,8 +367,34 @@ myscreen.matlab.minorVersion = str2num(strtok(matlabVersion,'.'));
 myscreen.useDigIO = 0;
 if isfield(myscreen,'digin') 
   if ~isempty(myscreen.digin) && isfield(myscreen.digin,'use') && isequal(myscreen.digin.use,1)
-    % we are using digio
+    % set like we are using digio
     myscreen.useDigIO = myscreen.digin.use;
+    % validate portNum and give message. If we fail the validation set useDigIO back to false
+    if isempty(myscreen.digin.portNum) || ~isnumeric(myscreen.digin.portNum) || ~isequal(length(myscreen.digin.portNum),1) || ~any(myscreen.digin.portNum==[0:9])
+      disp(sprintf('(initScreen) !!! portNum for digital input should be set to a number like 0, 1 or 2 to specify which port on the NI device you want to read for digital input. Not checking digIO !!!'));
+      myscreen.useDigIO = false;
+    end
+    % validate digital acquisition line
+    if ~isempty(myscreen.digin.acqLine)
+      if ~isnumeric(myscreen.digin.acqLine) || ~isequal(length(myscreen.digin.acqLine),1) || ~any(myscreen.digin.acqLine==[0:7])
+	disp(sprintf('(initScreen) !!! No valid acqLine has been set for digital magnet acquisition pulses (should be a number between 0-7 which specifies which line to read to specify magnet acquisitions (TRs) !!!'));
+	myscreen.digin.acqLine = -1;
+      end
+    else
+      myscreen.digin.acqLine = -1;
+    end
+    % validate digital acquisition type
+    if ~isequal(myscreen.digin.acqLine,-1) && (isempty(myscreen.digin.acqType) || ~isnumeric(myscreen.digin.acqType) || ~all(ismember(myscreen.digin.acqType,[0 1])))
+	disp(sprintf('(initScreen) !!! No valid acqType has been set for digital acquisition. acqType specifies when a trigger is considered to signal an acquisition - if set to 1 that means to count when digital in has gone high, if set to 0 means to count when digital in has gone low. If set to [0 1] specifies both of these count as events !!!'));
+    end
+    % check response lines
+    if ~all(ismember(myscreen.digin.responseLine,0:9))
+      disp(sprintf('(initScreen) !!! The responseLines for digio should be set to numbers from 0 to 7 which specify which lines of digital input correspond to subject button presses !!!'));
+    end
+    % check response types
+    if ~isempty(myscreen.digin.responseLine) && (isempty(myscreen.digin.responseType) || ~isnumeric(myscreen.digin.responseType) || ~all(ismember(myscreen.digin.responseType,[0 1])))
+	disp(sprintf('(initScreen) !!! No valid responseType has been set for digital acquisition. responseType specifies when a response button digital pulse is considered to signal a subject response - if set to 1 that means to count when digital in has gone high, if set to 0 means to count when digital in has gone low. If set to [0 1] specifies both of these count as events !!!'));
+    end
     % try to open the port
     digioRetval = mglDigIO('init',myscreen.digin.portNum);
     if isempty(digioRetval)
@@ -417,8 +471,33 @@ end
 
 % init the mgl screen
 if ~isempty(myscreen.screenNumber)
+  if isempty(mglResolution(myscreen.screenNumber))
+    disp(sprintf('(initScreen) !!! Screen %i does not exist !!!',myscreen.screenNumber));
+    myscreen = [];
+    return
+  end
+  % figure out whether we are going to change resolution
+  displays = mglDescribeDisplays;
+  waitAfterOpen = 3;
+  if (myscreen.screenNumber <= length(displays)) && (myscreen.screenNumber >= 1)
+    if isfield(displays(myscreen.screenNumber),'screenSizePixel') && isfield(displays(myscreen.screenNumber),'refreshRate')
+      % get already set pixel resolution and refresh rate
+      screenSizePixel = displays(myscreen.screenNumber).screenSizePixel;
+      refreshRate = displays(myscreen.screenNumber).refreshRate;
+      desiredSizePixel = [myscreen.screenWidth myscreen.screenHeight];
+      % now check if they are the same
+      %if isequal(screenSizePixel(:),desiredSizePixel(:)) && isequal(refreshRate,myscreen.framesPerSecond)
+%	disp(sprintf('(initScreen) Resolution and refersh rate do not appear to differ from current monitor settings. *Not* waiting after mglOpen. Note that if the monitor goes black for a second this means that the resolution has to be set by mac and in that case the gamma table may not get set correctly due to a race condition between mac system software setting the gamma table and initScreen setting the gamma table'));
+%	waitAfterOpen = 0;
+%      end
+    end
+  end
+
   % setting with specified screenNumber
   mglOpen(myscreen.screenNumber, myscreen.screenWidth, myscreen.screenHeight, myscreen.framesPerSecond);
+  % wait after the screen opens because there is a race condition if you change
+  % resolutions of the screen in which mac system resets the gamma table
+  mglWaitSecs(waitAfterOpen);
   % move the screen if it is a windowed context, and displayPos has been set.
   if myscreen.screenNumber < 1
     if length(myscreen.displayPos) == 2
@@ -430,6 +509,12 @@ else
   mglOpen;
   myscreen.screenWidth = mglGetParam('screenWidth');
   myscreen.screenHeight = mglGetParam('screenHeight');
+end
+
+% check to make sure we opened up correctly
+if isequal(mglGetParam('displayNumber'),-1)
+  disp(sprintf('(initScreen) Unable to open screen'));
+  keyboard
 end
 
 % use visual angle coordinates
@@ -595,6 +680,37 @@ else
   myscreen.background = myscreen.black;
 end
 
+% set up stencil mask if called for
+if myscreen.useScreenMask
+  % check for valid function
+  if exist(myscreen.screenMaskFunction) == 2
+    % check stencil bits
+    if myscreen.screenMaskStencilNum <= mglGetParam('stencilBits')
+      % clear screen
+      mglClearScreen(0);
+      % start stencil drawing
+      mglStencilCreateBegin(myscreen.screenMaskStencilNum);
+      % call the function to draw the stencil
+      feval(myscreen.screenMaskFunction,myscreen);
+      % and end stencil creation
+      mglStencilCreateEnd(myscreen.screenMaskStencilNum);
+      mglClearScreen(0);
+      % This is an unusual global that is used to tell mglClearScreen
+      % to use a mask when clearing the screen. Its a separate global
+      % for speed because mglClearScreen is usually within frame updates.
+      % Here we set it to the stencil number
+      global mglGlobalClearWithMask;
+      mglGlobalClearWithMask = myscreen.screenMaskStencilNum;
+      % set the stencil
+      mglStencilSelect(myscreen.screenMaskStencilNum);
+    else
+      disp(sprintf('(initScreen) !!! screenMaskStencilNum should be a number between 1 and %i, but is set to %i !!!',mglGetParam('stencilBits'),myscreen.screenMaskStencilNum));
+    end
+  else
+    disp(sprintf('(initScreen) !!! Could not mask screen. Screen mask function: %s does not exist. !!!',myscreen.screenMaskFunction));
+  end
+end
+
 % set background color  - mgl
 mglClearScreen(myscreen.background);
 mglFlush();
@@ -665,14 +781,16 @@ myscreen.traceNames{3} = 'responseTime';
 myscreen.traceNames{4} = 'taskPhase';
 % fifth is for fix task
 myscreen.traceNames{5} = 'fixationTask';
+% sixth is for volumes that are ignored
+myscreen.traceNames{6} = 'ignoredVolumes';
 %% addTraces now provides a safe way to add traces
 %% stimtrace is now a legacy variable which could be
 %% deprecated in a future version. numTraces specifies
 %% the number of traces and traceName the name
-myscreen.numTraces = 5;
+myscreen.numTraces = 7;
 %% legacy if you use stimtace without addTraces, you will
 %% get a free trace
-myscreen.stimtrace = 6;
+myscreen.stimtrace = 7;
 
 % save the beginning of time
 myscreen.starttime = datestr(clock);

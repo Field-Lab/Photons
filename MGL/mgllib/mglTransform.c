@@ -8,7 +8,7 @@
      purpose: applies view transformations 
      syntax:  mglTransform( whichMatrix, whichTransform, whichParameters )
 
-$Id: mglTransform.c 25 2006-09-15 16:04:26Z justin $
+$Id$
 =========================================================================
 #endif
 

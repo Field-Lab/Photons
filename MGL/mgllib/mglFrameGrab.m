@@ -1,6 +1,6 @@
 % mglFrameGrab.m
 %
-%        $Id: mglFrameGrab.m 988 2011-10-25 09:36:48Z justin $
+%        $Id$
 %      usage: mglFrameGrab(<[x y width height])
 %         by: justin gardner
 %       date: 03/01/08

@@ -1,6 +1,6 @@
 % mglGluAnnulus - draw annulus/annuli at location x,y
 %
-%        $Id: mglGluAnnulus.m 205 2007-03-20 00:36:08Z ds $ 
+%        $Id$ 
 %      usage: [  ] = mglGluAnnulus( x, y, isize, osize, color, [nslices], [nloops] )
 %         by: denis schluppeck
 %       date: 2007-03-19

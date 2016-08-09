@@ -1,6 +1,6 @@
 % mglGetKeys.m
 %
-%        $Id: mglGetKeys.m 18 2006-09-13 15:41:18Z justin $
+%        $Id$
 %      usage: mglGetKeys()
 %         by: justin gardner
 %       date: 09/12/06

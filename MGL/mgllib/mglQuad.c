@@ -7,7 +7,7 @@ copyright: (c) 2006 Justin Gardner, Jonas Larsson (GPL see mgl/COPYING)
 purpose: mex function to draw a quad in an OpenGL screen opened with mglOpen
 usage:   mglQuad([xV, yV, rgbColor)
 
-$Id: mglQuad.c 334 2008-12-28 02:49:05Z justin $
+$Id$
 
 =========================================================================
 #endif

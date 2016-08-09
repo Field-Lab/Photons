@@ -8,7 +8,7 @@
 
      Warning: if using mglFlush to keep timing, keep in mind that Matlab checks for license every 30s, screwing up timing at this interval. Installing a local copy of the license manager appears to solve problem, mostly.
 
-$Id: mglFlush.c 967 2011-09-14 05:00:11Z chrg $
+$Id$
 =========================================================================
 #endif
 

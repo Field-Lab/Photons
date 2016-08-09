@@ -1,6 +1,6 @@
 % mglWaitSecs.m
 %
-%        $Id: mglWaitSecs.m 51 2006-09-28 21:59:27Z justin $
+%        $Id$
 %      usage: mglWaitSecs()
 %         by: justin gardner
 %       date: 09/22/06

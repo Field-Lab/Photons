@@ -9,7 +9,7 @@
        usage: mglLines(x0,y0, x1, y1,size,color,bgcolor)
        e.g.: mglLines2(x0, y0, x1, y1, 2, [1 0.6 1]);
               
-$Id: mglLines2.c 796 2010-04-05 11:06:21Z justin $
+$Id$
 =========================================================================
 #endif
 

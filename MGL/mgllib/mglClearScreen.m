@@ -1,6 +1,6 @@
 % mglClearScreen.m
 %
-%        $Id: mglClearScreen.m 921 2011-05-12 18:44:23Z chrg $
+%        $Id$
 %      usage: mglClearScreen([clearColor], [clearBits])
 %         by: Jonas Larsson
 %       date: 04/10/06
@@ -29,4 +29,3 @@
 % mglClearScreen([0.7 0.2 0.5]);
 % mglFlush();
 %
-
