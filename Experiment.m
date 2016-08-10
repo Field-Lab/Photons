@@ -240,36 +240,15 @@ for i=2:size(s_params,2)
     stimulus{i-1} = make_stimulus(trial_params, def_params);
 end
 
+
 for i=1:length(stimulus)
     if i == 1
-        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 1);
+        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0);
     else
         display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0);
     end
 end
 
-
-% 
-% fprintf('\n\n<strong> Moving bar. </strong>\n');
-% clear parameters stimulus;
-% 
-% parameters.class = 'MB';
-% parameters.back_rgb = [1 1 1]*0.5;
-% parameters.rgb = -[1, 1, 1]*0.48;
-% parameters.bar_width = 30;
-% parameters.direction = 90;
-% parameters.delta = 1;  % pixels per frame
-% parameters.x_start = 1;  parameters.x_end = 640;
-% parameters.y_start = 1;   parameters.y_end = 480;
-% parameters.frames = 600;
-% parameters.delay_frames = 0;
-% 
-% stimulus = make_stimulus(parameters, def_params);
-% 
-% % show 10 times
-% for i=1:100
-%     display_stimulus(stimulus);
-% end
 
 
 %% Moving Grating single trial
@@ -562,6 +541,38 @@ parameters.field_width = 320;  parameters.field_height = 320;
 stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus, 'erase',0);
 %}
+
+
+%% Moving flashing square
+% presents a square (size=stix_width) within x,y bounds (eg. x_start) that
+% flashes ON within bounds for a duration (frames) and OFF for the same
+% duration.  It will move by stixel_shift (ie. if shift<width there will be
+% overlap in squares).
+
+fprintf('\n\n<strong> Moving flashing squares </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'MFS';  
+parameters.rgb = [1 1 1].*0.5;
+parameters.back_rgb = [1 1 1].*0.5;
+parameters.frames = 60;                       % "frames" is the number of frame refreshes to wait for each half-cycle (i.e. the pulse is on for the number of frames set here
+                                            % and then off for the same number of frames. This completes one repetition of the pulse.
+
+parameters.x_start = 100;  parameters.x_end = 700;  % These fields set the region of stimulation with full square overlap coverage
+parameters.y_start = 0;  parameters.y_end = 600; % actual presentation area will be end-start+(stix_w-stix_shift)
+parameters.stixel_width = 30;         % size of each stixel in pixels 
+parameters.stixel_shift = 30;  % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
+parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
+parameters.repeats = 2; % repeats of the whole stimulus block
+parameters.wait_trigger = 0;
+parameters.wait_key = 0;
+parameters.sub_region = 1; % if 1: subdivide the stimulus field into 4 regions, show 4 spatially correlated flash squares 
+parameters.random_seq = 0 ; % 1= random sequence, 0 = repeated sequence in order
+                         
+stimulus = make_stimulus(parameters, def_params);
+display_stimulus(stimulus);
+clear stimulus;
+
 
 %%
 Stop_Photons

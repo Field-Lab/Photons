@@ -147,7 +147,7 @@ classdef	Moving_Bar < handle
             mglClearScreen;
             mglFlush
             mglFlush     
-            stimulus.frames
+            %stimulus.frames
             for i = 1:stimulus.frames
                     x_vertices = stimulus.x_first + stimulus.x_delta*i;
                     y_vertices = stimulus.y_first + stimulus.y_delta*i;
