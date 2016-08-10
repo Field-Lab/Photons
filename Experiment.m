@@ -212,6 +212,7 @@ end
 % end
 
 
+
 %% Moving bar
 
 fprintf('\n\n<strong> Moving bar. </strong>\n');
@@ -220,20 +221,55 @@ clear parameters stimulus;
 parameters.class = 'MB';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = -[1, 1, 1]*0.48;
-parameters.bar_width = 30;
-parameters.direction = 90;
-parameters.delta = 1;  % pixels per frame
-parameters.x_start = 1;  parameters.x_end = 640;
-parameters.y_start = 1;   parameters.y_end = 480;
-parameters.frames = 600;
-parameters.delay_frames = 0;
+parameters.x_start = 200;  parameters.x_end = 600;
+parameters.y_start = 100;   parameters.y_end = 500;
+parameters.frames_p_bar = 1; % 1:no need to set frames. 0: have to set frames
+parameters.frames = 70;
+parameters.delay_frames = 30;
 
-stimulus = make_stimulus(parameters, def_params);
+variable_parameters = randomize_parameters('direction', [0:30:330], ...
+                                           'delta', [4 8], ...
+                                           'bar_width', [60 120], ...
+                                           'nrepeats',2);
+path2file = write_s_file(parameters, variable_parameters);
+s_params = read_s_file(path2file);
 
-% show 10 times
-for i=1:100
-    display_stimulus(stimulus);
+% see second option example in "S File read"
+for i=2:size(s_params,2)
+    trial_params = combine_parameters(s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
 end
+
+for i=1:length(stimulus)
+    if i == 1
+        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 1);
+    else
+        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0);
+    end
+end
+
+
+% 
+% fprintf('\n\n<strong> Moving bar. </strong>\n');
+% clear parameters stimulus;
+% 
+% parameters.class = 'MB';
+% parameters.back_rgb = [1 1 1]*0.5;
+% parameters.rgb = -[1, 1, 1]*0.48;
+% parameters.bar_width = 30;
+% parameters.direction = 90;
+% parameters.delta = 1;  % pixels per frame
+% parameters.x_start = 1;  parameters.x_end = 640;
+% parameters.y_start = 1;   parameters.y_end = 480;
+% parameters.frames = 600;
+% parameters.delay_frames = 0;
+% 
+% stimulus = make_stimulus(parameters, def_params);
+% 
+% % show 10 times
+% for i=1:100
+%     display_stimulus(stimulus);
+% end
 
 
 %% Moving Grating single trial
@@ -273,7 +309,7 @@ parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*60; % presentation of each grating, frames
 parameters.x_start = 1;  parameters.x_end = 640;
 parameters.y_start = 1;   parameters.y_end = 480;
-parameters.direction = 45;
+parameters.direction = [45 90];
 
 temporal_period = [30 60];
 spatial_period = [60 90 120];
@@ -345,7 +381,7 @@ parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*120; % presentation of each grating, frames
 parameters.x_start = 0;  parameters.x_end =639;
 parameters.y_start = 0;   parameters.y_end = 479;
-% parameters.direction = [0 90];
+parameters.direction = [0 90];
 
 variable_parameters = randomize_parameters('direction', [0 90], 'temporal_period', [30 60], 'spatial_period', [32,64], 'nrepeats',2);
 path2file = write_s_file(parameters, variable_parameters);
@@ -355,7 +391,7 @@ s_params = read_s_file(path2file);
 for i=2:size(s_params,2)
     trial_params = combine_parameters(s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
-    display_stimulus(stimulus{i-1}, 'wait_trigger', 1);
+    display_stimulus(stimulus{i-1}, 'wait_trigger', 0); % set 1 for actual experiment
 end
 
 %%%%%%%%%% clean up %%%%%%%%%% 

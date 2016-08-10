@@ -40,6 +40,8 @@ classdef	Moving_Bar < handle
         % Constructor method
         function stimulus = Moving_Bar(def_params, parameters)
             
+            parameters_struct = structRecover(parameters);
+            
             p = inputParser;
             addParameter(p,'class', 'MB');
             addParameter(p,'back_rgb', def_params.back_rgb);
@@ -52,7 +54,8 @@ classdef	Moving_Bar < handle
             addParameter(p,'bar_width', []); % forced
             addParameter(p,'delta', []); % forced
             addParameter(p,'direction', []); % forced
-            addParameter(p,'frames', []); % forced
+            addParameter(p,'frames_p_bar', []); % forced
+            addParameter(p,'frames', 0); 
             parse(p,parameters{:});
             parameters = p.Results;
             
@@ -116,11 +119,13 @@ classdef	Moving_Bar < handle
             if x_dis < y_dis                
                 stimulus.x_delta = parameters.delta/sind(angle);
                 stimulus.y_delta = 0;
-                stimulus.frames_per_bar = (x_dis+ parameters.bar_width/abs(sind(angle)))/abs(stimulus.x_delta);
             else
                 stimulus.y_delta = parameters.delta/cosd(angle);
                 stimulus.x_delta = 0;
-                stimulus.frames_per_bar = (y_dis+ parameters.bar_width/abs(cosd(angle)))/abs(stimulus.y_delta);
+            end
+            stimulus.frames_per_bar = (sqrt(stimulus.x_span^2+stimulus.y_span^2) + parameters.bar_width)/parameters.delta;
+            if parameters_struct.frames_p_bar
+                stimulus.frames = stimulus.frames_per_bar;
             end
             
         end% constructor 
@@ -141,8 +146,8 @@ classdef	Moving_Bar < handle
             RSM_Pause(stimulus.delay_frames);
             mglClearScreen;
             mglFlush
-            mglFlush            
-            
+            mglFlush     
+            stimulus.frames
             for i = 1:stimulus.frames
                     x_vertices = stimulus.x_first + stimulus.x_delta*i;
                     y_vertices = stimulus.y_first + stimulus.y_delta*i;
