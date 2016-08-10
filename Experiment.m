@@ -437,7 +437,7 @@ parameters.class = 'RN';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = [1 1 1]*0.48;
 parameters.seed = 11111;
-parameters.binary = 1;
+parameters.binary = 0;
 parameters.probability = 1;
 parameters.jitter = 0;
 parameters.delay_frames = 0;
@@ -454,7 +454,7 @@ parameters.y_start = 80;   parameters.y_end = 399;
 parameters.independent = 0;
 parameters.interval = 1;
 parameters.stixel_width = 20;
-parameters.frames = 10;
+parameters.frames = 60;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;
@@ -474,7 +474,8 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 stimulus = make_stimulus(parameters, def_params);
 
 
-time_stamps = display_stimulus(stimulus, 'wait_trigger', 0, 'erase', 0);
+time_stamps = display_stimulus(stimulus); % 'wait_trigger', 0, 'erase', 0
+
 
 %% Raw Movie
 
