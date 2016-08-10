@@ -434,10 +434,10 @@ fprintf('\n\n<strong> Random Noise </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'RN';
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = [1 1 1]*0.48;
+parameters.back_rgb = [1 1 1]*0;
+parameters.rgb = [1 1 1]*0.5;
 parameters.seed = 11111;
-parameters.binary = 0;
+parameters.binary = 1;
 parameters.probability = 1;
 parameters.jitter = 0;
 parameters.delay_frames = 0;
