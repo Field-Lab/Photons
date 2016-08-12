@@ -1,13 +1,13 @@
 %% Initialization
 
-%my_path = '/Users/jcafaro/Documents/MATLAB/Photons';
-my_path = '/Users/acquisition/Photons';
+my_path = '/Users/jcafaro/Documents/MATLAB/Photons';
+%my_path = '/Users/acquisition/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
-screen_number = 2; %0=test on current monitor, 2= is two monitor display
+screen_number = 0; %0=test on current monitor, 2= is two monitor display
 def_params = initialize_display('OLED', screen_number); % default parameters
 %mglMoveWindow([])
 
@@ -434,9 +434,9 @@ parameters.x_start = 0;  parameters.x_end = 800;
 parameters.y_start = 0;   parameters.y_end = 600 ;
 
 parameters.independent = 0;
-parameters.interval = 10;
-parameters.stixel_width = 100;
-parameters.frames = 200;
+parameters.interval = 1;
+parameters.stixel_width = 15;
+parameters.frames = 2;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;

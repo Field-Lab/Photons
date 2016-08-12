@@ -563,10 +563,10 @@ parameters.frames = 60;                       % "frames" is the number of frame 
 parameters.x_start = 180;  parameters.x_end = 600;  % These fields set the region of stimulation with full square overlap coverage
 parameters.y_start = 80;   parameters.y_end = 500; % actual presentation area will be end-start+(stix_w-stix_shift)
 parameters.stixel_width = 30;         % size of each stixel in pixels 
-parameters.stixel_shift = 10 ; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
+parameters.stixel_shift = 30 ; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
 
 parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
-parameters.repeats = 3; % repeats of the whole stimulus block
+parameters.repeats = 1; % repeats of the whole stimulus block
 parameters.wait_trigger = 0;
 parameters.wait_key = 0;
 parameters.sub_region = 1; % if 1: subdivide the stimulus field into 4 regions, show 4 spatially correlated flash squares 
