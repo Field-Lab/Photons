@@ -1,13 +1,13 @@
 %% Initialization
 
 my_path = '/Users/jcafaro/Documents/MATLAB/Photons';
-%my_path = '/Users/acquisition/Photons';
+my_path = '/Users/acquisition/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
-path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
-screen_number = 0; %0=test on current monitor, 2= is two monitor display
+path2save = [my_path, '/saved_timestamps/2016-08-03/'];
+screen_number = 2; %0=test on current monitor, 2= is two monitor display
 def_params = initialize_display('OLED', screen_number); % default parameters
 %mglMoveWindow([])
 
@@ -156,7 +156,7 @@ mglClearScreen(1);
 mglFlush
 
 % gray
-mglClearScreen(0.5);
+mglClearScreen(0.2);
 mglFlush
 
 % black
@@ -177,18 +177,18 @@ fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
 clear parameters stimulus;
 
 parameters.class = 'FP';
-parameters.frames = 30;
-parameters.delay_frames = 30;
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.x_start = 500;  parameters.x_end = 600;
-parameters.y_start = 300;   parameters.y_end = 400;
+parameters.frames = 60;
+parameters.delay_frames = 60;
+parameters.back_rgb = [1 1 1]*0;
+parameters.x_start = 0;  parameters.x_end = 800;
+parameters.y_start = 0;   parameters.y_end = 600;
 
 num_repeats = 30;
-rgb = [1 1 1]*1;
+rgb = [1 1 1]*.2; % pulse = rgb+ back_rgb
 for z = 1:num_repeats
     for i=1:size(rgb,1)
         stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
-        display_stimulus(stimulus);
+        display_stimulus(stimulus,'wait_trigger', 1);
     end
 end
 
@@ -293,8 +293,8 @@ parameters.spatial_modulation = 'sine'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*60; % presentation of each grating, frames
-parameters.x_start = 1;  parameters.x_end = 640;
-parameters.y_start = 1;   parameters.y_end = 480;
+parameters.x_start = 1;  parameters.x_end = 800;
+parameters.y_start = 1;   parameters.y_end = 600;
 parameters.direction = 45;
 
 temporal_period = [30 60];
@@ -358,24 +358,34 @@ fprintf('\n\n<strong> Moving Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'MG';
-parameters.spatial_modulation = 'sine'; % sine or square
-parameters.rgb = [1 1 1]*0.48;
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.frames = 5*120; % presentation of each grating, frames
-parameters.x_start = 0;  parameters.x_end =639;
-parameters.y_start = 0;   parameters.y_end = 479;
+parameters.spatial_modulation = 'square'; % sine or square
+parameters.rgb = [1 1 1]*0.1;
+parameters.back_rgb = [1 1 1]*0.1;
+parameters.frames = 8*60; % presentation of each grating, frames
+parameters.x_start = 0;  parameters.x_end =800;
+parameters.y_start = 0;   parameters.y_end = 600;
 % parameters.direction = [0 90];
 
-variable_parameters = randomize_parameters('direction', [0 90], 'temporal_period', [30 60], 'spatial_period', [32,64], 'nrepeats',2);
+variable_parameters = randomize_parameters('direction', [0:45:315], 'temporal_period', [30 120], 'spatial_period', [120], 'nrepeats',4);
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
-% see second option example in "S File read"
+% % see second option example in "S File read"
+% for i=2:size(s_params,2)
+%     trial_params = combine_parameters(s_params{1}, s_params{i});
+%     stimulus{i-1} = make_stimulus(trial_params, def_params);
+%     display_stimulus(stimulus{i-1}, 'wait_trigger', 1);
+% end
+
+%%%%%%%%%% OPTION 2: pre-make all, display all %%%%%%%%%% 
 for i=2:size(s_params,2)
-    trial_params = combine_parameters(s_params{1}, s_params{i});
+    trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
-    display_stimulus(stimulus{i-1}, 'wait_trigger', 1);
 end
+for i=1:length(stimulus)
+    display_stimulus(stimulus{i},'wait_trigger', 1);
+end
+
 
 %%%%%%%%%% clean up %%%%%%%%%% 
 for i=1:length(stimulus)
@@ -385,7 +395,7 @@ for i=1:length(stimulus)
 end
 
 % white
-mglClearScreen(1);
+mglClearScreen(.2);
 mglFlush
 
 %% Counterphase Grating
@@ -416,8 +426,8 @@ fprintf('\n\n<strong> Random Noise </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'RN';
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = [1 1 1]*0.48;
+parameters.back_rgb = [1 1 1]*0.2;
+parameters.rgb = [1 1 1]*0.1;
 parameters.seed = 11111;
 parameters.binary = 1;
 parameters.probability = 1;
@@ -436,7 +446,7 @@ parameters.y_start = 0;   parameters.y_end = 600 ;
 parameters.independent = 0;
 parameters.interval = 2;
 parameters.stixel_width = 15;
-parameters.frames = 3600;
+parameters.frames = 216000;
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;
@@ -455,7 +465,7 @@ parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.sti
 % parameters.map_file_name = '/Volumes/Lab/Users/crhoades/Colleen/matlab/private/colleen/New Cell Types/Stimulus Code/test/data002/large_on/5.txt';
 stimulus = make_stimulus(parameters, def_params);
 
-time_stamps = display_stimulus(stimulus, 'wait_trigger', 0, 'erase', 0);
+time_stamps = display_stimulus(stimulus, 'wait_trigger', 1, 'erase', 0);
 
 %% Raw Movie
 
@@ -555,25 +565,30 @@ fprintf('\n\n<strong> Moving flashing squares </strong>\n');
 clear parameters stimulus;
 
 parameters.class = 'MFS';  
-parameters.rgb = [.5, .5, .5];
+parameters.rgb = [1, 1, 1]*.2;
 parameters.back_rgb = [0, 0, 0];
 parameters.frames = 60;                       % "frames" is the number of frame refreshes to wait for each half-cycle (i.e. the pulse is on for the number of frames set here
                                             % and then off for the same number of frames. This completes one repetition of the pulse.
 
-parameters.x_start = 180;  parameters.x_end = 600;  % These fields set the region of stimulation with full square overlap coverage
-parameters.y_start = 80;   parameters.y_end = 500; % actual presentation area will be end-start+(stix_w-stix_shift)
+parameters.x_start = 250;  parameters.x_end = 550;  % These fields set the region of stimulation with full square overlap coverage
+parameters.y_start = 150;   parameters.y_end = 450; % actual presentation area will be end-start+(stix_w-stix_shift)
 parameters.stixel_width = 30;         % size of each stixel in pixels 
 parameters.stixel_shift = 30 ; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
 
 parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
+<<<<<<< HEAD
 parameters.repeats = 1; % repeats of the whole stimulus block
 parameters.wait_trigger = 0;
+=======
+parameters.repeats = 4; % repeats of the whole stimulus block
+parameters.wait_trigger = 1;
+>>>>>>> origin/Jcaf
 parameters.wait_key = 0;
 parameters.sub_region = 1; % if 1: subdivide the stimulus field into 4 regions, show 4 spatially correlated flash squares 
-parameters.random_seq = 0 ; % 1= random sequence, 0 = repeated sequence in order
+parameters.random_seq = 1 ; % 1= random sequence, 0 = repeated sequence in order
                          
 stimulus = make_stimulus(parameters, def_params);
-display_stimulus(stimulus);
+display_stimulus(stimulus,'wait_trigger',1);
 clear stimulus;
 
 %% end photons

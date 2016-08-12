@@ -64,6 +64,7 @@ classdef Moving_Flashing_Squares < handle
                 stimulus.stixel_shift = parameters.stixel_shift;
                 stimulus.repeats = parameters.repeats;
                 stimulus.num_reps = parameters.num_reps;
+                stimulus.random_seq = parameters.random_seq ;
                 stimulus.frames = parameters.frames;
                 stimulus.color = [parameters.rgb(1); parameters.rgb(2); parameters.rgb(3)];   
                 %stimulus.color = Color_Test( stimulus.color );
@@ -165,7 +166,7 @@ classdef Moving_Flashing_Squares < handle
             % sequence of square presentation
             sequence = [];
             for i = 1:stimulus.repeats
-                if stimulus.random_seq ;
+                if stimulus.random_seq==1 ;
                     sequence = [sequence; randperm(stimulus.trial_num)];
                 else
                     sequence = [sequence; [1:stimulus.trial_num]];
@@ -181,13 +182,14 @@ classdef Moving_Flashing_Squares < handle
             uisave('stim_out')
             
             % display number necessary time (s)
-            disp(['run time: ', num2str(stimulus.total_frame_num/mglGetParam('frameRate')), 's']) ;   
+            disp(['run time: ', num2str(stimulus.total_frame_num/mglGetParam('frameRate')), 's']) ;  
+            pause
         end
         
         
         function time_stamps = Run_Moving_Flashing_Squares( stimulus )
             
-            time_stamps = nans(1) ; % temp
+            time_stamps = nan ; % temp
             
             mglClearScreen( stimulus.backgrndcolor );
             mglFlush();
