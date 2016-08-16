@@ -135,6 +135,9 @@ classdef	Moving_Grating < handle
                      
             phi = 0;
             for i = 1:stimulus.frames
+                if i == 1
+                    Pulse_DigOut_Channel;
+                end
                 % update phase
                 phi = phi + stimulus.texture.delta;
 
