@@ -359,7 +359,7 @@ clear parameters stimulus
 
 parameters.class = 'MG';
 parameters.spatial_modulation = 'square'; % sine or square
-parameters.rgb = [1 1 1]*0.1;
+parameters.rgb = [1 1 1]*0.1; % can be shuffled as cell array (make sure to comment out)
 parameters.back_rgb = [1 1 1]*0.1;
 parameters.frames = 8*60; % presentation of each grating, frames
 parameters.x_start = 0;  parameters.x_end =800;
