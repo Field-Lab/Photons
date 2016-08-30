@@ -8,7 +8,7 @@ addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
-screen_number = 0; % Value = 0 (primary screen small), 1 (primary screen full), 2 (secondary screen full)
+screen_number = 0; % Value = 2 (primary screen small), 1 (primary screen full), 2 (secondary screen full)
 def_params = initialize_display('OLED', screen_number);
 
 
