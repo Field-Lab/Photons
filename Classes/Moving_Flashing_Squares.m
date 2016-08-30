@@ -49,7 +49,7 @@ classdef Moving_Flashing_Squares < handle
     
     methods
         
-        function stimulus = Moving_Flashing_Squares(~, parameters)
+        function stimulus = Moving_Flashing_Squares(def_params, parameters)
             
             % make parameters array from make_stimulus into structure
             parameters = structRecover(parameters) ;
@@ -64,11 +64,11 @@ classdef Moving_Flashing_Squares < handle
                 stimulus.stixel_shift = parameters.stixel_shift;
                 stimulus.repeats = parameters.repeats;
                 stimulus.num_reps = parameters.num_reps;
+                stimulus.random_seq = parameters.random_seq ;
                 stimulus.frames = parameters.frames;
-                %stimulus.color = [parameters.rgb(1); parameters.rgb(2); parameters.rgb(3)];   
-                stimulus.color = [parameters.rgb+parameters.back_rgb]';
+                stimulus.color = [parameters.rgb(1); parameters.rgb(2); parameters.rgb(3)];   
                 %stimulus.color = Color_Test( stimulus.color );
-                stimulus.backgrndcolor = parameters.back_rgb;
+                stimulus.backgrndcolor = parameters.back_rgb ;
                 stimulus.sub_region = parameters.sub_region ;
                 stimulus.wait_trigger = parameters.wait_trigger;                            
                 stimulus.wait_key = parameters.wait_key;
@@ -166,7 +166,7 @@ classdef Moving_Flashing_Squares < handle
             % sequence of square presentation
             sequence = [];
             for i = 1:stimulus.repeats
-                if stimulus.random_seq ;
+                if stimulus.random_seq==1 ;
                     sequence = [sequence; randperm(stimulus.trial_num)];
                 else
                     sequence = [sequence; [1:stimulus.trial_num]];
@@ -182,13 +182,14 @@ classdef Moving_Flashing_Squares < handle
             uisave('stim_out')
             
             % display number necessary time (s)
-            disp(['run time: ', num2str(stimulus.total_frame_num/mglGetParam('frameRate')), 's']) ;   
+            disp(['run time: ', num2str(stimulus.total_frame_num/mglGetParam('frameRate')), 's']) ;  
+            % pause (SR: Commented out to avoid confusion)
         end
         
         
         function time_stamps = Run_Moving_Flashing_Squares( stimulus )
             
-            time_stamps = nan(1) ; % temp
+            time_stamps = nan ; % temp
             
             mglClearScreen( stimulus.backgrndcolor );
             mglFlush();
@@ -228,3 +229,6 @@ classdef Moving_Flashing_Squares < handle
         end  % run moving flash squares        
     end  % method block                
 end   % class def
+
+
+
