@@ -106,3 +106,33 @@ for i=1:length(stimulus)
     end
 end
 
+%% Moving flashing square 
+% presents a square (size=stix_width) within x,y bounds (eg. x_start) that
+% flashes ON within bounds for a duration (frames) and OFF for the same
+% duration.  It will move by stixel_shift (ie. if shift<width there will be
+% overlap in squares).
+
+fprintf('\n\n<strong> Moving flashing squares </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'MFS';  
+parameters.rgb = [.5, .5, .5];
+parameters.back_rgb = [0, 0, 0];
+parameters.frames = 60;                       % "frames" is the number of frame refreshes to wait for each half-cycle (i.e. the pulse is on for the number of frames set here
+                                            % and then off for the same number of frames. This completes one repetition of the pulse.
+
+parameters.x_start = 180;  parameters.x_end = 600;  % These fields set the region of stimulation with full square overlap coverage
+parameters.y_start = 80;   parameters.y_end = 500; % actual presentation area will be end-start+(stix_w-stix_shift)
+parameters.stixel_width = 30;         % size of each stixel in pixels 
+parameters.stixel_shift = 10 ; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
+
+parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
+parameters.repeats = 3; % repeats of the whole stimulus block
+parameters.wait_trigger = 0;
+parameters.wait_key = 0;
+parameters.sub_region = 1; % if 1: subdivide the stimulus field into 4 regions, show 4 spatially correlated flash squares 
+parameters.random_seq = 0 ; % 1= random sequence, 0 = repeated sequence in order
+                         
+stimulus = make_stimulus(parameters, def_params);
+display_stimulus(stimulus);
+clear stimulus;
