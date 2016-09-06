@@ -55,6 +55,9 @@ switch parameters{class_index+1}
         
     case 'CH' % chirp stimulus
         stimulus = Chirp_Stimulus(def_params, parameters);
+        
+    case 'MFS' % chirp stimulus
+        stimulus = Moving_Flashing_Squares(def_params, parameters);
 end
 
 end

@@ -27,9 +27,12 @@ seq = get_sequence(steps);
 for i = 1:steps   
     mglClearScreen(guns*coef(seq(i)));
     mglFlush
+    disp(num2str(i))
     pause;
+    
     mglClearScreen(0.5);
     mglFlush
+    disp(num2str(i))
     pause;
 end
 
