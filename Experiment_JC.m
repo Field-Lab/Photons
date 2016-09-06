@@ -1,13 +1,13 @@
 %% Initialization
 
 my_path = '/Users/jcafaro/Documents/MATLAB/Photons';
-my_path = '/Users/acquisition/Photons';
+%my_path = '/Users/acquisition/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
 path2save = [my_path, '/saved_timestamps/2016-08-03/'];
-screen_number = 2; %0=test on current monitor, 2= is two monitor display
+screen_number = 0; %0=test on current monitor, 2= is two monitor display
 def_params = initialize_display('OLED', screen_number); % default parameters
 %mglMoveWindow([])
 
@@ -576,19 +576,16 @@ parameters.stixel_width = 30;         % size of each stixel in pixels
 parameters.stixel_shift = 30 ; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
 
 parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
-<<<<<<< HEAD
+
 parameters.repeats = 1; % repeats of the whole stimulus block
 parameters.wait_trigger = 0;
-=======
-parameters.repeats = 4; % repeats of the whole stimulus block
-parameters.wait_trigger = 1;
->>>>>>> origin/Jcaf
+
 parameters.wait_key = 0;
 parameters.sub_region = 1; % if 1: subdivide the stimulus field into 4 regions, show 4 spatially correlated flash squares 
 parameters.random_seq = 1 ; % 1= random sequence, 0 = repeated sequence in order
                          
 stimulus = make_stimulus(parameters, def_params);
-display_stimulus(stimulus,'wait_trigger',1);
+display_stimulus(stimulus,'wait_trigger',0);
 clear stimulus;
 
 %% end photons
