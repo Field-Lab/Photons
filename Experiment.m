@@ -1,15 +1,26 @@
 %% Initialization
 
+<<<<<<< HEAD
 my_path = '/Users/jcafaro/Documents/MATLAB/Photons';
 %my_path = '/Users/acquisition/Photons';
+=======
+my_path = '/Users/xyao/Documents/Field-lab/Photons';
+>>>>>>> xyao
 
 addpath(genpath(my_path))
 cd(my_path)
 
+<<<<<<< HEAD
 path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
 screen_number = 0; %0=test on current monitor, 2= is two monitor display
 def_params = initialize_display('OLED', screen_number); % default parameters
 %mglMoveWindow([])
+=======
+path2save = [my_path, '/saved_stim/2015-11-02'];
+screen_number = 0;
+def_params = initialize_display('OLED', screen_number);
+mglMoveWindow(1, 1080)
+>>>>>>> xyao
 
 % real refresh rate 
 %mglTestRefresh(2)
@@ -244,6 +255,7 @@ clear parameters stimulus;
 parameters.class = 'MB';
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.rgb = -[1, 1, 1]*0.48;
+<<<<<<< HEAD
 parameters.bar_width = 30;
 parameters.direction = 90;
 parameters.delta = 1;  % pixels per frame
@@ -251,36 +263,65 @@ parameters.x_start = 1;  parameters.x_end = 640;
 parameters.y_start = 1;   parameters.y_end = 480;
 parameters.frames = 600;
 parameters.delay_frames = 0;
+=======
+parameters.x_start = 200;  parameters.x_end = 600;
+parameters.y_start = 100;   parameters.y_end = 500;
+parameters.frames_p_bar = 1; % 1:no need to set frames. 0: have to set frames
+parameters.frames = 70;
+parameters.delay_frames = 30;
+>>>>>>> xyao
 
-stimulus = make_stimulus(parameters, def_params);
+variable_parameters = randomize_parameters('direction', [0 45 90 135 180 225 270 315], ...
+                                           'delta', [4 8], ...
+                                           'bar_width', [60 120], ...
+                                           'nrepeats',2);
+path2file = write_s_file(parameters, variable_parameters);
+s_params = read_s_file(path2file);
 
+<<<<<<< HEAD
 % show 10 times
 for i=1:100
     display_stimulus(stimulus);
 end
 
+=======
+% see second option example in "S File read"
+for i=2:size(s_params,2)
+    trial_params = combine_parameters(s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+end
+
+for i=1:length(stimulus)
+    if i == 1
+        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 1);
+    else
+        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0);
+    end
+end
+    
+>>>>>>> xyao
 %% Moving Grating single trial
 
 fprintf('\n\n<strong> Moving Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'MG';
-parameters.spatial_modulation = 'sine'; % sine or square
+parameters.spatial_modulation = 'square'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*120; % presentation of each grating, frames
-parameters.x_start = 1;  parameters.x_end = 640;
-parameters.y_start = 1;   parameters.y_end = 480;
-parameters.direction = 45;
+parameters.x_start = 0;  parameters.x_end = 800;
+parameters.y_start = 0;   parameters.y_end = 600;
+parameters.direction = 0;
 parameters.temporal_period = 60;  % frames 
-parameters.spatial_period = 120; % pixels
+parameters.spatial_period = 200; % pixels
 
 stimulus = make_stimulus(parameters, def_params);
 time_stamps = display_stimulus(stimulus);
 
 %%%%%%%%%% clean up %%%%%%%%%% 
 for i=1:stimulus.temporal_period
-    mglDeleteTexture(stimulus.texture{i});
+    mglDeleteTexture(stimulus.texture.tex1d);
 end
 
 %% Moving Grating simple sequence
@@ -358,15 +399,24 @@ fprintf('\n\n<strong> Moving Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'MG';
-parameters.spatial_modulation = 'sine'; % sine or square
+parameters.spatial_modulation = 'square'; % sine or square
 parameters.rgb = [1 1 1]*0.48;
 parameters.back_rgb = [1 1 1]*0.5;
+<<<<<<< HEAD
 parameters.frames = 5*120; % presentation of each grating, frames
 parameters.x_start = 0;  parameters.x_end =639;
 parameters.y_start = 0;   parameters.y_end = 479;
 % parameters.direction = [0 90];
 
 variable_parameters = randomize_parameters('direction', [0 90], 'temporal_period', [30 60], 'spatial_period', [32,64], 'nrepeats',2);
+=======
+parameters.frames = 5*30; % presentation of each grating, frames
+parameters.x_start = 50;  parameters.x_end = 750;
+parameters.y_start = 50;   parameters.y_end = 550;
+% parameters.direction = 45;
+
+variable_parameters = randomize_parameters('direction', [0 45 90 135 180 225 270 315], 'temporal_period', [12 24 60 120 240 480 720 960 1440], 'spatial_period', [240], 'nrepeats',4);
+>>>>>>> xyao
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
@@ -374,8 +424,13 @@ s_params = read_s_file(path2file);
 for i=2:size(s_params,2)
     trial_params = combine_parameters(s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
+<<<<<<< HEAD
     display_stimulus(stimulus{i-1}, 'wait_trigger', 1);
 end
+=======
+    display_stimulus(stimulus{i-1});
+end 
+>>>>>>> xyao
 
 %%%%%%%%%% clean up %%%%%%%%%% 
 for i=1:length(stimulus)
@@ -394,8 +449,8 @@ fprintf('\n\n<strong> Counterphase Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'CG';
-parameters.spatial_modulation = 'sine'; % sine or square
-parameters.temporal_modulation = 'sine'; % sine or square
+parameters.spatial_modulation = 'square'; % sine or square
+parameters.temporal_modulation = 'square'; % sine or square
 parameters.rgb = [1 1 0]*0.2;
 parameters.back_rgb = [1 1 1]*0.4;
 parameters.frames = 120; % presentation of each grating, frames
