@@ -101,9 +101,7 @@ end
 
 %%%%%%%%%% clean up %%%%%%%%%% 
 for i=1:length(stimulus)
-    for j=1:stimulus{i}.temporal_period
-        mglDeleteTexture(stimulus{i}.texture{j});
-    end
+    mglDeleteTexture(stimulus{i}.texture);
 end
 
 %% Moving flashing square 

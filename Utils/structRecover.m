@@ -6,9 +6,4 @@ function s = structRecover(CellArray)
 s = struct ;
 for a=1:2:length(CellArray) ; % for each element of the structure
     s=setfield(s,CellArray{a},CellArray{a+1}) ;
-<<<<<<< HEAD
 end
-    
-=======
-end
->>>>>>> xyao

@@ -176,7 +176,8 @@ classdef	Moving_Grating < handle
                 mglSetParam('visualAngleSquarePixels',0,1);
                 mglVisualAngleCoordinates(stimulus.parameters.display.distance,[stimulus.parameters.display.physical_width stimulus.parameters.display.physical_height]);
 
-            end            
+            end  
+            mglScreenCoordinates
         end
         
     end	% methods block
