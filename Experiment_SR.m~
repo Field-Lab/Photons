@@ -100,9 +100,9 @@ fprintf('\n\n<strong> Moving Grating. </strong>\n');
 clear parameters stimulus
 
 parameters.class = 'MG';
-parameters.spatial_modulation = 'square'; % sine or square
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = [1 1 1]*(0.48);
+parameters.spatial_modulation = 'sine'; % sine or square
+%parameters.back_rgb = [1 1 1]*0.5;
+%parameters.rgb = [1 1 1]*(0.48);
 parameters.x_start = 100;  parameters.x_end = 700;
 parameters.y_start = 0;   parameters.y_end = 600;
 parameters.frames = 8*60; % presentation of each grating, frames
@@ -110,22 +110,112 @@ parameters.delay_frames = 0;
 
 variable_parameters = randomize_parameters('direction', [0:30:330], ...
                                            'temporal_period', [30 120],...
-                                           'spatial_period', [100],...    
+                                           'spatial_period', [100],...
+                                           'back_rgb',{[1 1 1].*0.5},...
+                                           'rgb',{[1 1 1].*0.48},...
                                            'nrepeats',6);
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
 % see second option example in "S File read"
 for i=2:size(s_params,2)
+    trial_params = combine_parameters(s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+    display_stimulus(stimulus{i-1}, 'wait_trigger', 0); % set 1 for actual experiment
+end
+
+
+for i=2:size(s_params,2)
     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
-    display_stimulus(stimulus{i-1},'wait_trigger', 0, 'wait_key',0);
 end
-% for i=1:length(stimulus)
-%     display_stimulus(stimulus{i},'wait_trigger', 0, 'wait_key',0); % set wait_trigger to 1 for actual experiment
-% end
+for i=1:length(stimulus)
+    display_stimulus(stimulus{i});
+end
 
 
+
+
+%%%%%%%%%% clean up %%%%%%%%%% 
+for i=1:length(stimulus)
+    for j=1:stimulus{i}.temporal_period
+        mglDeleteTexture(stimulus{i}.texture{j});
+    end
+end
+
+
+
+%% Moving Grating S File read
+
+fprintf('\n\n<strong> Moving Grating. </strong>\n');
+clear parameters stimulus
+
+parameters.class = 'MG';
+parameters.spatial_modulation = 'sine'; % sine or square
+parameters.back_rgb = [1 1 1]*0.5;
+
+s_params = read_s_file([my_path, '/Maps/drifting_gratings/s03']);
+
+%%%%%%%%%% OPTION 1: make/display in loop %%%%%%%%%%%%%%%
+for i=2:size(s_params,2)
+    trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+    display_stimulus(stimulus{i-1});
+end
+
+%%%%%%%%%% OPTION 2: pre-make all, display all %%%%%%%%%% 
+for i=2:size(s_params,2)
+    trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+end
+for i=1:length(stimulus)
+    display_stimulus(stimulus{i});
+end
+
+%%%%%%%%%% clean up %%%%%%%%%% 
+for i=1:length(stimulus)
+    for j=1:stimulus{i}.temporal_period
+        mglDeleteTexture(stimulus{i}.texture{j});
+    end
+end
+
+
+
+%% Moving Grating S File write
+
+fprintf('\n\n<strong> Moving Grating. </strong>\n');
+clear parameters stimulus
+
+parameters.class = 'MG';
+parameters.spatial_modulation = 'square'; % 'sine' or 'square'
+parameters.rgb = [1 1 1]*0.48;
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.frames = 5*120; % presentation of each grating, frames
+parameters.x_start = 0;  parameters.x_end =639;
+parameters.y_start = 0;   parameters.y_end = 479;
+parameters.direction = [0 90];
+
+variable_parameters = randomize_parameters('direction', [0 90], 'temporal_period', [30 60], 'spatial_period', [32,64], 'nrepeats',2);
+path2file = write_s_file(parameters, variable_parameters);
+s_params = read_s_file(path2file);
+
+% see second option example in "S File read"
+for i=2:size(s_params,2)
+    trial_params = combine_parameters(s_params{1}, s_params{i});
+    stimulus{i-1} = make_stimulus(trial_params, def_params);
+    display_stimulus(stimulus{i-1}, 'wait_trigger', 0); % set 1 for actual experiment
+end
+
+%%%%%%%%%% clean up %%%%%%%%%% 
+for i=1:length(stimulus)
+    for j=1:stimulus{i}.temporal_period
+        mglDeleteTexture(stimulus{i}.texture{j});
+    end
+end
+
+% gray screen
+mglClearScreen(0.5);
+mglFlush;
 
 %% Counterphase Grating
 
