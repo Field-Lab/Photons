@@ -8,7 +8,7 @@ addpath(genpath(my_path))
 cd(my_path)
 
 %path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
-path2save = ['/Users/Suva/Desktop/TestDir/'];
+%path2save = ['/Users/Suva/Desktop/TestDir/'];
 screen_number = 0; % Value = 2 (primary screen small), 1 (primary screen full), 2 (secondary screen full)
 def_params = initialize_display('OLED', screen_number);
 
@@ -57,9 +57,6 @@ display_stimulus(stimulus);
 fprintf('\n\n<strong> Moving bar. </strong>\n');
 clear parameters stimulus;
 
-fprintf('\n\n<strong> Moving bar. </strong>\n');
-clear parameters stimulus;
-
 parameters.class = 'MB';
 %parameters.back_rgb = [1 1 1]*0.25;
 %parameters.rgb = [1, 1, 1]*(0.1*0.25);
@@ -86,11 +83,13 @@ for i=2:size(s_params,2)
 end
 
 for i=1:length(stimulus)
+    tic;
     if i == 1
         display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0); % set wait trigger to 1 during experiment
     else
         display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0);
     end
+    toc;
 end
 
 
@@ -101,8 +100,8 @@ clear parameters stimulus
 
 parameters.class = 'MG';
 parameters.spatial_modulation = 'square'; % sine or square
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = [1 1 1]*(0.48);
+%parameters.back_rgb = [1 1 1]*0.5;
+%parameters.rgb = [1 1 1]*(0.48);
 parameters.x_start = 100;  parameters.x_end = 700;
 parameters.y_start = 0;   parameters.y_end = 600;
 parameters.frames = 8*60; % presentation of each grating, frames
@@ -110,44 +109,25 @@ parameters.delay_frames = 0;
 
 variable_parameters = randomize_parameters('direction', [0:30:330], ...
                                            'temporal_period', [30 120],...
-                                           'spatial_period', [100],...    
+                                           'spatial_period', [100],... 
+                                           'back_rgb',{[1 1 1].*0.5},...
+                                           'rgb',{[1 1 1].*0.48},...
                                            'nrepeats',6);
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
 % see second option example in "S File read"
-for i=2:size(s_params,2)
+for i=2:size(s_params,2)  
     trial_params = combine_parameters(parameters, s_params{1}, s_params{i});
     stimulus{i-1} = make_stimulus(trial_params, def_params);
-    display_stimulus(stimulus{i-1},'wait_trigger', 0, 'wait_key',0);
 end
-% for i=1:length(stimulus)
-%     display_stimulus(stimulus{i},'wait_trigger', 0, 'wait_key',0); % set wait_trigger to 1 for actual experiment
-% end
 
 
+for i=1:length(stimulus)
+    display_stimulus(stimulus{i},'wait_trigger', 0, 'wait_key',0); % set wait_trigger to 1 for actual experiment
+end
 
-%% Counterphase Grating
 
-fprintf('\n\n<strong> Counterphase Grating. </strong>\n');
-clear parameters stimulus
-
-parameters.class = 'CG';
-parameters.spatial_modulation = 'sine'; % sine or square
-parameters.temporal_modulation = 'sine'; % sine or square
-parameters.rgb = [1 1 0]*0.2;
-parameters.back_rgb = [1 1 1]*0.4;
-parameters.frames = 120; % presentation of each grating, frames
-parameters.x_start = 200;  parameters.x_end = 600;
-parameters.y_start = 100;   parameters.y_end = 500;
-parameters.spatial_phase = 0; % pixels - offset
-parameters.temporal_period = 60;  % frames (how long it takes to return to initial phase)
-parameters.spatial_period = 120; % pixels
-parameters.orientation = 90;
-
-stimulus = make_stimulus(parameters, def_params);
-
-time_stamps = display_stimulus(stimulus);
 
 
 
@@ -208,7 +188,7 @@ parameters.frames = 60;                       % "frames" is the number of frame 
 parameters.x_start = 250;  parameters.x_end = 550;  % These fields set the region of stimulation with full square overlap coverage
 parameters.y_start = 150;   parameters.y_end = 450; % actual presentation area will be end-start+(stix_w-stix_shift)
 parameters.stixel_width = 30;         % size of each stixel in pixels 
-parameters.stixel_shift = 10 ; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
+parameters.stixel_shift = 10; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
 
 parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
 parameters.repeats = 5; % repeats of the whole stimulus block
@@ -220,6 +200,46 @@ parameters.random_seq = 0 ; % 1= random sequence, 0 = repeated sequence in order
 stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus);
 clear stimulus;
+
+
+%% Random Noise for imaging
+
+fprintf('\n\n<strong> Random Noise </strong>\n');
+clear parameters stimulus
+
+parameters.class = 'RN';
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.rgb = [1 1 1]*0.48;
+parameters.seed = 11111;
+parameters.binary = 1;
+parameters.probability = 1;
+parameters.jitter = 0;
+parameters.delay_frames = 0;  % onset latency in # of frames 
+
+%%%%%%%%%%%%% OLED %%%%%%%%%%%%%% 
+parameters.x_start = 100;  parameters.x_end = 700;
+parameters.y_start = 0;   parameters.y_end = 600;
+
+% %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
+% parameters.x_start = 0;  parameters.x_end = 639;
+% parameters.y_start = 80;   parameters.y_end = 399;
+
+parameters.independent = 0; % (0: rgb values vary together, 1: rgb values vary independently)
+parameters.interval = 1000;  % # of frames before the image changes 
+parameters.stixel_width = 30;
+parameters.frames = 60*3600; % 3600 sec 
+
+parameters.stixel_height = parameters.stixel_width;
+parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;
+parameters.field_height = (parameters.y_end-parameters.y_start+1)/parameters.stixel_height;
+
+% For Voronoi, set stixel_height and stixel_width to 1 and pass a map path
+%parameters.map_file_name = [my_path, '/Maps/2011-12-13-2_f04_vorcones/map-0000.txt'];
+
+stimulus = make_stimulus(parameters, def_params);
+
+time_stamps = display_stimulus(stimulus, 'wait_trigger', 0);  % set 'wait _trigger' to 1 during experiment
+
 
 
 %%

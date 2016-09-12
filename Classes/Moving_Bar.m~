@@ -149,6 +149,7 @@ classdef	Moving_Bar < handle
             mglFlush     
             %stimulus.frames
             for i = 1:stimulus.frames
+                tic
                     x_vertices = stimulus.x_first + stimulus.x_delta*i;
                     y_vertices = stimulus.y_first + stimulus.y_delta*i;
                     mglFillRect(stimulus.x_center,stimulus.y_center,[stimulus.x_span stimulus.y_span], stimulus.back_rgb);
@@ -161,6 +162,7 @@ classdef	Moving_Bar < handle
             end
             time_stamps(2) = mglGetSecs(t0);
             Pulse_DigOut_Channel;  
+            toc
             
             mglStencilSelect(0);
         end
