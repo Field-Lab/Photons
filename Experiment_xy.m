@@ -40,17 +40,17 @@ fprintf('\n\n<strong> Moving bar. </strong>\n');
 clear parameters stimulus;
 
 parameters.class = 'MB';
-parameters.back_rgb = [1 1 1]*0.5;
-parameters.rgb = -[1, 1, 1]*0.48;
 parameters.x_start = 200;  parameters.x_end = 600;
 parameters.y_start = 100;   parameters.y_end = 500;
 parameters.frames_p_bar = 1; % 1:no need to set frames. 0: have to set frames
-parameters.frames = 70;
+% parameters.frames = 70;
 parameters.delay_frames = 30;
 
-variable_parameters = randomize_parameters('direction', [0 45 90 135 180 225 270 315], ...
-                                           'delta', [4 8], ...
-                                           'bar_width', [60 120], ...
+variable_parameters = randomize_parameters('DIRECTION', [0 45 90 135 180 225 270 315], ...
+                                           'DELTA', [4 8], ...
+                                           'BAR_WIDTH', [60 120], ...
+                                           'BACK_RGB', {[0.2 0.2 0.2]}, ...
+                                           'RGB', {[0.3 0.3 0.3], [0.6 0.6 0.6]}, ...
                                            'nrepeats',2);
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
@@ -76,16 +76,15 @@ clear parameters stimulus
 
 parameters.class = 'MG';
 parameters.spatial_modulation = 'square'; % sine or square
-parameters.rgb = [1 1 1]*0.48;
-parameters.back_rgb = [1 1 1]*0.5;
 parameters.frames = 5*60; % presentation of each grating, frames
 parameters.x_start = 0;  parameters.x_end = 800;
 parameters.y_start = 0;   parameters.y_end = 600;
-% parameters.direction = 45;
 
-variable_parameters = randomize_parameters('direction', [0 45 90 135 180 225 270 315], ...
-                                           'temporal_period', [12 24 60 120 240 480 720 960 1440], ...
-                                           'spatial_period', [200], ...
+variable_parameters = randomize_parameters('DIRECTION', [0 45 90 135 180 225 270 315], ...
+                                           'TEMPORAL_PERIOD', [12 24 60 120 240 480 720 960 1440], ...
+                                           'SPATIAL_PERIOD', [200], ...
+                                           'RGB', {[0.25 0.25 0.25]}, ...
+                                           'BACK_RGB', {[0.5 0.5 0.5]}, ...
                                            'nrepeats',4);
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
@@ -101,7 +100,7 @@ end
 
 %%%%%%%%%% clean up %%%%%%%%%% 
 for i=1:length(stimulus)
-    mglDeleteTexture(stimulus{i}.texture);
+    mglDeleteTexture(stimulus{i}.texture.tex1d);
 end
 
 %% Moving flashing square 
