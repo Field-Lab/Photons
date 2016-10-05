@@ -1,23 +1,21 @@
 %% Initialization
 
-my_path = '/Users/Suva/Desktop/GitAll/GitClones_FieldLab/Photons';
-%my_path = '/Users/acquisition/Photons';
+%my_path = '/Users/Suva/Desktop/GitAll/GitClones_FieldLab/Photons';
+my_path = '/Users/acquisition/Photons';
 %my_path = '/Users/stimulus/Photons';
 
 addpath(genpath(my_path))
 cd(my_path)
 
-%path2save = [my_path, '/saved_timestamps/2016-04-21-5/'];
-%path2save = ['/Users/Suva/Desktop/TestDir/'];
-screen_number = 0; % Value = 2 (primary screen small), 1 (primary screen full), 2 (secondary screen full)
+screen_number = 2; % Value = 2 (primary screen small), 1 (primary screen full), 2 (secondary screen full)
 def_params = initialize_display('OLED', screen_number);
 
 
-% % set gamma OLED Aug 2, 2016
-% scale = [1.1399    1.0998    1.1027];
-% power = [1.1741    1.2998    1.3112];
-% offset = [-0.1445   -0.1023   -0.1054];
-% set_gamma_from_fit_params(scale, power, offset);
+% set gamma OLED Aug 2, 2016
+scale = [1.1399    1.0998    1.1027];
+power = [1.1741    1.2998    1.3112];
+offset = [-0.1445   -0.1023   -0.1054];
+set_gamma_from_fit_params(scale, power, offset);
 
 % % set gamma OLED nov 2015
 % scale = [1.1156    1.0919    1.0921];
@@ -60,8 +58,8 @@ clear parameters stimulus;
 parameters.class = 'MB';
 %parameters.back_rgb = [1 1 1]*0.25;
 %parameters.rgb = [1, 1, 1]*(0.1*0.25);
-parameters.x_start = 100;  parameters.x_end = 700;
-parameters.y_start = 0;   parameters.y_end = 600;
+parameters.x_start = 200;  parameters.x_end = 600;
+parameters.y_start = 100;   parameters.y_end = 500;
 parameters.frames_p_bar = 1; % 1:no need to set frames. 0: have to set frames
 parameters.frames = 60*5;
 parameters.delay_frames = 30;
@@ -69,10 +67,12 @@ parameters.delay_frames = 30;
 variable_parameters = randomize_parameters('direction', [0:30:330], ...
                                            'delta', [4], ...
                                            'bar_width', [240], ...
-                                           'nrepeats',11,...
+                                           'nrepeats',10,...
                                            'back_rgb',{[1 1 1].*0.25},...
                                            'rgb',{0.1*0.25.*[1 1 1], 0.3*0.25.*[1 1 1], 0.6*0.25.*[1 1 1],...
                                            1*0.25.*[1 1 1], 3*0.25.*[1 1 1]});
+                                       
+                                     
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
@@ -83,13 +83,11 @@ for i=2:size(s_params,2)
 end
 
 for i=1:length(stimulus)
-    tic;
     if i == 1
-        display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0); % set wait trigger to 1 during experiment
+        display_stimulus(stimulus{i}, 'wait_trigger', 1, 'wait_key', 0); % set wait trigger to 1 during experiment
     else
         display_stimulus(stimulus{i}, 'wait_trigger', 0, 'wait_key', 0);
     end
-    toc;
 end
 
 
@@ -113,6 +111,8 @@ variable_parameters = randomize_parameters('direction', [0:30:330], ...
                                            'back_rgb',{[1 1 1].*0.5},...
                                            'rgb',{[1 1 1].*0.48},...
                                            'nrepeats',6);
+                                       
+
 path2file = write_s_file(parameters, variable_parameters);
 s_params = read_s_file(path2file);
 
@@ -146,17 +146,17 @@ parameters.jitter = 0;
 parameters.delay_frames = 0;  % onset latency in # of frames 
 
 %%%%%%%%%%%%% OLED %%%%%%%%%%%%%% 
-parameters.x_start = 100;  parameters.x_end = 700;
-parameters.y_start = 0;   parameters.y_end = 600;
+parameters.x_start = 101;  parameters.x_end = 700;
+parameters.y_start = 1;   parameters.y_end = 600;
 
 % %%%%%%%%%%%%%% CRT %%%%%%%%%%%%%% 
 % parameters.x_start = 0;  parameters.x_end = 639;
 % parameters.y_start = 80;   parameters.y_end = 399;
 
 parameters.independent = 0; % (0: rgb values vary together, 1: rgb values vary independently)
-parameters.interval = 2;  % # of frames before the image changes 
+parameters.interval = 1;  % # of frames before the image changes 
 parameters.stixel_width = 10;
-parameters.frames = 60*3600; % 3600 sec 
+parameters.frames = 30*3600; % 3600 sec 
 
 parameters.stixel_height = parameters.stixel_width;
 parameters.field_width = (parameters.x_end-parameters.x_start+1)/parameters.stixel_width;
@@ -191,11 +191,11 @@ parameters.stixel_width = 30;         % size of each stixel in pixels
 parameters.stixel_shift = 10; % number of pixels each stixel can be shifted by (below stixel width causes stixel overlap)
 
 parameters.num_reps = 1; % "num_reps" gives the number of times the pulse on-off cycle is completed.
-parameters.repeats = 5; % repeats of the whole stimulus block
+parameters.repeats = 4; % repeats of the whole stimulus block
 parameters.wait_trigger = 0; % set this to 1 during experiment
 parameters.wait_key = 0;
 parameters.sub_region = 1; % if 1: subdivide the stimulus field into 4 regions, show 4 spatially correlated flash squares 
-parameters.random_seq = 0 ; % 1= random sequence, 0 = repeated sequence in order
+parameters.random_seq = 1 ; % 1= random sequence, 0 = repeated sequence in order
                          
 stimulus = make_stimulus(parameters, def_params);
 display_stimulus(stimulus);

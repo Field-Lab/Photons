@@ -87,40 +87,40 @@ classdef	Moving_Bar < handle
             angle = parameters.direction;
             
             L = 3000; % Length of the bar, the idea of making this number large is to ensure that it covers the whole display.
-            if angle >= 0 && angle < 90
-                r0 = [parameters.x_start, parameters.y_start];
-                stimulus.x_first = [-L; -L; L; L];
-                stimulus.y_first = [parameters.y_start-parameters.bar_width; parameters.y_start;  parameters.y_start; parameters.y_start-parameters.bar_width];
-                [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle); % then the bar will be rotated around a corner of display by a certain degree (base on moving direction)
-            elseif angle >= 90 && angle < 180
-                r0 = [parameters.x_start, parameters.y_end];
-                stimulus.y_first = [-L; L; L; -L];
-                stimulus.x_first = [parameters.x_start-parameters.bar_width; parameters.x_start-parameters.bar_width;  parameters.x_start; parameters.x_start];
-                [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle-90); % then the bar will be rotated around a corner of display by a certain degree (base on moving direction)
-            elseif angle >= 180 && angle < 270
-                r0 = [parameters.x_end, parameters.y_end];
-                stimulus.x_first = [-L; -L; L; L];
-                stimulus.y_first = [parameters.y_end; parameters.y_end+parameters.bar_width;  parameters.y_end+parameters.bar_width; parameters.y_end];
-                [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle-180); % then the bar will be rotated around a corner of display by a certain degree (base on moving direction)
-            elseif angle >= 270 && angle < 360
-                r0 = [parameters.x_end, parameters.y_start];
-                stimulus.y_first = [-L; L; L; -L];
-                stimulus.x_first = [parameters.x_end; parameters.x_end; parameters.x_end+parameters.bar_width; parameters.x_end+parameters.bar_width;];
-                [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle-270); % then the bar will be rotated around a corner of display by a certain degree (base on moving direction)
-            end
+                if angle >= 0 && angle < 90
+                    r0 = [parameters.x_start, parameters.y_end]; % coordinates of one display corner.
+                    stimulus.x_first = [parameters.x_start; parameters.x_start; parameters.x_start-parameters.bar_width; parameters.x_start-parameters.bar_width]; % bar was first set to be either vertical or horizontal (base on moving direction)
+                    stimulus.y_first = [L; -L; -L; L];
+                    [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle); % then the bar will be rotated around a corner of display by a certain degree (base on moving direction)
+                elseif angle >= 90 && angle < 180
+                    r0 = [parameters.x_end, parameters.y_end];
+                    stimulus.x_first = [-L; -L; L; L];
+                    stimulus.y_first = [parameters.y_end+parameters.bar_width; parameters.y_end; parameters.y_end; parameters.y_end+parameters.bar_width];
+                    [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle-90);
+                elseif angle >= 180 && angle < 270
+                    r0 = [parameters.x_end, parameters.y_start];
+                    stimulus.x_first = [parameters.x_end+parameters.bar_width; parameters.x_end+parameters.bar_width; parameters.x_end; parameters.x_end];
+                    stimulus.y_first = [L; -L; -L; L];
+                    [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle-180);
+                elseif angle >= 270 && angle < 360
+                    r0 = [parameters.x_start, parameters.y_start];
+                    stimulus.x_first = [-L; -L; L; L];
+                    stimulus.y_first = [parameters.y_start; parameters.y_start-parameters.bar_width; parameters.y_start-parameters.bar_width; parameters.y_start]; 
+                    [stimulus.x_first, stimulus.y_first] = rotateData(stimulus.x_first, stimulus.y_first, r0(1), r0(2), angle-270);
+                end
             
             stimulus.x_first = stimulus.x_first';
             stimulus.y_first = stimulus.y_first';
 
             % make the bar moving either vertically or horizontally
             % based on which distance is shorter
-            x_dis = (abs(cotd(angle)*stimulus.y_span)+stimulus.x_span);
-            y_dis = (abs(stimulus.x_span*tand(angle))+stimulus.y_span);
+            x_dis = (abs(tand(angle)*stimulus.y_span)+stimulus.x_span);
+            y_dis = (abs(stimulus.x_span*cotd(angle))+stimulus.y_span);
             if x_dis < y_dis                
-                stimulus.x_delta = parameters.delta/sind(angle);
+                stimulus.x_delta = parameters.delta/cosd(angle);
                 stimulus.y_delta = 0;
             else
-                stimulus.y_delta = parameters.delta/cosd(angle);
+                stimulus.y_delta = parameters.delta/sind(angle);
                 stimulus.x_delta = 0;
             end
             stimulus.frames_per_bar = (sqrt(stimulus.x_span^2+stimulus.y_span^2) + parameters.bar_width)/parameters.delta;
@@ -147,10 +147,9 @@ classdef	Moving_Bar < handle
             mglClearScreen;
             mglFlush
             mglFlush     
-            %stimulus.frames
             for i = 1:stimulus.frames
                     x_vertices = stimulus.x_first + stimulus.x_delta*i;
-                    y_vertices = stimulus.y_first + stimulus.y_delta*i;
+                    y_vertices = stimulus.y_first - stimulus.y_delta*i;
                     mglFillRect(stimulus.x_center,stimulus.y_center,[stimulus.x_span stimulus.y_span], stimulus.back_rgb);
                     mglQuad(round(x_vertices), round(y_vertices), stimulus.rgb, 0);
                     mglFlush
@@ -160,9 +159,9 @@ classdef	Moving_Bar < handle
                     end
             end
             time_stamps(2) = mglGetSecs(t0);
-            Pulse_DigOut_Channel;  
+            Pulse_DigOut_Channel;            
             
             mglStencilSelect(0);
         end
     end	
-end 
+end
