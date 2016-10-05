@@ -49,6 +49,25 @@ stimulus = make_stimulus(parameters,def_params);
 display_stimulus(stimulus);
 
 
+%% Rectangular Flashing Pulses
+fprintf('\n\n<strong> Rectangular Pulses: any sequence. </strong>\n');
+clear parameters stimulus;
+
+parameters.class = 'FP';
+parameters.frames = 1;
+parameters.delay_frames = 0;
+parameters.back_rgb = [1 1 1]*0.5;
+parameters.x_start = 0;  parameters.x_end = 639;
+parameters.y_start = 0;   parameters.y_end = 479;
+
+num_repeats = 30;
+rgb = [0 0 0]*0.5;
+for z = 1:num_repeats
+    for i=1:size(rgb,1)
+        stimulus = make_stimulus(parameters, 'rgb', rgb(i,:), def_params);
+        display_stimulus(stimulus);
+    end
+end
 
 %% Moving bar
 
